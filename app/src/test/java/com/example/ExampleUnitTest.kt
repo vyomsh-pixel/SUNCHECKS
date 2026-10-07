@@ -35,7 +35,7 @@ class ExampleUnitTest {
     @Test
     fun testProfileOnboardingState() {
         val initialProfile = UserProfileEntity(
-            email = "rajkesir74@gmail.com",
+            email = "user@example.com",
             persona = "Working Professional",
             isOnboardingCompleted = false
         )
@@ -53,7 +53,7 @@ class ExampleUnitTest {
     @Test
     fun testEmailReminderGeneration() {
         val profile = UserProfileEntity(
-            email = "rajkesir74@gmail.com",
+            email = "user@example.com",
             persona = "Student",
             currentStreak = 4
         )
@@ -85,7 +85,7 @@ class ExampleUnitTest {
         )
 
         assertTrue(subject.contains("[DayPulse]"))
-        assertTrue(body.contains("rajkesir74@gmail.com"))
+        assertTrue(body.contains("user@example.com"))
         assertTrue(body.contains("Ace Chemistry Exam"))
         assertTrue(body.contains("4 Days"))
         assertTrue(body.contains("Study 2h"))

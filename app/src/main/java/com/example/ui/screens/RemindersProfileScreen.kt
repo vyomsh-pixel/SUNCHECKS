@@ -76,7 +76,7 @@ fun RemindersProfileScreen(
     val profile = uiState.profile
 
     var name by remember(profile) { mutableStateOf(profile?.name ?: "DayPulse Explorer") }
-    var email by remember(profile) { mutableStateOf(profile?.email ?: "rajkesir74@gmail.com") }
+    var email by remember(profile) { mutableStateOf(profile?.email ?: "") }
     var persona by remember(profile) { mutableStateOf(Persona.fromString(profile?.persona)) }
     var roleDetails by remember(profile) { mutableStateOf(profile?.roleDetails ?: "Software & Tech") }
     var workStyle by remember(profile) { mutableStateOf(profile?.workStyle ?: "Morning Focus") }

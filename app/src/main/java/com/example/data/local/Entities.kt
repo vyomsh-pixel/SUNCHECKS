@@ -23,7 +23,7 @@ data class UserProfileEntity(
     @PrimaryKey
     val id: Int = 1,
     val name: String = "DayPulse Explorer",
-    val email: String = "rajkesir74@gmail.com",
+    val email: String = "",
     val persona: String = "Working Professional",
     val focusPriorities: String = "Deep Work, Career Growth, Health",
     val roleDetails: String = "Software & Tech",

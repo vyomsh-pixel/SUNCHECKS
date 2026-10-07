@@ -89,8 +89,8 @@ fun OnboardingScreen(
     var step by remember { mutableIntStateOf(0) }
 
     // User preferences state
-    var name by remember { mutableStateOf("Raj Kesir") }
-    var email by remember { mutableStateOf("rajkesir74@gmail.com") }
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var selectedPersona by remember { mutableStateOf(Persona.WORKING_PROFESSIONAL) }
     var roleDetails by remember { mutableStateOf("Software Engineering") }
     var workStyle by remember { mutableStateOf("Morning Focus") }

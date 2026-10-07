@@ -348,7 +348,7 @@ fun DailyLogScreen(
             text = {
                 Column {
                     Text(
-                        text = "Recipient: ${profile?.email ?: "rajkesir74@gmail.com"}",
+                        text = "Recipient: ${profile?.email?.ifBlank { "Not configured" } ?: "Not configured"}",
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.primary

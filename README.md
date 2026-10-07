@@ -41,7 +41,7 @@ Designed for high performers across different walks of life, DayPulse personaliz
   - ✨ **Reflection Feedback**: Compassionate evening feedback closing mental loops before sleep.
 
 ### 5. Email Reminders & Check-in Digests
-- **One-Click Email Dispatch**: Previews and dispatches a comprehensive, formatted daily summary directly to your configured email (`rajkesir74@gmail.com`) via Android's native email client.
+- **One-Click Email Dispatch**: Previews and dispatches a comprehensive, formatted daily summary directly to your configured email via Android's native email client.
 - **Schedule Notification Alerts**: Configurable evening check-in alarms and local reminders.
 
 ### 6. Interactive 4-Step Onboarding Flow

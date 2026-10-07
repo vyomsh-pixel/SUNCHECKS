@@ -64,7 +64,7 @@ class DayPulseRepository(
             profile = UserProfileEntity(
                 id = 1,
                 name = "DayPulse Explorer",
-                email = "rajkesir74@gmail.com",
+                email = "",
                 persona = Persona.WORKING_PROFESSIONAL.title,
                 focusPriorities = "Deep Work, Career Growth, Health & Wellness",
                 reminderHour = 20,

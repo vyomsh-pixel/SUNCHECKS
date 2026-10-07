@@ -16,6 +16,8 @@ import com.example.data.remote.AdviceType
 import com.example.data.repository.DayPulseRepository
 import com.example.utils.EmailReminderHelper
 import com.example.utils.NotificationHelper
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -119,7 +121,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val updatedProfile = currentProfile.copy(
                 name = name.ifBlank { "DayPulse Explorer" },
-                email = email.ifBlank { "rajkesir74@gmail.com" },
+                email = email.trim(),
                 persona = persona.title,
                 roleDetails = roleDetails,
                 workStyle = workStyle,
@@ -202,19 +204,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateFocusIntention(text: String) {
         val current = _uiState.value.currentLog ?: return
         val updated = current.copy(focusIntention = text)
-        persistCurrentLog(updated)
+        _uiState.value = _uiState.value.copy(currentLog = updated)
+        debouncePersistLog(updated)
     }
 
     fun updateGratitude(text: String) {
         val current = _uiState.value.currentLog ?: return
         val updated = current.copy(gratitude = text)
-        persistCurrentLog(updated)
+        _uiState.value = _uiState.value.copy(currentLog = updated)
+        debouncePersistLog(updated)
     }
 
     fun updateEveningReflection(text: String) {
         val current = _uiState.value.currentLog ?: return
         val updated = current.copy(eveningReflection = text)
-        persistCurrentLog(updated)
+        _uiState.value = _uiState.value.copy(currentLog = updated)
+        debouncePersistLog(updated)
     }
 
     fun toggleTask(taskId: String) {
@@ -409,7 +414,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(snackbarMessage = msg)
     }
 
+    private var debouncedPersistJob: Job? = null
+
+    private fun debouncePersistLog(log: DailyLogEntity, delayMs: Long = 500L) {
+        debouncedPersistJob?.cancel()
+        debouncedPersistJob = viewModelScope.launch {
+            delay(delayMs)
+            repository.saveLog(log)
+        }
+    }
+
+    fun flushPendingLogPersist() {
+        debouncedPersistJob?.cancel()
+        val current = _uiState.value.currentLog ?: return
+        viewModelScope.launch {
+            repository.saveLog(current)
+        }
+    }
+
     private fun persistCurrentLog(log: DailyLogEntity) {
+        debouncedPersistJob?.cancel()
         _uiState.value = _uiState.value.copy(currentLog = log)
         viewModelScope.launch {
             repository.saveLog(log)
