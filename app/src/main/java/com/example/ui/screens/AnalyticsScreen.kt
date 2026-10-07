@@ -1,8 +1,6 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -36,30 +33,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.data.local.DailyLogEntity
+import com.example.data.local.UserProfileEntity
 import com.example.data.model.Mood
-import com.example.ui.theme.AmberWarm
-import com.example.ui.theme.CyanAccent
-import com.example.ui.theme.EmeraldSuccess
-import com.example.ui.viewmodel.MainViewModel
+import com.example.ui.components.getColor
+import com.example.ui.components.getIcon
+import com.example.ui.theme.DayPulseTheme
+import com.example.ui.theme.extendedColors
 import com.example.ui.viewmodel.UiState
 
 @Composable
 fun AnalyticsScreen(
     uiState: UiState,
-    viewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val allLogs = uiState.allLogs
     val profile = uiState.profile
+    val extended = MaterialTheme.extendedColors
 
     val currentStreak = profile?.currentStreak ?: 1
     val bestStreak = profile?.bestStreak ?: 1
@@ -89,7 +84,7 @@ fun AnalyticsScreen(
             )
             Text(
                 text = "Longitudinal insights from your daily pulse check-ins",
-                fontSize = 11.sp,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -105,28 +100,36 @@ fun AnalyticsScreen(
                     .testTag("stat_streak_card"),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
                 ),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Surface(
                         shape = CircleShape,
-                        color = AmberWarm.copy(alpha = 0.2f),
+                        color = extended.warning.copy(alpha = 0.15f),
                         modifier = Modifier.size(36.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 imageVector = Icons.Default.LocalFireDepartment,
                                 contentDescription = null,
-                                tint = AmberWarm,
+                                tint = extended.warning,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text("$currentStreak Days", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text("Streak Active", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        text = "$currentStreak Days",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Streak Active",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
@@ -134,28 +137,36 @@ fun AnalyticsScreen(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
                 ),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Surface(
                         shape = CircleShape,
-                        color = CyanAccent.copy(alpha = 0.2f),
+                        color = extended.info.copy(alpha = 0.15f),
                         modifier = Modifier.size(36.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 imageVector = Icons.Default.EmojiEvents,
                                 contentDescription = null,
-                                tint = CyanAccent,
+                                tint = extended.info,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text("$bestStreak Days", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text("All-Time Record", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        text = "$bestStreak Days",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "All-Time Record",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
@@ -163,37 +174,45 @@ fun AnalyticsScreen(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
                 ),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Surface(
                         shape = CircleShape,
-                        color = EmeraldSuccess.copy(alpha = 0.2f),
+                        color = extended.success.copy(alpha = 0.15f),
                         modifier = Modifier.size(36.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 imageVector = Icons.Default.Insights,
                                 contentDescription = null,
-                                tint = EmeraldSuccess,
+                                tint = extended.success,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(String.format("%.1f", avgEnergy), fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text("Avg Energy / 10", fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        text = String.format("%.1f", avgEnergy),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Avg Energy / 10",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
 
-        // Custom Canvas Visual Chart for Emotional Landscape
+        // Custom Visual Chart for Emotional Landscape
         Card(
             shape = RoundedCornerShape(22.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
             ),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
             modifier = Modifier.fillMaxWidth()
@@ -206,7 +225,7 @@ fun AnalyticsScreen(
                 )
                 Text(
                     text = "Frequency distribution of logged emotional states",
-                    fontSize = 11.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -214,13 +233,7 @@ fun AnalyticsScreen(
                 Mood.entries.forEach { mood ->
                     val count = moodCounts[mood] ?: 0
                     val fraction = if (totalLoggedDays > 0) count.toFloat() / totalLoggedDays else 0f
-                    val moodColor = when (mood) {
-                        Mood.ECSTATIC -> EmeraldSuccess
-                        Mood.GOOD -> CyanAccent
-                        Mood.NEUTRAL -> MaterialTheme.colorScheme.primary
-                        Mood.LOW -> AmberWarm
-                        Mood.STRESSED -> MaterialTheme.colorScheme.error
-                    }
+                    val moodColor = mood.getColor(extended)
 
                     Row(
                         modifier = Modifier
@@ -228,9 +241,19 @@ fun AnalyticsScreen(
                             .padding(vertical = 5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(mood.emoji, fontSize = 18.sp)
+                        Icon(
+                            imageVector = mood.getIcon(),
+                            contentDescription = mood.displayName,
+                            tint = moodColor,
+                            modifier = Modifier.size(20.dp)
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(mood.displayName, fontSize = 12.sp, fontWeight = FontWeight.Medium, modifier = Modifier.width(95.dp))
+                        Text(
+                            text = mood.displayName,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.width(95.dp)
+                        )
                         LinearProgressIndicator(
                             progress = { fraction },
                             modifier = Modifier
@@ -241,7 +264,11 @@ fun AnalyticsScreen(
                             trackColor = MaterialTheme.colorScheme.surface
                         )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text("$count d", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "$count d",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
@@ -251,7 +278,7 @@ fun AnalyticsScreen(
         Card(
             shape = RoundedCornerShape(22.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
             ),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
             modifier = Modifier.fillMaxWidth()
@@ -280,15 +307,15 @@ fun AnalyticsScreen(
                     ) {
                         Surface(
                             shape = CircleShape,
-                            color = if (unlocked) EmeraldSuccess.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surface,
-                            border = if (unlocked) BorderStroke(1.dp, EmeraldSuccess.copy(alpha = 0.5f)) else null,
+                            color = if (unlocked) extended.success.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surface,
+                            border = if (unlocked) BorderStroke(1.dp, extended.success.copy(alpha = 0.4f)) else null,
                             modifier = Modifier.size(40.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = if (unlocked) Icons.Default.Star else Icons.Default.ThumbUp,
                                     contentDescription = null,
-                                    tint = if (unlocked) EmeraldSuccess else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                    tint = if (unlocked) extended.success else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
@@ -298,18 +325,23 @@ fun AnalyticsScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     text = title,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 13.sp,
                                     color = if (unlocked) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 if (unlocked) {
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Text("✓ Unlocked", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = EmeraldSuccess)
+                                    Text(
+                                        text = "✓ Unlocked",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = extended.success
+                                    )
                                 }
                             }
                             Text(
                                 text = desc,
-                                fontSize = 11.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -318,6 +350,22 @@ fun AnalyticsScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AnalyticsScreenPreview() {
+    DayPulseTheme {
+        AnalyticsScreen(
+            uiState = UiState(
+                profile = UserProfileEntity(name = "Vyom", persona = "Founder", currentStreak = 4, bestStreak = 9),
+                allLogs = listOf(
+                    DailyLogEntity(date = "2026-10-06", energyLevel = 8, mood = "ECSTATIC"),
+                    DailyLogEntity(date = "2026-10-07", energyLevel = 7, mood = "GOOD")
+                )
+            )
+        )
     }
 }

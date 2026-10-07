@@ -56,23 +56,25 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.content.Context
 import com.example.BuildConfig
 import com.example.data.model.Persona
-import com.example.ui.theme.AmberWarm
-import com.example.ui.theme.CyanAccent
-import com.example.ui.theme.EmeraldSuccess
-import com.example.ui.viewmodel.MainViewModel
+import com.example.ui.theme.extendedColors
 import com.example.ui.viewmodel.UiState
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RemindersProfileScreen(
     uiState: UiState,
-    viewModel: MainViewModel,
+    onOpenOnboarding: () -> Unit,
+    onUpdateProfile: (name: String, email: String, persona: Persona, roleDetails: String, workStyle: String, challenge: String, priorities: String, reminderHour: Int, reminderMinute: Int, reminderEnabled: Boolean, morningDigestEnabled: Boolean) -> Unit,
+    onPrepareEmailPreview: () -> Unit,
+    onTriggerTestNotification: (Context) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+    val extended = MaterialTheme.extendedColors
     val profile = uiState.profile
 
     var name by remember(profile) { mutableStateOf(profile?.name ?: "DayPulse Explorer") }
@@ -144,7 +146,7 @@ fun RemindersProfileScreen(
                     }
 
                     OutlinedButton(
-                        onClick = { viewModel.openOnboardingFlow() },
+                        onClick = onOpenOnboarding,
                         shape = RoundedCornerShape(10.dp),
                         modifier = Modifier
                             .height(34.dp)
@@ -330,18 +332,18 @@ fun RemindersProfileScreen(
 
                 Button(
                     onClick = {
-                        viewModel.updateFullProfile(
-                            name = name,
-                            email = email,
-                            persona = persona,
-                            roleDetails = roleDetails,
-                            workStyle = workStyle,
-                            challenge = primaryChallenge,
-                            priorities = priorities,
-                            reminderHour = reminderHour,
-                            reminderMinute = reminderMinute,
-                            reminderEnabled = reminderEnabled,
-                            morningDigestEnabled = morningDigestEnabled
+                        onUpdateProfile(
+                            name,
+                            email,
+                            persona,
+                            roleDetails,
+                            workStyle,
+                            primaryChallenge,
+                            priorities,
+                            reminderHour,
+                            reminderMinute,
+                            reminderEnabled,
+                            morningDigestEnabled
                         )
                     },
                     shape = RoundedCornerShape(12.dp),
@@ -395,7 +397,7 @@ fun RemindersProfileScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Button(
-                    onClick = { viewModel.prepareEmailPreview() },
+                    onClick = onPrepareEmailPreview,
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -412,7 +414,7 @@ fun RemindersProfileScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 OutlinedButton(
-                    onClick = { viewModel.triggerTestNotification(context) },
+                    onClick = { onTriggerTestNotification(context) },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -531,27 +533,41 @@ fun RemindersProfileScreen(
                 Icon(
                     imageVector = Icons.Default.Key,
                     contentDescription = "API Status",
-                    tint = if (hasGeminiKey) EmeraldSuccess else MaterialTheme.colorScheme.primary,
+                    tint = if (hasGeminiKey) extended.success else MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
                     Text(
-                        text = if (hasGeminiKey) "Gemini 3.5 Flash Active" else "Smart Offline AI Mode",
+                        text = if (hasGeminiKey) "Gemini 2.5 Flash Active" else "Smart Offline AI Mode",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
-                        color = if (hasGeminiKey) EmeraldSuccess else MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (hasGeminiKey) extended.success else MaterialTheme.colorScheme.primary
                     )
                     Text(
                         text = if (hasGeminiKey) "Cloud AI connected with rich role prompt injection."
                         else "High quality role-based rules active. Add GEMINI_API_KEY in Secrets for live cloud answers.",
-                        fontSize = 11.sp,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
+@Composable
+fun RemindersProfileScreenPreview() {
+    com.example.ui.theme.DayPulseTheme {
+        RemindersProfileScreen(
+            uiState = UiState(),
+            onOpenOnboarding = {},
+            onUpdateProfile = { _, _, _, _, _, _, _, _, _, _, _ -> },
+            onPrepareEmailPreview = {},
+            onTriggerTestNotification = {}
+        )
     }
 }

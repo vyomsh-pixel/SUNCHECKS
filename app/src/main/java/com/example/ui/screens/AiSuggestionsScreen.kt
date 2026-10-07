@@ -1,6 +1,5 @@
 package com.example.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,14 +26,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -51,32 +46,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.AiSuggestionItem
 import com.example.data.model.Persona
-import com.example.ui.theme.AmberWarm
-import com.example.ui.theme.CyanAccent
-import com.example.ui.theme.EmeraldSuccess
-import com.example.ui.theme.IndigoLight
-import com.example.ui.theme.IndigoPrimary
-import com.example.ui.viewmodel.MainViewModel
+import com.example.ui.theme.DayPulseTheme
+import com.example.ui.theme.extendedColors
 import com.example.ui.viewmodel.UiState
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AiSuggestionsScreen(
     uiState: UiState,
-    viewModel: MainViewModel,
+    onUpdatePersona: (Persona) -> Unit,
+    onRefreshAiPlan: () -> Unit,
+    onAdoptSuggestion: (AiSuggestionItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val currentPersona = Persona.fromString(uiState.profile?.persona)
     val suggestions = uiState.suggestions
+    val extended = MaterialTheme.extendedColors
     var selectedFilter by remember { mutableStateOf("All") }
 
     val filteredSuggestions = remember(suggestions, selectedFilter) {
@@ -111,7 +104,7 @@ fun AiSuggestionsScreen(
                     else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
                     modifier = Modifier
-                        .clickable { viewModel.updatePersona(persona) }
+                        .clickable { onUpdatePersona(persona) }
                         .testTag("persona_chip_${persona.name.lowercase()}")
                 ) {
                     Row(
@@ -122,8 +115,8 @@ fun AiSuggestionsScreen(
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = persona.title,
+                            style = MaterialTheme.typography.labelMedium,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                            fontSize = 13.sp,
                             color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -135,71 +128,59 @@ fun AiSuggestionsScreen(
         // Persona Banner Card
         Card(
             shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(
-                modifier = Modifier
-                    .background(
-                        Brush.linearGradient(
-                            listOf(
-                                Color(0xFF1E1B4B),
-                                Color(0xFF312E81),
-                                Color(0xFF0E7490)
-                            )
+            Column(modifier = Modifier.padding(20.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = currentPersona.iconEmoji, fontSize = 32.sp)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = currentPersona.title,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
-                    )
-                    .padding(20.dp)
-            ) {
-                Column {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = currentPersona.iconEmoji, fontSize = 32.sp)
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text(
-                                text = currentPersona.title,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                            Text(
-                                text = currentPersona.subtitle,
-                                fontSize = 11.sp,
-                                color = Color.White.copy(alpha = 0.8f)
-                            )
-                        }
+                        Text(
+                            text = currentPersona.subtitle,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                        )
                     }
+                }
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-                    Text(
-                        text = "Focus Pillars:",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = CyanAccent
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        currentPersona.focusAreas.forEach { area ->
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color.White.copy(alpha = 0.15f))
-                                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                            ) {
-                                Text(
-                                    text = area,
-                                    fontSize = 10.sp,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
+                Text(
+                    text = "Focus Pillars:",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    currentPersona.focusAreas.forEach { area ->
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = area,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = FontWeight.Medium
+                            )
                         }
                     }
                 }
@@ -219,15 +200,15 @@ fun AiSuggestionsScreen(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Calibrated by Gemini 3.5 Flash",
-                    fontSize = 11.sp,
+                    text = "Calibrated by Gemini 2.5 Flash",
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium
                 )
             }
 
             Button(
-                onClick = { viewModel.refreshAiPlan() },
+                onClick = onRefreshAiPlan,
                 enabled = !uiState.isLoadingAiPlan,
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -238,11 +219,11 @@ fun AiSuggestionsScreen(
                 if (uiState.isLoadingAiPlan) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         strokeWidth = 2.dp
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("Thinking...", fontSize = 12.sp)
+                    Text("Thinking...", style = MaterialTheme.typography.labelMedium)
                 } else {
                     Icon(
                         imageVector = Icons.Default.AutoAwesome,
@@ -250,7 +231,7 @@ fun AiSuggestionsScreen(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("Regenerate", fontSize = 12.sp)
+                    Text("Regenerate", style = MaterialTheme.typography.labelMedium)
                 }
             }
         }
@@ -267,13 +248,13 @@ fun AiSuggestionsScreen(
                     onClick = { selectedFilter = filter },
                     label = {
                         Text(
-                            when (filter) {
-                                "Morning" -> "Morning 🌅"
-                                "Afternoon" -> "Afternoon ☀️"
-                                "Evening" -> "Evening 🌙"
+                            text = when (filter) {
+                                "Morning" -> "Morning"
+                                "Afternoon" -> "Afternoon"
+                                "Evening" -> "Evening"
                                 else -> "All Blocks"
                             },
-                            fontSize = 11.sp,
+                            style = MaterialTheme.typography.labelSmall,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                         )
                     },
@@ -290,6 +271,9 @@ fun AiSuggestionsScreen(
         if (filteredSuggestions.isEmpty() && !uiState.isLoadingAiPlan) {
             Card(
                 shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+                ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
@@ -312,7 +296,7 @@ fun AiSuggestionsScreen(
                     )
                     Text(
                         text = "Switch filter or tap 'Regenerate' to formulate tailored suggestions.",
-                        fontSize = 12.sp,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -321,7 +305,7 @@ fun AiSuggestionsScreen(
             filteredSuggestions.forEach { item ->
                 AiSuggestionCard(
                     suggestion = item,
-                    onAdopt = { viewModel.adoptAiSuggestion(item) }
+                    onAdopt = { onAdoptSuggestion(item) }
                 )
             }
         }
@@ -330,7 +314,7 @@ fun AiSuggestionsScreen(
         Card(
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
             ),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)),
             modifier = Modifier.fillMaxWidth()
@@ -340,14 +324,14 @@ fun AiSuggestionsScreen(
                     Icon(
                         imageVector = Icons.Default.Lightbulb,
                         contentDescription = null,
-                        tint = AmberWarm,
+                        tint = extended.warning,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Why this works for ${currentPersona.title}s",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -360,14 +344,14 @@ fun AiSuggestionsScreen(
                         Persona.HEALTH_ENTHUSIAST -> "• Morning hydration and sunlight kickstart circadian cortisol and melatonin rhythm.\n• Progressive overload coupled with 8 hours of sleep drives physical gains."
                         Persona.ENTREPRENEUR -> "• Protecting your first 90 minutes for product & revenue velocity prevents operational firefighting.\n• Ruthless bottleneck elimination creates exponential leverage."
                     },
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     lineHeight = 18.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -377,6 +361,13 @@ fun AiSuggestionCard(
     onAdopt: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val extended = MaterialTheme.extendedColors
+    val tagColor = when (suggestion.timeOfDay.lowercase()) {
+        "morning" -> extended.warning
+        "afternoon" -> extended.info
+        else -> MaterialTheme.colorScheme.primary
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -385,7 +376,7 @@ fun AiSuggestionCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
     ) {
         Column(modifier = Modifier.padding(18.dp)) {
@@ -398,24 +389,14 @@ fun AiSuggestionCard(
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(
-                                when (suggestion.timeOfDay.lowercase()) {
-                                    "morning" -> AmberWarm.copy(alpha = 0.15f)
-                                    "afternoon" -> CyanAccent.copy(alpha = 0.15f)
-                                    else -> IndigoLight.copy(alpha = 0.15f)
-                                }
-                            )
+                            .background(tagColor.copy(alpha = 0.15f))
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Text(
                             text = suggestion.timeOfDay,
-                            fontSize = 11.sp,
+                            style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = when (suggestion.timeOfDay.lowercase()) {
-                                "morning" -> AmberWarm
-                                "afternoon" -> CyanAccent
-                                else -> IndigoLight
-                            }
+                            color = tagColor
                         )
                     }
 
@@ -423,7 +404,7 @@ fun AiSuggestionCard(
 
                     Text(
                         text = "• ${suggestion.category}",
-                        fontSize = 11.sp,
+                        style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -434,20 +415,20 @@ fun AiSuggestionCard(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(EmeraldSuccess.copy(alpha = 0.15f))
+                            .background(extended.success.copy(alpha = 0.15f))
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = "Adopted",
-                            tint = EmeraldSuccess,
+                            tint = extended.success,
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = "In Tasks",
-                            fontSize = 11.sp,
-                            color = EmeraldSuccess,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = extended.success,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -465,7 +446,7 @@ fun AiSuggestionCard(
                             modifier = Modifier.size(12.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Add to Tasks", fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+                        Text("Add to Tasks", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -485,5 +466,28 @@ fun AiSuggestionCard(
                 lineHeight = 18.sp
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AiSuggestionsScreenPreview() {
+    DayPulseTheme {
+        AiSuggestionsScreen(
+            uiState = UiState(
+                suggestions = listOf(
+                    AiSuggestionItem(
+                        id = "1",
+                        title = "90m Deep Focus Work Sprint",
+                        description = "Shield phone and close communication apps to power through core tasks.",
+                        timeOfDay = "Morning",
+                        category = "Focus"
+                    )
+                )
+            ),
+            onUpdatePersona = {},
+            onRefreshAiPlan = {},
+            onAdoptSuggestion = {}
+        )
     }
 }

@@ -79,11 +79,9 @@ import com.example.ui.theme.EmeraldSuccess
 import com.example.ui.theme.IndigoDark
 import com.example.ui.theme.IndigoLight
 import com.example.ui.theme.IndigoPrimary
-import com.example.ui.viewmodel.MainViewModel
-
 @Composable
 fun OnboardingScreen(
-    viewModel: MainViewModel,
+    onCompleteOnboarding: (name: String, email: String, persona: Persona, roleDetails: String, workStyle: String, challenge: String, goals: String, selectedHabits: List<String>) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var step by remember { mutableIntStateOf(0) }
@@ -150,15 +148,15 @@ fun OnboardingScreen(
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .clickable {
-                                viewModel.completeOnboarding(
-                                    name = name,
-                                    email = email,
-                                    persona = selectedPersona,
-                                    roleDetails = roleDetails,
-                                    workStyle = workStyle,
-                                    challenge = primaryChallenge,
-                                    goals = goals,
-                                    selectedHabits = selectedHabits
+                                onCompleteOnboarding(
+                                    name,
+                                    email,
+                                    selectedPersona,
+                                    roleDetails,
+                                    workStyle,
+                                    primaryChallenge,
+                                    goals,
+                                    selectedHabits
                                 )
                             }
                             .padding(8.dp)
@@ -259,15 +257,15 @@ fun OnboardingScreen(
                     if (step < totalSteps - 1) {
                         step++
                     } else {
-                        viewModel.completeOnboarding(
-                            name = name,
-                            email = email,
-                            persona = selectedPersona,
-                            roleDetails = roleDetails,
-                            workStyle = workStyle,
-                            challenge = primaryChallenge,
-                            goals = goals,
-                            selectedHabits = selectedHabits
+                        onCompleteOnboarding(
+                            name,
+                            email,
+                            selectedPersona,
+                            roleDetails,
+                            workStyle,
+                            primaryChallenge,
+                            goals,
+                            selectedHabits
                         )
                     }
                 },

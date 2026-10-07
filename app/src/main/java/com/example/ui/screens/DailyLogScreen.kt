@@ -1,6 +1,6 @@
 package com.example.ui.screens
 
-import androidx.compose.foundation.BorderStroke
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,22 +21,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,25 +38,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.local.DailyLogEntity
+import com.example.data.local.UserProfileEntity
 import com.example.data.model.Mood
+import com.example.data.model.TaskItem
 import com.example.ui.components.EnergyLevelSection
 import com.example.ui.components.MoodSelectorSection
+import com.example.ui.components.PromptCard
 import com.example.ui.components.StreakHeroCard
 import com.example.ui.components.TaskChecklistSection
-import com.example.ui.theme.AmberWarm
-import com.example.ui.theme.CyanAccent
-import com.example.ui.theme.EmeraldSuccess
-import com.example.ui.theme.IndigoLight
-import com.example.ui.theme.IndigoPrimary
+import com.example.ui.theme.DayPulseTheme
+import com.example.ui.theme.extendedColors
 import com.example.ui.viewmodel.AppNavTab
-import com.example.ui.viewmodel.MainViewModel
 import com.example.ui.viewmodel.UiState
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -71,13 +64,26 @@ import java.util.Locale
 @Composable
 fun DailyLogScreen(
     uiState: UiState,
-    viewModel: MainViewModel,
+    onNavigateToTab: (AppNavTab) -> Unit,
+    onEmailDigestClick: () -> Unit,
+    onUpdateFocusIntention: (String) -> Unit,
+    onMoodSelected: (Mood) -> Unit,
+    onToggleMoodTag: (String) -> Unit,
+    onEnergyChange: (Int) -> Unit,
+    onToggleTask: (String) -> Unit,
+    onAddTask: (String) -> Unit,
+    onDeleteTask: (String) -> Unit,
+    onUpdateGratitude: (String) -> Unit,
+    onUpdateEveningReflection: (String) -> Unit,
+    onDismissEmailPreview: () -> Unit,
+    onSendEmailDigest: (Context) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val log = uiState.currentLog
     val profile = uiState.profile
+    val extended = MaterialTheme.extendedColors
 
     val todayFormatted = remember {
         SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault()).format(Date())
@@ -101,7 +107,7 @@ fun DailyLogScreen(
                     modifier = Modifier
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(EmeraldSuccess)
+                        .background(extended.success)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
@@ -109,14 +115,14 @@ fun DailyLogScreen(
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    letterSpacing = 1.sp
+                    letterSpacing = 0.8.sp
                 )
             }
 
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
-                modifier = Modifier.clickable { viewModel.setNavTab(AppNavTab.AI_SUGGESTIONS) }
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.clickable { onNavigateToTab(AppNavTab.AI_SUGGESTIONS) }
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -131,7 +137,7 @@ fun DailyLogScreen(
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "AI Routine (${uiState.suggestions.size})",
-                        fontSize = 11.sp,
+                        style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
@@ -144,196 +150,76 @@ fun DailyLogScreen(
             currentStreak = profile?.currentStreak ?: 1,
             bestStreak = profile?.bestStreak ?: 1,
             personaTitle = profile?.persona ?: "Working Professional",
-            onEmailDigestClick = { viewModel.prepareEmailPreview() }
+            onEmailDigestClick = onEmailDigestClick
         )
 
         // Today's Focus Intention
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-        ) {
-            Column(modifier = Modifier.padding(18.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.Bookmark,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(
-                            text = "Daily North Star • Top Intention",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "What single outcome defines victory for today?",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
-                    value = log?.focusIntention ?: "",
-                    onValueChange = { viewModel.updateFocusIntention(it) },
-                    placeholder = { Text("e.g. Master Chapter 4 / Ship feature release / 90m deep block...") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("focus_intention_input"),
-                    shape = RoundedCornerShape(14.dp)
-                )
-            }
-        }
+        PromptCard(
+            title = "Daily North Star • Top Intention",
+            subtitle = "What single outcome defines victory for today?",
+            icon = Icons.Default.Bookmark,
+            iconTint = MaterialTheme.colorScheme.primary,
+            value = log?.focusIntention ?: "",
+            onValueChange = onUpdateFocusIntention,
+            placeholder = "e.g. Master Chapter 4 / Ship feature release / 90m deep block...",
+            testTag = "focus_intention_input"
+        )
 
         // Mood Tracker Section
         MoodSelectorSection(
             selectedMood = Mood.fromString(log?.mood),
-            onMoodSelected = { viewModel.updateMood(it) },
+            onMoodSelected = onMoodSelected,
             currentTags = log?.moodTags ?: "",
-            onTagToggled = { viewModel.toggleMoodTag(it) }
+            onTagToggled = onToggleMoodTag
         )
 
         // Energy Meter Section
         EnergyLevelSection(
             energyLevel = log?.energyLevel ?: 7,
-            onEnergyChange = { viewModel.updateEnergyLevel(it) }
+            onEnergyChange = onEnergyChange
         )
 
         // Daily Habits & Tasks Checklist
         TaskChecklistSection(
             tasks = uiState.tasks,
-            onToggleTask = { viewModel.toggleTask(it) },
-            onAddTask = { viewModel.addTask(it) },
-            onDeleteTask = { viewModel.deleteTask(it) }
+            onToggleTask = onToggleTask,
+            onAddTask = onAddTask,
+            onDeleteTask = onDeleteTask
         )
 
         // Gratitude & Three Good Things
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-        ) {
-            Column(modifier = Modifier.padding(18.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        shape = CircleShape,
-                        color = AmberWarm.copy(alpha = 0.15f),
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.Favorite,
-                                contentDescription = null,
-                                tint = AmberWarm,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(
-                            text = "Gratitude & Energy Multipliers",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "What went surprisingly well or brought you peace today?",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
-                    value = log?.gratitude ?: "",
-                    onValueChange = { viewModel.updateGratitude(it) },
-                    placeholder = { Text("1. Energizing workout, 2. Breakthrough on code, 3. Great conversation...") },
-                    minLines = 2,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("gratitude_input"),
-                    shape = RoundedCornerShape(14.dp)
-                )
-            }
-        }
+        PromptCard(
+            title = "Gratitude & Energy Multipliers",
+            subtitle = "What went surprisingly well or brought you peace today?",
+            icon = Icons.Default.Favorite,
+            iconTint = extended.warning,
+            value = log?.gratitude ?: "",
+            onValueChange = onUpdateGratitude,
+            placeholder = "1. Energizing workout, 2. Breakthrough on code, 3. Great conversation...",
+            testTag = "gratitude_input",
+            minLines = 2
+        )
 
         // Evening Reflections
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-        ) {
-            Column(modifier = Modifier.padding(18.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        shape = CircleShape,
-                        color = CyanAccent.copy(alpha = 0.15f),
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = null,
-                                tint = CyanAccent,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Column {
-                        Text(
-                            text = "Evening Reflection & Lessons",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Close the mental loop. What will you do differently tomorrow?",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
-                    value = log?.eveningReflection ?: "",
-                    onValueChange = { viewModel.updateEveningReflection(it) },
-                    placeholder = { Text("Reflections on progress, wins, and tomorrow's adjustments...") },
-                    minLines = 3,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("evening_reflection_input"),
-                    shape = RoundedCornerShape(14.dp)
-                )
-            }
-        }
+        PromptCard(
+            title = "Evening Reflection & Lessons",
+            subtitle = "Close the mental loop. What will you do differently tomorrow?",
+            icon = Icons.Default.Edit,
+            iconTint = extended.info,
+            value = log?.eveningReflection ?: "",
+            onValueChange = onUpdateEveningReflection,
+            placeholder = "Reflections on progress, wins, and tomorrow's adjustments...",
+            testTag = "evening_reflection_input",
+            minLines = 3
+        )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     // Email Digest Preview Modal Dialog
     uiState.emailPreviewPair?.let { (subject, body) ->
         AlertDialog(
-            onDismissRequest = { viewModel.dismissEmailPreview() },
+            onDismissRequest = onDismissEmailPreview,
             title = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
@@ -342,22 +228,26 @@ fun DailyLogScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Email Reminder & Digest", fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "Email Reminder & Digest",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             },
             text = {
                 Column {
                     Text(
                         text = "Recipient: ${profile?.email?.ifBlank { "Not configured" } ?: "Not configured"}",
+                        style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = subject,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 13.sp
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Card(
@@ -372,26 +262,55 @@ fun DailyLogScreen(
                     ) {
                         Text(
                             text = body,
-                            fontSize = 11.sp,
-                            modifier = Modifier.padding(12.dp),
-                            lineHeight = 16.sp
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(12.dp)
                         )
                     }
                 }
             },
             confirmButton = {
                 Button(
-                    onClick = { viewModel.sendEmailDigest(context) },
+                    onClick = { onSendEmailDigest(context) },
                     modifier = Modifier.testTag("confirm_send_email_button")
                 ) {
                     Text("Open Email Client")
                 }
             },
             dismissButton = {
-                OutlinedButton(onClick = { viewModel.dismissEmailPreview() }) {
+                OutlinedButton(onClick = onDismissEmailPreview) {
                     Text("Cancel")
                 }
             }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DailyLogScreenPreview() {
+    DayPulseTheme {
+        DailyLogScreen(
+            uiState = UiState(
+                profile = UserProfileEntity(name = "Vyom", persona = "Founder & Entrepreneur", currentStreak = 5, bestStreak = 12),
+                currentLog = DailyLogEntity(date = "2026-10-07", energyLevel = 8, mood = "GOOD", focusIntention = "Ship the redesigned Calm Theme"),
+                tasks = listOf(
+                    TaskItem(id = "1", title = "Morning meditation & cold shower", isCompleted = true),
+                    TaskItem(id = "2", title = "Deep work block: Architecture refactor", isCompleted = false)
+                )
+            ),
+            onNavigateToTab = {},
+            onEmailDigestClick = {},
+            onUpdateFocusIntention = {},
+            onMoodSelected = {},
+            onToggleMoodTag = {},
+            onEnergyChange = {},
+            onToggleTask = {},
+            onAddTask = {},
+            onDeleteTask = {},
+            onUpdateGratitude = {},
+            onUpdateEveningReflection = {},
+            onDismissEmailPreview = {},
+            onSendEmailDigest = {}
         )
     }
 }

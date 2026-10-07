@@ -88,7 +88,11 @@ fun MainRoot(viewModel: MainViewModel) {
         label = "onboarding_switcher"
     ) { isOnboarding ->
         if (isOnboarding) {
-            OnboardingScreen(viewModel = viewModel)
+            OnboardingScreen(
+                onCompleteOnboarding = { name, email, persona, roleDetails, workStyle, challenge, goals, habits ->
+                    viewModel.completeOnboarding(name, email, persona, roleDetails, workStyle, challenge, goals, habits)
+                }
+            )
         } else {
             DayPulseApp(viewModel = viewModel)
         }
@@ -122,21 +126,21 @@ fun DayPulseApp(viewModel: MainViewModel) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = "DayPulse",
+                            style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.ExtraBold,
-                            fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Surface(
                             shape = RoundedCornerShape(8.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                            color = MaterialTheme.colorScheme.primaryContainer
                         ) {
                             Text(
                                 text = "${persona.iconEmoji} ${persona.title}",
-                                fontSize = 11.sp,
+                                style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                             )
                         }
                     }
@@ -149,41 +153,41 @@ fun DayPulseApp(viewModel: MainViewModel) {
         bottomBar = {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 6.dp
+                tonalElevation = 3.dp
             ) {
                 NavigationBarItem(
                     selected = uiState.currentTab == AppNavTab.DAILY_LOG,
                     onClick = { viewModel.setNavTab(AppNavTab.DAILY_LOG) },
                     icon = { Icon(Icons.Default.DateRange, contentDescription = "Daily Log") },
-                    label = { Text("Log", fontSize = 11.sp) },
+                    label = { Text("Log", style = MaterialTheme.typography.labelSmall) },
                     modifier = Modifier.testTag("nav_tab_daily_log")
                 )
                 NavigationBarItem(
                     selected = uiState.currentTab == AppNavTab.AI_SUGGESTIONS,
                     onClick = { viewModel.setNavTab(AppNavTab.AI_SUGGESTIONS) },
                     icon = { Icon(Icons.Default.AutoAwesome, contentDescription = "Smart AI Routine") },
-                    label = { Text("AI Routine", fontSize = 11.sp) },
+                    label = { Text("AI Routine", style = MaterialTheme.typography.labelSmall) },
                     modifier = Modifier.testTag("nav_tab_ai_routine")
                 )
                 NavigationBarItem(
                     selected = uiState.currentTab == AppNavTab.ASSISTANT_BOT,
                     onClick = { viewModel.setNavTab(AppNavTab.ASSISTANT_BOT) },
                     icon = { Icon(Icons.Default.ChatBubble, contentDescription = "AI Advisor Bot") },
-                    label = { Text("Advisor", fontSize = 11.sp) },
+                    label = { Text("Advisor", style = MaterialTheme.typography.labelSmall) },
                     modifier = Modifier.testTag("nav_tab_assistant")
                 )
                 NavigationBarItem(
                     selected = uiState.currentTab == AppNavTab.ANALYTICS,
                     onClick = { viewModel.setNavTab(AppNavTab.ANALYTICS) },
                     icon = { Icon(Icons.Default.BarChart, contentDescription = "Trends") },
-                    label = { Text("Trends", fontSize = 11.sp) },
+                    label = { Text("Trends", style = MaterialTheme.typography.labelSmall) },
                     modifier = Modifier.testTag("nav_tab_analytics")
                 )
                 NavigationBarItem(
                     selected = uiState.currentTab == AppNavTab.PROFILE_REMINDERS,
                     onClick = { viewModel.setNavTab(AppNavTab.PROFILE_REMINDERS) },
                     icon = { Icon(Icons.Default.Notifications, contentDescription = "Profile & Reminders") },
-                    label = { Text("Profile", fontSize = 11.sp) },
+                    label = { Text("Profile", style = MaterialTheme.typography.labelSmall) },
                     modifier = Modifier.testTag("nav_tab_reminders")
                 )
             }
@@ -198,23 +202,43 @@ fun DayPulseApp(viewModel: MainViewModel) {
             when (uiState.currentTab) {
                 AppNavTab.DAILY_LOG -> DailyLogScreen(
                     uiState = uiState,
-                    viewModel = viewModel
+                    onNavigateToTab = { viewModel.setNavTab(it) },
+                    onEmailDigestClick = { viewModel.prepareEmailPreview() },
+                    onUpdateFocusIntention = { viewModel.updateFocusIntention(it) },
+                    onMoodSelected = { viewModel.updateMood(it) },
+                    onToggleMoodTag = { viewModel.toggleMoodTag(it) },
+                    onEnergyChange = { viewModel.updateEnergyLevel(it) },
+                    onToggleTask = { viewModel.toggleTask(it) },
+                    onAddTask = { viewModel.addTask(it) },
+                    onDeleteTask = { viewModel.deleteTask(it) },
+                    onUpdateGratitude = { viewModel.updateGratitude(it) },
+                    onUpdateEveningReflection = { viewModel.updateEveningReflection(it) },
+                    onDismissEmailPreview = { viewModel.dismissEmailPreview() },
+                    onSendEmailDigest = { viewModel.sendEmailDigest(it) }
                 )
                 AppNavTab.AI_SUGGESTIONS -> AiSuggestionsScreen(
                     uiState = uiState,
-                    viewModel = viewModel
+                    onUpdatePersona = { viewModel.updatePersona(it) },
+                    onRefreshAiPlan = { viewModel.refreshAiPlan() },
+                    onAdoptSuggestion = { viewModel.adoptAiSuggestion(it) }
                 )
                 AppNavTab.ASSISTANT_BOT -> AssistantBotScreen(
                     uiState = uiState,
-                    viewModel = viewModel
+                    onClearChat = { viewModel.clearChat() },
+                    onRequestQuickAdvice = { viewModel.requestQuickAdvice(it) },
+                    onSendChatMessage = { viewModel.sendChatMessage(it) }
                 )
                 AppNavTab.ANALYTICS -> AnalyticsScreen(
-                    uiState = uiState,
-                    viewModel = viewModel
+                    uiState = uiState
                 )
                 AppNavTab.PROFILE_REMINDERS -> RemindersProfileScreen(
                     uiState = uiState,
-                    viewModel = viewModel
+                    onOpenOnboarding = { viewModel.openOnboardingFlow() },
+                    onUpdateProfile = { name, email, persona, roleDetails, workStyle, challenge, priorities, reminderHour, reminderMinute, reminderEnabled, morningDigestEnabled ->
+                        viewModel.updateFullProfile(name, email, persona, roleDetails, workStyle, challenge, priorities, reminderHour, reminderMinute, reminderEnabled, morningDigestEnabled)
+                    },
+                    onPrepareEmailPreview = { viewModel.prepareEmailPreview() },
+                    onTriggerTestNotification = { viewModel.triggerTestNotification(it) }
                 )
             }
         }

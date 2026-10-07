@@ -1,8 +1,5 @@
 package com.example.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,13 +22,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DeleteSweep
-import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -42,7 +34,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,27 +41,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.ChatMessageEntity
 import com.example.data.model.Persona
 import com.example.data.remote.AdviceType
-import com.example.ui.theme.AmberWarm
-import com.example.ui.theme.CyanAccent
-import com.example.ui.theme.EmeraldSuccess
-import com.example.ui.theme.IndigoLight
-import com.example.ui.theme.IndigoPrimary
-import com.example.ui.viewmodel.MainViewModel
+import com.example.ui.theme.DayPulseTheme
+import com.example.ui.theme.extendedColors
 import com.example.ui.viewmodel.UiState
 
 @Composable
 fun AssistantBotScreen(
     uiState: UiState,
-    viewModel: MainViewModel,
+    onClearChat: () -> Unit,
+    onRequestQuickAdvice: (AdviceType) -> Unit,
+    onSendChatMessage: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var inputText by remember { mutableStateOf("") }
@@ -79,6 +67,7 @@ fun AssistantBotScreen(
     val chatMessages = uiState.chatMessages
     val profile = uiState.profile
     val log = uiState.currentLog
+    val extended = MaterialTheme.extendedColors
 
     val quickStarters = when (persona) {
         Persona.STUDENT -> listOf(
@@ -100,29 +89,23 @@ fun AssistantBotScreen(
             "How to stop working late into the night"
         )
         Persona.CREATIVE -> listOf(
-            "How do I break through creative block today?",
-            "Dealing with impostor syndrome on my current project",
-            "How to stay consistent with daily artistic practice",
-            "Advice on finishing projects rather than starting new ones"
+            "How to overcome creative blocks and resistance this morning?",
+            "Creating a sacred daily creative habit without perfectionism",
+            "Structuring deep creative flow blocks",
+            "How to reflect and recharge artistic energy"
         )
         Persona.HEALTH_ENTHUSIAST -> listOf(
-            "How can I stay motivated to workout when feeling low energy?",
-            "Best nutrition and hydration routine for afternoon focus",
-            "Simple desk mobility stretches to relieve stiffness",
-            "Tips for deeper restorative sleep after high output"
+            "Optimal recovery routine after intense morning training",
+            "Daily habits to maintain high mental and physical stamina",
+            "How to align deep work with high energy peaks",
+            "Evening shutdown protocol to optimize sleep quality"
         )
         Persona.ENTREPRENEUR -> listOf(
-            "How to solve my #1 business bottleneck today?",
-            "Managing executive stress & staying decisive under pressure",
-            "Framework for high-leverage delegation and timeboxing",
-            "Maintaining health while scaling a company"
+            "How to focus on #1 company leverage instead of firefighting?",
+            "Decision-making framework when overwhelmed by inputs",
+            "Protecting strategic thinking time from meeting creep",
+            "Maintaining peak founder energy across a 12-hour sprint"
         )
-    }
-
-    LaunchedEffect(chatMessages.size) {
-        if (chatMessages.isNotEmpty()) {
-            listState.animateScrollToItem(chatMessages.size - 1)
-        }
     }
 
     Column(
@@ -134,7 +117,7 @@ fun AssistantBotScreen(
         Card(
             shape = RoundedCornerShape(18.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
             ),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -157,7 +140,7 @@ fun AssistantBotScreen(
                                 Icon(
                                     imageVector = Icons.Default.SmartToy,
                                     contentDescription = "Bot",
-                                    tint = Color.White,
+                                    tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
@@ -167,26 +150,26 @@ fun AssistantBotScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     text = "PulseBot AI Advisor",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Surface(
                                     shape = RoundedCornerShape(6.dp),
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                    color = MaterialTheme.colorScheme.primaryContainer
                                 ) {
                                     Text(
                                         text = persona.title,
-                                        fontSize = 10.sp,
+                                        style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.primary,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                     )
                                 }
                             }
                             Text(
                                 text = "Calibrated for: ${profile?.roleDetails ?: "General"} • ${profile?.workStyle ?: "Balanced"}",
-                                fontSize = 11.sp,
+                                style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -194,7 +177,7 @@ fun AssistantBotScreen(
 
                     if (chatMessages.isNotEmpty()) {
                         IconButton(
-                            onClick = { viewModel.clearChat() },
+                            onClick = onClearChat,
                             modifier = Modifier.testTag("clear_chat_button")
                         ) {
                             Icon(
@@ -221,15 +204,15 @@ fun AssistantBotScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "⚡ Energy: ${log?.energyLevel ?: 7}/10 • Mood: ${log?.mood ?: "GOOD"}",
-                            fontSize = 11.sp,
+                            text = "Energy: ${log?.energyLevel ?: 7}/10 • Mood: ${log?.mood ?: "GOOD"}",
+                            style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         val completedCount = uiState.tasks.count { it.isCompleted }
                         Text(
                             text = "Tasks: $completedCount/${uiState.tasks.size} done",
-                            fontSize = 11.sp,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
@@ -240,30 +223,27 @@ fun AssistantBotScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Quick Action Advice Buttons (Productivity, Motivation, Strategy, Reflection)
+        // Quick Action Advice Buttons (Productivity, Motivation, Strategy)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AdvicePillButton(
-                icon = "⚡",
                 label = "Productivity Tip",
                 isLoading = uiState.isGeneratingQuickAdvice,
-                onClick = { viewModel.requestQuickAdvice(AdviceType.PRODUCTIVITY_TIP) },
+                onClick = { onRequestQuickAdvice(AdviceType.PRODUCTIVITY_TIP) },
                 modifier = Modifier.weight(1f)
             )
             AdvicePillButton(
-                icon = "🔥",
                 label = "Motivation Boost",
                 isLoading = uiState.isGeneratingQuickAdvice,
-                onClick = { viewModel.requestQuickAdvice(AdviceType.MOTIVATION_BOOST) },
+                onClick = { onRequestQuickAdvice(AdviceType.MOTIVATION_BOOST) },
                 modifier = Modifier.weight(1f)
             )
             AdvicePillButton(
-                icon = "🎯",
                 label = "Daily Strategy",
                 isLoading = uiState.isGeneratingQuickAdvice,
-                onClick = { viewModel.requestQuickAdvice(AdviceType.ROLE_STRATEGY) },
+                onClick = { onRequestQuickAdvice(AdviceType.ROLE_STRATEGY) },
                 modifier = Modifier.weight(1f)
             )
         }
@@ -280,7 +260,7 @@ fun AssistantBotScreen(
                     shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier
-                        .clickable { viewModel.sendChatMessage(starter) }
+                        .clickable { onSendChatMessage(starter) }
                         .testTag("starter_chip")
                 ) {
                     Row(
@@ -296,7 +276,7 @@ fun AssistantBotScreen(
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = starter,
-                            fontSize = 11.sp,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -342,8 +322,8 @@ fun AssistantBotScreen(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Tap any quick action pill above (Productivity Tip, Motivation Boost, Strategy) or ask questions about balancing your ${persona.title} goals.",
-                        fontSize = 12.sp,
+                        text = "Tap any quick action pill above or ask questions about balancing your ${persona.title} goals.",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 18.sp,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -367,12 +347,13 @@ fun AssistantBotScreen(
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(16.dp),
-                                    strokeWidth = 2.dp
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = "PulseBot is generating personalized advice...",
-                                    fontSize = 12.sp,
+                                    style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                             }
@@ -392,7 +373,7 @@ fun AssistantBotScreen(
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { inputText = it },
-                placeholder = { Text("Ask PulseBot for advice...", fontSize = 13.sp) },
+                placeholder = { Text("Ask PulseBot for advice...", style = MaterialTheme.typography.bodyMedium) },
                 shape = RoundedCornerShape(16.dp),
                 maxLines = 3,
                 modifier = Modifier
@@ -403,7 +384,7 @@ fun AssistantBotScreen(
             IconButton(
                 onClick = {
                     if (inputText.isNotBlank() && !uiState.isChatReplying) {
-                        viewModel.sendChatMessage(inputText)
+                        onSendChatMessage(inputText)
                         inputText = ""
                     }
                 },
@@ -420,7 +401,7 @@ fun AssistantBotScreen(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
                     contentDescription = "Send",
-                    tint = if (inputText.isNotBlank()) Color.White else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                    tint = if (inputText.isNotBlank()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -430,7 +411,6 @@ fun AssistantBotScreen(
 
 @Composable
 private fun AdvicePillButton(
-    icon: String,
     label: String,
     isLoading: Boolean,
     onClick: () -> Unit,
@@ -438,7 +418,7 @@ private fun AdvicePillButton(
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+        color = MaterialTheme.colorScheme.primaryContainer,
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .clickable(enabled = !isLoading) { onClick() }
@@ -448,11 +428,9 @@ private fun AdvicePillButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(icon, fontSize = 13.sp)
-            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = label,
-                fontSize = 11.sp,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -473,13 +451,13 @@ fun ChatBubbleItem(message: ChatMessageEntity) {
                 modifier = Modifier
                     .padding(end = 6.dp, top = 4.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f))
+                    .background(MaterialTheme.colorScheme.primaryContainer)
                     .padding(4.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.SmartToy,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(16.dp)
                 )
             }
@@ -501,10 +479,27 @@ fun ChatBubbleItem(message: ChatMessageEntity) {
             Text(
                 text = message.content,
                 modifier = Modifier.padding(12.dp),
-                fontSize = 13.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 lineHeight = 19.sp,
-                color = if (isUser) Color.White else MaterialTheme.colorScheme.onSurface
+                color = if (isUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AssistantBotScreenPreview() {
+    DayPulseTheme {
+        AssistantBotScreen(
+            uiState = UiState(
+                chatMessages = listOf(
+                    ChatMessageEntity(sender = "bot", content = "Welcome to DayPulse! How can I support your focus today?")
+                )
+            ),
+            onClearChat = {},
+            onRequestQuickAdvice = {},
+            onSendChatMessage = {}
+        )
     }
 }

@@ -1,12 +1,9 @@
 package com.example.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,12 +22,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.SentimentDissatisfied
+import androidx.compose.material.icons.outlined.SentimentNeutral
+import androidx.compose.material.icons.outlined.SentimentSatisfied
+import androidx.compose.material.icons.outlined.SentimentVeryDissatisfied
+import androidx.compose.material.icons.outlined.SentimentVerySatisfied
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -43,7 +42,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -58,33 +56,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.data.model.AiSuggestionItem
 import com.example.data.model.Mood
 import com.example.data.model.TaskItem
-import com.example.ui.theme.AmberWarm
-import com.example.ui.theme.CyanAccent
-import com.example.ui.theme.EmeraldSuccess
-import com.example.ui.theme.IndigoDark
-import com.example.ui.theme.IndigoLight
-import com.example.ui.theme.IndigoPrimary
-import com.example.ui.theme.MoodEcstaticColor
-import com.example.ui.theme.MoodGoodColor
-import com.example.ui.theme.MoodLowColor
-import com.example.ui.theme.MoodNeutralColor
-import com.example.ui.theme.MoodStressedColor
+import com.example.ui.theme.ExtendedColors
+import com.example.ui.theme.extendedColors
+
+fun Mood.getIcon(): ImageVector = when (this) {
+    Mood.ECSTATIC -> Icons.Outlined.SentimentVerySatisfied
+    Mood.GOOD -> Icons.Outlined.SentimentSatisfied
+    Mood.NEUTRAL -> Icons.Outlined.SentimentNeutral
+    Mood.LOW -> Icons.Outlined.SentimentDissatisfied
+    Mood.STRESSED -> Icons.Outlined.SentimentVeryDissatisfied
+}
+
+fun Mood.getColor(colors: ExtendedColors): Color = when (this) {
+    Mood.ECSTATIC -> colors.moodEcstatic
+    Mood.GOOD -> colors.moodGood
+    Mood.NEUTRAL -> colors.moodNeutral
+    Mood.LOW -> colors.moodLow
+    Mood.STRESSED -> colors.moodStressed
+}
 
 @Composable
 fun StreakHeroCard(
@@ -97,145 +94,100 @@ fun StreakHeroCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(12.dp, RoundedCornerShape(26.dp), spotColor = Color(0xFF4F46E5).copy(alpha = 0.4f))
             .testTag("streak_hero_card"),
-        shape = RoundedCornerShape(26.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
     ) {
-        Box(
+        Column(
             modifier = Modifier
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF1E1B4B),
-                            Color(0xFF312E81),
-                            Color(0xFF0F766E),
-                            Color(0xFF1E293B)
-                        ),
-                        start = Offset(0f, 0f),
-                        end = Offset(1000f, 1000f)
-                    )
-                )
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
-            // Background Canvas Pulse Wave
-            Canvas(
-                modifier = Modifier
-                    .matchParentSize()
-                    .padding(vertical = 10.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                val path = Path().apply {
-                    moveTo(0f, size.height * 0.7f)
-                    cubicTo(
-                        size.width * 0.25f, size.height * 0.9f,
-                        size.width * 0.4f, size.height * 0.2f,
-                        size.width * 0.55f, size.height * 0.6f
-                    )
-                    cubicTo(
-                        size.width * 0.7f, size.height * 1.0f,
-                        size.width * 0.85f, size.height * 0.4f,
-                        size.width, size.height * 0.5f
-                    )
-                }
-                drawPath(
-                    path = path,
-                    color = Color(0x3338BDF8),
-                    style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(22.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color(0x40F59E0B),
-                            border = BorderStroke(1.dp, Color(0x80FBBF24))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = MaterialTheme.extendedColors.warningContainer
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.LocalFireDepartment,
-                                    contentDescription = "Streak",
-                                    tint = Color(0xFFFBBF24),
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = "$currentStreak Day Streak",
-                                    color = Color.White,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    fontSize = 14.sp
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.width(10.dp))
-
-                        Surface(
-                            shape = RoundedCornerShape(10.dp),
-                            color = Color.White.copy(alpha = 0.12f)
-                        ) {
+                            Icon(
+                                imageVector = Icons.Default.LocalFireDepartment,
+                                contentDescription = "Streak",
+                                tint = MaterialTheme.extendedColors.warning,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
                             Text(
-                                text = "Record: $bestStreak d",
-                                color = Color.White.copy(alpha = 0.9f),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                text = "$currentStreak Day Streak",
+                                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold
                             )
                         }
                     }
 
-                    Button(
-                        onClick = onEmailDigestClick,
-                        shape = RoundedCornerShape(14.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Color(0xFF1E1B4B)
-                        ),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                        modifier = Modifier.testTag("send_email_digest_button")
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Email,
-                            contentDescription = "Send Email Digest",
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "Email Me",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp
+                            text = "Record: $bestStreak d",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Text(
-                    text = "Daily Pulse • $personaTitle",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    letterSpacing = (-0.2).sp
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Every day you track your energy and intention, you master your trajectory.",
-                    color = Color.White.copy(alpha = 0.85f),
-                    fontSize = 12.sp,
-                    lineHeight = 17.sp
-                )
+                Button(
+                    onClick = onEmailDigestClick,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    modifier = Modifier.testTag("send_email_digest_button")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = "Send Email Digest",
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "Email Me",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Text(
+                text = "Daily Pulse • $personaTitle",
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(3.dp))
+            Text(
+                text = "Every day you track your energy and intention, you master your trajectory.",
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.82f),
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
@@ -254,12 +206,14 @@ fun MoodSelectorSection(
         "Creative", "Busy", "Grateful", "Tired", "Reflective"
     )
     val activeTags = currentTags.split(",").map { it.trim() }.toSet()
+    val extended = MaterialTheme.extendedColors
+    val currentMoodColor = selectedMood.getColor(extended)
 
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
     ) {
@@ -276,7 +230,7 @@ fun MoodSelectorSection(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Captures emotional baseline for AI guidance",
+                        text = "Captures emotional baseline for daily guidance",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -284,27 +238,26 @@ fun MoodSelectorSection(
 
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = when (selectedMood) {
-                        Mood.ECSTATIC -> MoodEcstaticColor.copy(alpha = 0.2f)
-                        Mood.GOOD -> MoodGoodColor.copy(alpha = 0.2f)
-                        Mood.NEUTRAL -> MoodNeutralColor.copy(alpha = 0.2f)
-                        Mood.LOW -> MoodLowColor.copy(alpha = 0.2f)
-                        Mood.STRESSED -> MoodStressedColor.copy(alpha = 0.2f)
-                    }
+                    color = currentMoodColor.copy(alpha = 0.15f)
                 ) {
-                    Text(
-                        text = "${selectedMood.emoji} ${selectedMood.displayName}",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = when (selectedMood) {
-                            Mood.ECSTATIC -> MoodEcstaticColor
-                            Mood.GOOD -> MoodGoodColor
-                            Mood.NEUTRAL -> MoodNeutralColor
-                            Mood.LOW -> MoodLowColor
-                            Mood.STRESSED -> MoodStressedColor
-                        },
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
+                    ) {
+                        Icon(
+                            imageVector = selectedMood.getIcon(),
+                            contentDescription = null,
+                            tint = currentMoodColor,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = selectedMood.displayName,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = currentMoodColor
+                        )
+                    }
                 }
             }
 
@@ -317,13 +270,7 @@ fun MoodSelectorSection(
             ) {
                 moods.forEach { mood ->
                     val isSelected = mood == selectedMood
-                    val moodColor = when (mood) {
-                        Mood.ECSTATIC -> MoodEcstaticColor
-                        Mood.GOOD -> MoodGoodColor
-                        Mood.NEUTRAL -> MoodNeutralColor
-                        Mood.LOW -> MoodLowColor
-                        Mood.STRESSED -> MoodStressedColor
-                    }
+                    val moodColor = mood.getColor(extended)
 
                     val scale by animateFloatAsState(
                         targetValue = if (isSelected) 1.12f else 1.0f,
@@ -337,7 +284,7 @@ fun MoodSelectorSection(
                             .scale(scale)
                             .clip(RoundedCornerShape(16.dp))
                             .background(
-                                if (isSelected) moodColor.copy(alpha = 0.18f)
+                                if (isSelected) moodColor.copy(alpha = 0.14f)
                                 else Color.Transparent
                             )
                             .clickable { onMoodSelected(mood) }
@@ -347,20 +294,25 @@ fun MoodSelectorSection(
                         Surface(
                             shape = CircleShape,
                             color = if (isSelected) moodColor else MaterialTheme.colorScheme.surface,
-                            border = if (isSelected) BorderStroke(2.5.dp, moodColor)
+                            border = if (isSelected) BorderStroke(2.dp, moodColor)
                             else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)),
-                            shadowElevation = if (isSelected) 6.dp else 1.dp,
+                            shadowElevation = if (isSelected) 4.dp else 1.dp,
                             modifier = Modifier.size(46.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text(text = mood.emoji, fontSize = 24.sp)
+                                Icon(
+                                    imageVector = mood.getIcon(),
+                                    contentDescription = mood.displayName,
+                                    tint = if (isSelected) MaterialTheme.colorScheme.surface else moodColor,
+                                    modifier = Modifier.size(24.dp)
+                                )
                             }
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = mood.displayName,
-                            fontSize = 10.sp,
-                            fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             color = if (isSelected) moodColor else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -372,7 +324,7 @@ fun MoodSelectorSection(
             // Mood Tags FlowRow
             Text(
                 text = "Emotional Context Tags:",
-                fontSize = 11.sp,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -388,7 +340,13 @@ fun MoodSelectorSection(
                     FilterChip(
                         selected = isChipSelected,
                         onClick = { onTagToggled(tag) },
-                        label = { Text(tag, fontSize = 11.sp, fontWeight = if (isChipSelected) FontWeight.Bold else FontWeight.Normal) },
+                        label = {
+                            Text(
+                                text = tag,
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = if (isChipSelected) FontWeight.Bold else FontWeight.Normal
+                            )
+                        },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                             selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -407,11 +365,18 @@ fun EnergyLevelSection(
     onEnergyChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val extended = MaterialTheme.extendedColors
+    val energyColor = when (energyLevel) {
+        in 1..3 -> extended.warning
+        in 4..6 -> extended.info
+        else -> extended.success
+    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
     ) {
@@ -432,7 +397,7 @@ fun EnergyLevelSection(
                             in 1..3 -> "Low reserve • Rest & recharge"
                             in 4..6 -> "Moderate • Paced steady sprints"
                             in 7..8 -> "High battery • Ready for deep work"
-                            else -> "⚡ Peak Voltage • Maximum output"
+                            else -> "Peak Vitality • Maximum output"
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -440,22 +405,14 @@ fun EnergyLevelSection(
                 }
 
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = when (energyLevel) {
-                        in 1..3 -> AmberWarm.copy(alpha = 0.2f)
-                        in 4..6 -> CyanAccent.copy(alpha = 0.2f)
-                        else -> EmeraldSuccess.copy(alpha = 0.2f)
-                    }
+                    shape = RoundedCornerShape(10.dp),
+                    color = energyColor.copy(alpha = 0.15f)
                 ) {
                     Text(
-                        text = "$energyLevel / 10 ⚡",
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 13.sp,
-                        color = when (energyLevel) {
-                            in 1..3 -> AmberWarm
-                            in 4..6 -> CyanAccent
-                            else -> EmeraldSuccess
-                        },
+                        text = "$energyLevel / 10",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = energyColor,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                     )
                 }
@@ -467,22 +424,22 @@ fun EnergyLevelSection(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(14.dp),
+                    .height(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 for (i in 1..10) {
                     val isFilled = i <= energyLevel
                     val barColor = when {
                         !isFilled -> MaterialTheme.colorScheme.surface
-                        i <= 3 -> AmberWarm
-                        i <= 6 -> CyanAccent
-                        else -> EmeraldSuccess
+                        i <= 3 -> extended.warning
+                        i <= 6 -> extended.info
+                        else -> extended.success
                     }
 
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .height(14.dp)
+                            .height(12.dp)
                             .clip(RoundedCornerShape(3.dp))
                             .background(barColor)
                             .clickable { onEnergyChange(i) }
@@ -521,12 +478,14 @@ fun TaskChecklistSection(
     val completedCount = tasks.count { it.isCompleted }
     val progress = if (tasks.isNotEmpty()) completedCount.toFloat() / tasks.size else 0f
     val percentage = (progress * 100).toInt()
+    val extended = MaterialTheme.extendedColors
+    val isAllDone = percentage == 100 && tasks.isNotEmpty()
 
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
     ) {
@@ -544,7 +503,7 @@ fun TaskChecklistSection(
                     )
                     Text(
                         text = "$completedCount of ${tasks.size} completed ($percentage%)",
-                        fontSize = 11.sp,
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -552,15 +511,13 @@ fun TaskChecklistSection(
 
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = if (percentage == 100 && tasks.isNotEmpty()) EmeraldSuccess.copy(alpha = 0.2f)
-                    else MaterialTheme.colorScheme.primaryContainer
+                    color = if (isAllDone) extended.successContainer else MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
-                        text = if (percentage == 100 && tasks.isNotEmpty()) "All Done! 🎉" else "$percentage%",
-                        fontSize = 12.sp,
+                        text = if (isAllDone) "All Done! Completed" else "$percentage%",
+                        style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold,
-                        color = if (percentage == 100 && tasks.isNotEmpty()) EmeraldSuccess
-                        else MaterialTheme.colorScheme.primary,
+                        color = if (isAllDone) extended.success else MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -573,7 +530,7 @@ fun TaskChecklistSection(
                     .fillMaxWidth()
                     .height(8.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                color = if (percentage == 100) EmeraldSuccess else MaterialTheme.colorScheme.primary,
+                color = if (isAllDone) extended.success else MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surface
             )
 
@@ -583,7 +540,7 @@ fun TaskChecklistSection(
             tasks.forEach { task ->
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = if (task.isCompleted) MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                    color = if (task.isCompleted) MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)
                     else MaterialTheme.colorScheme.surface,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -622,7 +579,7 @@ fun TaskChecklistSection(
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Delete",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -640,7 +597,12 @@ fun TaskChecklistSection(
                 OutlinedTextField(
                     value = newTaskText,
                     onValueChange = { newTaskText = it },
-                    placeholder = { Text("Add customized task or habit...", fontSize = 13.sp) },
+                    placeholder = {
+                        Text(
+                            text = "Add customized task or habit...",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
                     singleLine = true,
                     shape = RoundedCornerShape(14.dp),
                     modifier = Modifier
@@ -664,10 +626,76 @@ fun TaskChecklistSection(
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = "Add Task",
-                        tint = Color.White
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun PromptCard(
+    title: String,
+    subtitle: String,
+    icon: ImageVector,
+    iconTint: Color,
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    testTag: String,
+    minLines: Int = 1,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Surface(
+                    shape = CircleShape,
+                    color = iconTint.copy(alpha = 0.15f),
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = iconTint,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChange,
+                placeholder = { Text(placeholder, style = MaterialTheme.typography.bodyMedium) },
+                minLines = minLines,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(testTag),
+                shape = RoundedCornerShape(14.dp)
+            )
         }
     }
 }
