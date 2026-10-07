@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">DayPulse</string>
-    <string name="title_daily_log">Daily Pulse</string>
-    <string name="title_ai_advisor">AI Assistant</string>
-    <string name="title_insights">Analytics</string>
-    <string name="title_reminders">Reminders &amp; Profile</string>
-</resources>

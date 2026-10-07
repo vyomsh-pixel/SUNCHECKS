@@ -1,6 +1,0 @@
-{
-  "name": "DayPulse",
-  "description": "Smart daily logger with AI routine suggestions tailored to your persona (Student, Working Professional), email reminders, reflections, and an AI assistant bot.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
