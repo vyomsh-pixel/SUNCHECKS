@@ -135,10 +135,12 @@ export function ReminderMatrix({
         {filtered.length === 0 ? (
           <div className="py-24 text-center">
             <h3 className="font-hud text-2xl font-bold text-cyber-glow uppercase">
-              NO DIRECTIVES IN CURRENT SECTOR
+              {uiMode === 'serious' ? 'NO SCHEDULED REMINDERS' : 'NO DIRECTIVES IN CURRENT SECTOR'}
             </h3>
             <p className="mt-2 text-sm font-tech text-slate-300 max-w-md mx-auto">
-              Initialize a schedule to arm your 24/7 autonomous background dispatcher.
+              {uiMode === 'serious'
+                ? 'Add a task or study schedule with custom times (daily, weekdays, interval, or random) to automatically receive emails from your 24/7 background dispatcher.'
+                : 'Initialize a schedule to arm your 24/7 autonomous background dispatcher.'}
             </p>
             <div className="mt-6">
               <button
@@ -148,7 +150,7 @@ export function ReminderMatrix({
                 }}
                 className="px-6 py-2.5 cyber-btn-yellow text-sm font-bold"
               >
-                [+ INITIALIZE FIRST DIRECTIVE]
+                {uiMode === 'serious' ? '[+ CREATE FIRST REMINDER]' : '[+ INITIALIZE FIRST DIRECTIVE]'}
               </button>
             </div>
           </div>

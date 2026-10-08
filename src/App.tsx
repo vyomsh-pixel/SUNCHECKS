@@ -37,10 +37,11 @@ import { ReminderMatrix } from './components/ReminderMatrix';
 import { IdeasAndCertVault } from './components/IdeasAndCertVault';
 import { CyberRadio } from './components/CyberRadio';
 import { CyberRadioDock } from './components/CyberRadioDock';
+import { DaemonView } from './components/DaemonView';
+import { WorkloadView } from './components/WorkloadView';
 import { AddReminderModal } from './components/AddReminderModal';
 import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
-import { TechBadge } from './components/TechBadge';
 import { playCyberClick } from './cyberAudio';
 
 export default function App() {
@@ -253,113 +254,29 @@ export default function App() {
 
         {/* 3. 24/7 Email Automation */}
         {activeTab === 'daemon' && (
-          <div className="space-y-6">
-            <div className="cyber-redone-container p-6 relative">
-              {/* Top corner cyan hazard stripe */}
-              <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe-cyan" />
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
-                <div className="flex items-center gap-3">
-                  <TechBadge mode={profile.uiMode} type="bot" size="lg" />
-                  <div>
-                    <h2 className="font-cyber text-lg font-black tracking-wider text-[#00F0FF]">
-                      24/7 AUTONOMOUS NEURAL DAEMON
-                    </h2>
-                    <p className="text-xs font-tech text-slate-400">
-                      Minute-by-minute heartbeat engine executing continuously via Node.js
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setIsOutboxModalOpen(true);
-                  }}
-                  className="px-4 py-2 cyber-btn-cyan text-xs font-black"
-                >
-                  [INSPECT OUTBOX]
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
-                  <span className="text-[10px] font-cyber uppercase text-slate-400">STATUS</span>
-                  <p className="text-xs font-cyber font-black text-[#00FF66] mt-1">
-                    {daemonStatus.online ? 'ONLINE 24/7 // HEARTBEAT' : 'OFFLINE (LOCAL CACHE)'}
-                  </p>
-                </div>
-                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
-                  <span className="text-[10px] font-cyber uppercase text-slate-400">ARMED REMINDERS</span>
-                  <p className="text-xs font-cyber font-black text-[#FCEE0A] mt-1">
-                    {daemonStatus.activeCount} ACTIVE SCHEDULES
-                  </p>
-                </div>
-                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
-                  <span className="text-[10px] font-cyber uppercase text-slate-400">OUTBOX DISPATCHES</span>
-                  <p className="text-xs font-cyber font-black text-white mt-1">
-                    {emailLogs.length} LOGGED TRANSMISSIONS
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <DaemonView
+            daemonStatus={daemonStatus}
+            emailLogs={emailLogs}
+            userEmail={profile.email}
+            uiMode={profile.uiMode}
+            onRefresh={refreshAll}
+            onSendTestPing={sendTestEmailPing}
+          />
         )}
 
         {/* 4. Workload & Profile */}
         {activeTab === 'profile' && (
-          <div className="space-y-6">
-            <div className="cyber-redone-container p-6 relative">
-              {/* Top corner hazard stripe */}
-              <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe" />
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
-                <div className="flex items-center gap-3">
-                  <TechBadge mode={profile.uiMode} type="dev" size="lg" />
-                  <div>
-                    <h2 className="font-cyber text-lg font-black tracking-wider text-[#FCEE0A]">
-                      OPERATOR IDENTITY: {profile.name.toUpperCase()}
-                    </h2>
-                    <p className="text-xs font-tech text-slate-300">
-                      ACTIVE ROLE: {profile.activeRole.toUpperCase().replace(/_/g, ' ')}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setIsProfileModalOpen(true);
-                  }}
-                  className="px-4 py-2 cyber-btn-yellow text-xs font-black"
-                >
-                  [CONFIGURE OPERATOR]
-                </button>
-              </div>
-
-              {/* Bandwidth Gauge Box */}
-              <div className="p-4 bg-[#05060A]/80 border-2 border-[#00F0FF]/50 cyber-cut space-y-3">
-                <div className="flex justify-between items-center text-xs font-cyber">
-                  <span className="text-slate-300">DAILY LIFE BANDWIDTH CONSUMPTION</span>
-                  <span className="text-[#FCEE0A] font-black text-sm">{bandwidthPercent}%</span>
-                </div>
-                <div className="w-full h-3 bg-[#0D0F18] border border-slate-700 overflow-hidden">
-                  <div
-                    className={`h-full transition-all duration-500 ${
-                      bandwidthPercent > 80
-                        ? 'bg-gradient-to-r from-[#FCEE0A] to-[#FF003C]'
-                        : 'bg-gradient-to-r from-[#00F0FF] to-[#00FF66]'
-                    }`}
-                    style={{ width: `${Math.min(100, Math.max(5, bandwidthPercent))}%` }}
-                  />
-                </div>
-                <p className="text-xs font-tech text-slate-400 leading-relaxed pt-1">
-                  Operating against your {profile.dailyCapacityHours}h daily bandwidth ceiling.
-                  {bandwidthPercent > 80
-                    ? ' Heavy velocity: balanced across student exams, intern tickets, and freelance deliverables.'
-                    : ' Bandwidth balanced. Sufficient cognitive capacity for additional cloud certification modules.'}
-                </p>
-              </div>
-            </div>
-          </div>
+          <WorkloadView
+            profile={profile}
+            bandwidthPercent={bandwidthPercent}
+            activeRemindersCount={activeRemindersCount}
+            uiMode={profile.uiMode}
+            onSaveProfile={async (p) => {
+              setProfile(p);
+              await saveProfile(p);
+            }}
+            onSendTestPing={sendTestEmailPing}
+          />
         )}
 
         {/* 5. Focus Radio (The Last Section) */}

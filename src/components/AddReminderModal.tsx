@@ -108,10 +108,12 @@ export function AddReminderModal({
             <TechBadge mode={uiMode} type="dev" size="sm" />
             <div>
               <h2 className="text-base font-cyber font-black tracking-wider text-[#FCEE0A]">
-                {uiMode === 'serious' ? 'CONFIGURE OPERATIONAL GIG' : 'NEW TASK // LOCK IN CHOOM'}
+                {uiMode === 'serious' ? 'SET NEW REMINDER & SCHEDULE' : 'NEW TASK // LOCK IN CHOOM'}
               </h2>
               <p className="text-xs font-tech text-slate-400 mt-0.5">
-                24/7 background scheduler dispatches email automatically.
+                {uiMode === 'serious'
+                  ? 'Our 24/7 background engine will automatically dispatch an email at this time.'
+                  : '24/7 background scheduler dispatches email automatically.'}
               </p>
             </div>
           </div>
@@ -132,7 +134,7 @@ export function AddReminderModal({
           <div>
             <label className="block text-xs font-cyber uppercase text-slate-400 mb-2 flex items-center gap-2">
               <Tag className="w-3.5 h-3.5 text-[#00F0FF]" />
-              TOPIC DOMAIN
+              {uiMode === 'serious' ? 'CATEGORY DOMAIN' : 'TOPIC DOMAIN'}
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-cyber text-xs">
               {(
@@ -166,7 +168,7 @@ export function AddReminderModal({
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-xs font-cyber uppercase text-slate-400">
-                GIG / DIRECTIVE TITLE
+                {uiMode === 'serious' ? 'REMINDER TITLE' : 'GIG / DIRECTIVE TITLE'}
               </label>
               <button
                 type="button"
@@ -192,7 +194,7 @@ export function AddReminderModal({
           <div>
             <label className="block text-xs font-cyber uppercase text-slate-400 mb-2 flex items-center gap-2">
               <Clock className="w-3.5 h-3.5 text-[#FCEE0A]" />
-              CADENCE ENGINE
+              {uiMode === 'serious' ? 'SCHEDULE FREQUENCY' : 'CADENCE ENGINE'}
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-cyber text-xs">
               <button
