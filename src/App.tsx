@@ -42,7 +42,7 @@ import { TechBadge } from './components/TechBadge';
 export default function App() {
   const [profile, setProfile] = useState<CyberProfile>({
     name: 'Vyom',
-    email: 'vyomsharma@example.com',
+    email: 'rajkesir74@gmail.com',
     activeRole: 'student_intern_freelancer',
     uiMode: 'serious',
     geminiApiKey: '',

@@ -12,7 +12,7 @@ const STORAGE_KEYS = {
 
 const DEFAULT_PROFILE: CyberProfile = {
   name: 'Vyom',
-  email: 'vyomsharma@example.com',
+  email: 'rajkesir74@gmail.com',
   activeRole: 'student_intern_freelancer',
   uiMode: 'serious',
   geminiApiKey: DEFAULT_API_KEY,
