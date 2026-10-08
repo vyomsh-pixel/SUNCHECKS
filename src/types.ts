@@ -1,52 +1,66 @@
-export type MoodLevel = 1 | 2 | 3 | 4 | 5;
+// CyberPulse Type Definitions
+// Strict Zero Emojis Policy
 
-export interface MoodMeta {
-  level: MoodLevel;
-  label: string;
-  sublabel: string;
-  colorClass: string;
-  bgClass: string;
-  borderClass: string;
-}
+export type ReminderCadence = 'daily' | 'interval' | 'weekdays' | 'random';
+export type ReminderTheme = 'work' | 'cert' | 'freelance' | 'life';
+export type UiMode = 'serious' | 'fun';
+export type PersonaType = 'student_intern_freelancer' | 'student' | 'intern' | 'freelancer' | 'vacation_builder';
 
-export interface HabitItem {
+export interface ReminderItem {
   id: string;
-  label: string;
-  hint: string;
-  iconName: string;
+  title: string;
+  theme: ReminderTheme;
+  description: string;
+  cadence: ReminderCadence;
+  time: string; // HH:MM
+  intervalDays?: number;
+  weekdays?: string[]; // ['mon', 'wed', 'fri']
+  email: string;
+  autoEmail: boolean;
+  status: 'active' | 'paused' | 'completed';
+  mode?: UiMode;
+  createdAt: string;
+  lastTriggeredAt: string | null;
+  nextTriggerAt: string;
 }
 
-export interface DailyLog {
-  date: string; // ISO 'YYYY-MM-DD'
-  mood: MoodLevel;
-  energy: number; // 1 to 10
-  intention: string;
-  gratitude: string;
-  reflection: string;
-  completedHabits: string[];
-  updatedAt: number;
+export interface ProjectIdea {
+  id: string;
+  title: string;
+  category: 'freelance' | 'side_project' | 'certification';
+  notes: string;
+  status: 'backlog' | 'in_progress' | 'shipped';
+  techStack?: string[];
+  roadmap?: string[];
+  valueProposition?: string;
+  createdAt: string;
 }
 
-export interface UserProfile {
+export interface CyberProfile {
   name: string;
-  streakCount: number;
-  lastActiveDate: string;
+  email: string;
+  activeRole: PersonaType;
+  uiMode: UiMode;
   geminiApiKey: string;
-  isDarkMode: boolean;
+  certTargets: string[];
+  dailyCapacityHours: number;
 }
 
-export interface ChatMessage {
+export interface DaemonStatus {
+  online: boolean;
+  daemonStartTime: string;
+  uptimeSeconds: number;
+  activeCount: number;
+  totalReminders: number;
+  serverTime: string;
+}
+
+export interface EmailLogItem {
   id: string;
-  sender: 'user' | 'assistant';
-  text: string;
-  timestamp: number;
-}
-
-export interface AiRoutine {
-  theme: string;
-  morningBlock: string;
-  afternoonBlock: string;
-  eveningWindDown: string;
-  mindfulGrounding: string;
-  generatedAt: string;
+  reminderId: string;
+  title: string;
+  recipient: string;
+  timestamp: string;
+  provider: string;
+  status: string;
 }

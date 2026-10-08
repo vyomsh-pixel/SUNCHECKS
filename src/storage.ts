@@ -1,151 +1,276 @@
-import { DailyLog, UserProfile, HabitItem } from './types';
+// CyberPulse Data & API Sync Layer
+// Seamless communication between Frontend HUD and 24/7 Backend Daemon
+
+import { ReminderItem, CyberProfile, ProjectIdea, DaemonStatus, EmailLogItem } from './types';
 import { DEFAULT_API_KEY } from './gemini';
 
 const STORAGE_KEYS = {
-  LOGS: 'daypulse_daily_logs',
-  PROFILE: 'daypulse_user_profile',
-  ROUTINES: 'daypulse_saved_routines',
-  CHAT: 'daypulse_chat_messages',
+  REMINDERS_CACHE: 'cyberpulse_reminders_cache',
+  PROFILE_CACHE: 'cyberpulse_profile_cache',
+  IDEAS: 'cyberpulse_project_ideas',
 };
 
-export const DEFAULT_HABITS: HabitItem[] = [
-  { id: 'sunlight', label: 'Morning sunlight', hint: '10–15 mins outside', iconName: 'Sun' },
-  { id: 'hydrate', label: 'Hydrate well', hint: 'Water before caffeine', iconName: 'Droplet' },
-  { id: 'movement', label: 'Gentle movement', hint: 'Walk, stretch, or workout', iconName: 'Activity' },
-  { id: 'pause', label: 'Mindful pause', hint: '2 mins of conscious breathing', iconName: 'Wind' },
+const DEFAULT_PROFILE: CyberProfile = {
+  name: 'Vyom',
+  email: 'vyomsharma@example.com',
+  activeRole: 'student_intern_freelancer',
+  uiMode: 'serious',
+  geminiApiKey: DEFAULT_API_KEY,
+  certTargets: ['AWS Certified Solutions Architect', 'GCP Cloud Engineer', 'CKA Kubernetes'],
+  dailyCapacityHours: 12,
+};
+
+const DEFAULT_IDEAS: ProjectIdea[] = [
+  {
+    id: 'idea_1',
+    title: 'CyberPulse 24/7 Autonomous Daemon',
+    category: 'side_project',
+    notes: 'Zero-downtime personal ops hub running node-cron and multi-cadence email dispatcher.',
+    status: 'in_progress',
+    techStack: ['Node.js', 'Express', 'React', 'Tailwind CSS', 'Vite'],
+    roadmap: ['Build cron scheduler', 'Implement glassmorphic HUD', 'Deploy to Render 24/7'],
+    valueProposition: 'Automates all student/intern follow-ups without keeping browser open.',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'idea_2',
+    title: 'Cloud Cert Flashcard Simulator',
+    category: 'certification',
+    notes: 'Spaced repetition flashcards focusing on VPC peering and IAM least-privilege policies.',
+    status: 'backlog',
+    techStack: ['TypeScript', 'Gemini 3.8 Flash'],
+    roadmap: ['Scrape exam blueprint', 'Generate scenario quizzes', 'Score tracking'],
+    valueProposition: 'Speeds up AWS/GCP certification preparation by 3x.',
+    createdAt: new Date().toISOString(),
+  },
 ];
 
-export function getTodayKey(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-export function getInitialLog(date: string = getTodayKey()): DailyLog {
-  return {
-    date,
-    mood: 3, // Steady by default
-    energy: 6, // Balanced
-    intention: '',
-    gratitude: '',
-    reflection: '',
-    completedHabits: [],
-    updatedAt: Date.now(),
-  };
-}
-
-export function getAllLogs(): Record<string, DailyLog> {
+// 1. Daemon Status
+export async function fetchDaemonStatus(): Promise<DaemonStatus> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEYS.LOGS);
-    return raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    console.error('Failed to parse logs from localStorage', e);
-    return {};
-  }
-}
-
-export function getTodayLog(): DailyLog {
-  const logs = getAllLogs();
-  const today = getTodayKey();
-  return logs[today] || getInitialLog(today);
-}
-
-export function saveDailyLog(log: DailyLog): void {
-  try {
-    const logs = getAllLogs();
-    logs[log.date] = { ...log, updatedAt: Date.now() };
-    localStorage.setItem(STORAGE_KEYS.LOGS, JSON.stringify(logs));
-  } catch (e) {
-    console.error('Failed to save log', e);
-  }
-}
-
-export function getUserProfile(): UserProfile {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.PROFILE);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (!parsed.geminiApiKey) {
-        parsed.geminiApiKey = DEFAULT_API_KEY;
-      }
-      return parsed;
+    const res = await fetch('/api/status', { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      return await res.json();
     }
-  } catch (e) {
-    console.error('Failed to get user profile', e);
+  } catch {
+    // Daemon offline or unreachable
   }
   return {
-    name: 'Friend',
-    streakCount: 1,
-    lastActiveDate: getTodayKey(),
-    geminiApiKey: DEFAULT_API_KEY,
-    isDarkMode: false,
+    online: false,
+    daemonStartTime: '',
+    uptimeSeconds: 0,
+    activeCount: 0,
+    totalReminders: 0,
+    serverTime: new Date().toISOString(),
   };
 }
 
-export function saveUserProfile(profile: UserProfile): void {
+// 2. Reminders CRUD
+export async function fetchReminders(): Promise<ReminderItem[]> {
   try {
-    localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile));
-  } catch (e) {
-    console.error('Failed to save user profile', e);
-  }
-}
-
-export function calculateStreak(): number {
-  const logs = getAllLogs();
-  const today = new Date();
-  let streak = 0;
-  let checkDate = new Date(today);
-
-  // Check if today is logged
-  const todayKey = getTodayKey();
-  if (logs[todayKey]) {
-    streak++;
-    checkDate.setDate(checkDate.getDate() - 1);
-  } else {
-    // If today is not logged yet, start checking from yesterday
-    checkDate.setDate(checkDate.getDate() - 1);
+    const res = await fetch('/api/reminders', { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem(STORAGE_KEYS.REMINDERS_CACHE, JSON.stringify(data));
+      return data;
+    }
+  } catch {
+    console.warn('Backend daemon unreachable. Using local cache.');
   }
 
-  while (true) {
-    const y = checkDate.getFullYear();
-    const m = String(checkDate.getMonth() + 1).padStart(2, '0');
-    const d = String(checkDate.getDate()).padStart(2, '0');
-    const key = `${y}-${m}-${d}`;
-    if (logs[key]) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else {
-      break;
+  // Fallback to local cache
+  const cached = localStorage.getItem(STORAGE_KEYS.REMINDERS_CACHE);
+  if (cached) {
+    try {
+      return JSON.parse(cached);
+    } catch {
+      // ignore
     }
   }
-
-  return Math.max(1, streak);
+  return [];
 }
 
-export function exportBackupJson(): string {
-  const data = {
-    version: 1,
-    exportedAt: new Date().toISOString(),
-    logs: getAllLogs(),
-    profile: getUserProfile(),
+export async function createReminder(data: Partial<ReminderItem>): Promise<ReminderItem> {
+  try {
+    const res = await fetch('/api/reminders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('Failed to post to backend, creating locally', err);
+  }
+
+  // Local fallback
+  const current = await fetchReminders();
+  const newItem: ReminderItem = {
+    id: `rem_${Date.now()}`,
+    title: data.title || 'Untitled Directive',
+    theme: data.theme || 'work',
+    description: data.description || '',
+    cadence: data.cadence || 'daily',
+    time: data.time || '10:00',
+    intervalDays: data.intervalDays || 1,
+    weekdays: data.weekdays || ['mon', 'wed', 'fri'],
+    email: data.email || DEFAULT_PROFILE.email,
+    autoEmail: data.autoEmail !== false,
+    status: 'active',
+    mode: data.mode || 'serious',
+    createdAt: new Date().toISOString(),
+    lastTriggeredAt: null,
+    nextTriggerAt: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
   };
-  return JSON.stringify(data, null, 2);
+  const updated = [newItem, ...current];
+  localStorage.setItem(STORAGE_KEYS.REMINDERS_CACHE, JSON.stringify(updated));
+  return newItem;
 }
 
-export function importBackupJson(jsonString: string): boolean {
+export async function updateReminder(id: string, updates: Partial<ReminderItem>): Promise<ReminderItem | null> {
   try {
-    const parsed = JSON.parse(jsonString);
-    if (parsed.logs) {
-      localStorage.setItem(STORAGE_KEYS.LOGS, JSON.stringify(parsed.logs));
+    const res = await fetch(`/api/reminders/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    if (res.ok) {
+      return await res.json();
     }
-    if (parsed.profile) {
-      localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(parsed.profile));
+  } catch (err) {
+    console.warn('Failed to update on backend, updating locally', err);
+  }
+
+  const current = await fetchReminders();
+  const idx = current.findIndex((r) => r.id === id);
+  if (idx !== -1) {
+    current[idx] = { ...current[idx], ...updates };
+    localStorage.setItem(STORAGE_KEYS.REMINDERS_CACHE, JSON.stringify(current));
+    return current[idx];
+  }
+  return null;
+}
+
+export async function deleteReminder(id: string): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/reminders/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      return true;
     }
-    return true;
-  } catch (e) {
-    console.error('Failed to import backup JSON', e);
+  } catch (err) {
+    console.warn('Failed to delete on backend', err);
+  }
+
+  const current = await fetchReminders();
+  const filtered = current.filter((r) => r.id !== id);
+  localStorage.setItem(STORAGE_KEYS.REMINDERS_CACHE, JSON.stringify(filtered));
+  return true;
+}
+
+export async function triggerReminderNow(id: string, email?: string): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/reminders/${id}/trigger-now`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    return res.ok;
+  } catch {
     return false;
   }
+}
+
+export async function sendTestEmailPing(email: string): Promise<boolean> {
+  try {
+    const res = await fetch('/api/test-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+// 3. Profile
+export async function fetchProfile(): Promise<CyberProfile> {
+  try {
+    const res = await fetch('/api/profile', { signal: AbortSignal.timeout(3000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (!data.geminiApiKey) data.geminiApiKey = DEFAULT_API_KEY;
+      localStorage.setItem(STORAGE_KEYS.PROFILE_CACHE, JSON.stringify(data));
+      return data;
+    }
+  } catch {
+    // fallback
+  }
+
+  const cached = localStorage.getItem(STORAGE_KEYS.PROFILE_CACHE);
+  if (cached) {
+    try {
+      const parsed = JSON.parse(cached);
+      if (!parsed.geminiApiKey) parsed.geminiApiKey = DEFAULT_API_KEY;
+      return parsed;
+    } catch {
+      // ignore
+    }
+  }
+  return DEFAULT_PROFILE;
+}
+
+export async function saveProfile(profile: CyberProfile): Promise<CyberProfile> {
+  localStorage.setItem(STORAGE_KEYS.PROFILE_CACHE, JSON.stringify(profile));
+  try {
+    await fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    });
+  } catch {
+    // ignore
+  }
+  return profile;
+}
+
+// 4. Project Ideas Vault
+export function getProjectIdeas(): ProjectIdea[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.IDEAS);
+    return raw ? JSON.parse(raw) : DEFAULT_IDEAS;
+  } catch {
+    return DEFAULT_IDEAS;
+  }
+}
+
+export function saveProjectIdea(idea: ProjectIdea): void {
+  const current = getProjectIdeas();
+  const existingIndex = current.findIndex((i) => i.id === idea.id);
+  if (existingIndex >= 0) {
+    current[existingIndex] = idea;
+  } else {
+    current.unshift(idea);
+  }
+  localStorage.setItem(STORAGE_KEYS.IDEAS, JSON.stringify(current));
+}
+
+export function deleteProjectIdea(id: string): void {
+  const current = getProjectIdeas();
+  const filtered = current.filter((i) => i.id !== id);
+  localStorage.setItem(STORAGE_KEYS.IDEAS, JSON.stringify(filtered));
+}
+
+// 5. Email Logs
+export async function fetchEmailLogs(): Promise<EmailLogItem[]> {
+  try {
+    const res = await fetch('/api/logs');
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
+    // ignore
+  }
+  return [];
 }

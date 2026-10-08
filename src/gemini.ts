@@ -1,138 +1,142 @@
-import { DailyLog, AiRoutine } from './types';
+// Strict Gemini 3.8 Flash Client for CyberPulse
+// Zero Emojis Policy Enforced
 
 export const DEFAULT_API_KEY = (import.meta.env.VITE_GEMINI_API_KEY || '').trim();
+export const GEMINI_MODEL = 'gemini-3.8-flash';
 
-const PRIMARY_MODEL = 'gemini-3.8-flash';
-const FALLBACK_MODEL = 'gemini-2.5-flash';
-
-export const HEALTH_DISCLAIMER =
-  'DayPulse is a personal wellness visualization tool for self-tracking and reflection. It is not intended to diagnose, treat, or replace professional medical advice.';
-
-async function callGemini(payload: Record<string, unknown>, userKey?: string): Promise<string> {
+export async function callGemini(payload: Record<string, unknown>, userKey?: string): Promise<string> {
   const key = (userKey || DEFAULT_API_KEY).trim();
   if (!key) {
-    throw new Error('Gemini API Key is missing. Please check your configuration in Settings.');
+    throw new Error('Gemini API Key missing. Please provide a key in settings or .env file.');
   }
 
-  const models = [PRIMARY_MODEL, FALLBACK_MODEL];
-  let lastError: Error | null = null;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(key)}`;
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': key,
+    },
+    body: JSON.stringify(payload),
+  });
 
-  for (const model of models) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': key,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const message = errorData?.error?.message || `HTTP error ${response.status}`;
-        throw new Error(message);
-      }
-
-      const data = await response.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (text) {
-        return text;
-      }
-    } catch (err: unknown) {
-      lastError = err as Error;
-      // If 404 or model unavailable, try fallback model in loop
-      console.warn(`Gemini attempt with ${model} failed, trying fallback...`, err);
-    }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const message = errorData?.error?.message || `HTTP error ${response.status}`;
+    throw new Error(message);
   }
 
-  throw lastError || new Error('Failed to generate response from Gemini.');
+  const data = await response.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    throw new Error('Empty response received from Gemini 3.8 Flash.');
+  }
+  return text;
 }
 
-export async function generateDailyRoutine(log: DailyLog, apiKey?: string): Promise<AiRoutine> {
-  const moodLabels = ['', 'Rough', 'Down', 'Steady', 'Good', 'Radiant'];
-  const prompt = `
-You are the DayPulse Wellness Guide. Analyze today's check-in metrics and generate a calm, realistic, grounded daily rhythm.
+export interface SmartReminderEnhancement {
+  formattedSummary: string;
+  actionableSteps: string[];
+  phrasingTone: string;
+}
 
-User's Check-in Today:
-- Mood: ${moodLabels[log.mood]} (${log.mood}/5)
-- Energy Level: ${log.energy}/10
-- Focus Intention: "${log.intention || 'Have a steady, productive day'}"
-- Gratitude: "${log.gratitude || 'Being present'}"
+/**
+ * Enhances a task or study reminder.
+ * Strict: NO yellow emojis, no rocket ships, no dice.
+ */
+export async function enhanceReminder(
+  title: string,
+  theme: 'work' | 'cert' | 'freelance' | 'life',
+  mode: 'serious' | 'fun',
+  apiKey?: string
+): Promise<SmartReminderEnhancement> {
+  const modeInstruction = mode === 'serious'
+    ? 'Tone: Sharp corporate cyberpunk terminal. Use technical terminology (EXECUTION_VECTOR, DIRECTIVE, SYNC). Minimalist and ruthlessly practical.'
+    : 'Tone: Witty, sarcastic, relatable tech/student banter. Rib the user for procrastinating or over-caffeinating (e.g. "Did you actually write unit tests or did you just pray to the prod gods?"). Keep it funny and grounded.';
+
+  const prompt = `
+You are the CyberPulse Operational Terminal Assistant.
+The user is a multi-hyphenate Student + Intern + Freelancer.
+Task Title: "${title}"
+Category: "${theme.toUpperCase()}"
+UI Mode: ${mode.toUpperCase()}
 
 Instructions:
-1. Respond STRICTLY in valid JSON format with these exact keys:
-   - "theme": A short 3-5 word calm theme for the day (e.g. "Gentle Momentum & Clear Focus")
-   - "morningBlock": Practical morning guidance tailored to energy ${log.energy}/10
-   - "afternoonBlock": Sustainable afternoon work/flow block
-   - "eveningWindDown": Calming evening decompression ritual
-   - "mindfulGrounding": One 2-minute actionable breathing or grounding exercise
-2. Keep the tone warm, grounded, and concise. Never provide clinical or diagnostic advice.
-3. Return ONLY the raw JSON object without markdown fences or extraneous text.
+1. ${modeInstruction}
+2. ABSOLUTE CONSTRAINT: DO NOT USE ANY EMOJIS. No yellow faces, no rockets, no dice, no thumbs-up, NO unicode emojis whatsoever. Only clean text, brackets like [DIRECTIVE], [MEME_LOG], [STATUS: PENDING], or alphanumeric characters.
+3. Respond STRICTLY in valid JSON with these keys:
+   - "formattedSummary": A concise 1-2 sentence description or witty phrase.
+   - "actionableSteps": An array of 2 to 3 practical micro-steps (strings).
+   - "phrasingTone": A 2-word label for the tone (e.g. "TACTICAL_HUD" or "SARCASTIC_DEV").
+4. Return ONLY valid JSON without markdown fences.
 `;
 
   const payload = {
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: {
       responseMimeType: 'application/json',
-      temperature: 0.7,
+      temperature: mode === 'fun' ? 0.9 : 0.4,
     },
   };
 
   const rawJson = await callGemini(payload, apiKey);
-
   try {
     const parsed = JSON.parse(rawJson);
     return {
-      theme: parsed.theme || 'Steady & Centered Rhythm',
-      morningBlock: parsed.morningBlock || 'Start gently with a glass of water and 10 minutes of daylight.',
-      afternoonBlock: parsed.afternoonBlock || 'Focus on your key intention during your peak energy window.',
-      eveningWindDown: parsed.eveningWindDown || 'Disconnect from screens 30 minutes before sleep.',
-      mindfulGrounding: parsed.mindfulGrounding || 'Take 4 slow belly breaths: inhale for 4, exhale for 6.',
-      generatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      formattedSummary: parsed.formattedSummary || title,
+      actionableSteps: Array.isArray(parsed.actionableSteps) ? parsed.actionableSteps : ['Execute directive', 'Verify output'],
+      phrasingTone: parsed.phrasingTone || (mode === 'serious' ? 'TACTICAL_HUD' : 'SARCASTIC_DEV'),
     };
-  } catch (e) {
-    console.error('Failed to parse Gemini JSON output', rawJson, e);
-    throw new Error('Failed to parse structured routine format.');
+  } catch {
+    return {
+      formattedSummary: title,
+      actionableSteps: ['Review deliverables', 'Confirm milestones'],
+      phrasingTone: mode === 'serious' ? 'TACTICAL_HUD' : 'SARCASTIC_DEV',
+    };
   }
 }
 
-export async function askAdvisor(
-  history: { sender: 'user' | 'assistant'; text: string }[],
-  userMessage: string,
-  currentLog: DailyLog,
+/**
+ * Refines a project idea or certification target.
+ */
+export async function refineIdea(
+  rawIdea: string,
+  category: string,
   apiKey?: string
-): Promise<string> {
-  const systemPrompt = `
-You are the DayPulse Wellness Advisor — a calm, warm, supportive, and practical companion.
-Context about the user today:
-- Today's Mood: ${currentLog.mood}/5
-- Energy Battery: ${currentLog.energy}/10
-- Intention: "${currentLog.intention || 'None set yet'}"
+): Promise<{ headline: string; techStack: string[]; roadmap: string[]; valueProposition: string }> {
+  const prompt = `
+Analyze this project/study idea for a student-intern-freelancer:
+Idea: "${rawIdea}"
+Focus Area: "${category}"
 
-Guidelines:
-- Keep answers concise, grounded, and compassionate (2-3 short paragraphs max).
-- Offer micro-actions, cognitive reframing, or breathing techniques when stress is indicated.
-- Strict boundary: You are a personal wellness visualizer and helper, NOT a healthcare professional. Never diagnose or prescribe medical treatments.
+Rules:
+1. STRICT ZERO EMOJIS. No emojis allowed anywhere in the output.
+2. Provide a practical execution blueprint.
+3. Return STRICT JSON with keys:
+   - "headline": Short high-impact project title
+   - "techStack": Array of 3-5 recommended tools/technologies
+   - "roadmap": Array of 3 sequential milestones
+   - "valueProposition": One sentence explaining the tangible career or portfolio payoff.
 `;
 
-  const contents = [
-    { role: 'user', parts: [{ text: systemPrompt }] },
-    ...history.slice(-6).map((msg) => ({
-      role: msg.sender === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.text }],
-    })),
-    { role: 'user', parts: [{ text: userMessage }] },
-  ];
-
   const payload = {
-    contents,
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 600,
+      responseMimeType: 'application/json',
+      temperature: 0.6,
     },
   };
 
-  return callGemini(payload, apiKey);
+  const rawJson = await callGemini(payload, apiKey);
+  try {
+    return JSON.parse(rawJson);
+  } catch {
+    return {
+      headline: rawIdea,
+      techStack: ['TypeScript', 'Node.js', 'Vite'],
+      roadmap: ['Prototype core loop', 'Wire background daemon', 'Deploy and verify'],
+      valueProposition: 'High-leverage milestone for portfolio and practical competence.',
+    };
+  }
 }

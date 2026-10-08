@@ -11,6 +11,8 @@ build
 .env
 .env.local
 .env.*.local
+server/data/*.json
+!server/data/.gitkeep
 
 # Logs
 npm-debug.log*
