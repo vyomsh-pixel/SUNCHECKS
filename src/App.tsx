@@ -36,6 +36,7 @@ import { CyberHeader, ActiveTab } from './components/CyberHeader';
 import { ReminderMatrix } from './components/ReminderMatrix';
 import { IdeasAndCertVault } from './components/IdeasAndCertVault';
 import { CyberRadio } from './components/CyberRadio';
+import { CyberRadioDock } from './components/CyberRadioDock';
 import { AddReminderModal } from './components/AddReminderModal';
 import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
@@ -224,6 +225,7 @@ export default function App() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 pt-6 pb-12 relative z-10">
         
         {/* Navigation Tab Content */}
+        {/* 1. Reminders & Schedule */}
         {activeTab === 'reminders' && (
           <ReminderMatrix
             reminders={reminders}
@@ -235,10 +237,7 @@ export default function App() {
           />
         )}
 
-        {activeTab === 'radio' && (
-          <CyberRadio />
-        )}
-
+        {/* 2. Certifications & Projects */}
         {activeTab === 'ideas' && (
           <IdeasAndCertVault
             ideas={ideas}
@@ -252,6 +251,61 @@ export default function App() {
           />
         )}
 
+        {/* 3. 24/7 Email Automation */}
+        {activeTab === 'daemon' && (
+          <div className="space-y-6">
+            <div className="cyber-redone-container p-6 relative">
+              {/* Top corner cyan hazard stripe */}
+              <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe-cyan" />
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
+                <div className="flex items-center gap-3">
+                  <TechBadge mode={profile.uiMode} type="bot" size="lg" />
+                  <div>
+                    <h2 className="font-cyber text-lg font-black tracking-wider text-[#00F0FF]">
+                      24/7 AUTONOMOUS NEURAL DAEMON
+                    </h2>
+                    <p className="text-xs font-tech text-slate-400">
+                      Minute-by-minute heartbeat engine executing continuously via Node.js
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    playCyberClick();
+                    setIsOutboxModalOpen(true);
+                  }}
+                  className="px-4 py-2 cyber-btn-cyan text-xs font-black"
+                >
+                  [INSPECT OUTBOX]
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
+                  <span className="text-[10px] font-cyber uppercase text-slate-400">STATUS</span>
+                  <p className="text-xs font-cyber font-black text-[#00FF66] mt-1">
+                    {daemonStatus.online ? 'ONLINE 24/7 // HEARTBEAT' : 'OFFLINE (LOCAL CACHE)'}
+                  </p>
+                </div>
+                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
+                  <span className="text-[10px] font-cyber uppercase text-slate-400">ARMED REMINDERS</span>
+                  <p className="text-xs font-cyber font-black text-[#FCEE0A] mt-1">
+                    {daemonStatus.activeCount} ACTIVE SCHEDULES
+                  </p>
+                </div>
+                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
+                  <span className="text-[10px] font-cyber uppercase text-slate-400">OUTBOX DISPATCHES</span>
+                  <p className="text-xs font-cyber font-black text-white mt-1">
+                    {emailLogs.length} LOGGED TRANSMISSIONS
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 4. Workload & Profile */}
         {activeTab === 'profile' && (
           <div className="space-y-6">
             <div className="cyber-redone-container p-6 relative">
@@ -308,58 +362,16 @@ export default function App() {
           </div>
         )}
 
-        {activeTab === 'daemon' && (
-          <div className="space-y-6">
-            <div className="cyber-redone-container p-6 relative">
-              {/* Top corner cyan hazard stripe */}
-              <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe-cyan" />
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
-                <div className="flex items-center gap-3">
-                  <TechBadge mode={profile.uiMode} type="bot" size="lg" />
-                  <div>
-                    <h2 className="font-cyber text-lg font-black tracking-wider text-[#00F0FF]">
-                      24/7 AUTONOMOUS NEURAL DAEMON
-                    </h2>
-                    <p className="text-xs font-tech text-slate-400">
-                      Minute-by-minute heartbeat engine executing continuously via Node.js
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setIsOutboxModalOpen(true);
-                  }}
-                  className="px-4 py-2 cyber-btn-cyan text-xs font-black"
-                >
-                  [INSPECT OUTBOX]
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
-                  <span className="text-[10px] font-cyber uppercase text-slate-400">STATUS</span>
-                  <p className="text-xs font-cyber font-black text-[#00FF66] mt-1">
-                    {daemonStatus.online ? 'ONLINE 24/7 // HEARTBEAT' : 'OFFLINE (LOCAL CACHE)'}
-                  </p>
-                </div>
-                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
-                  <span className="text-[10px] font-cyber uppercase text-slate-400">ARMED REMINDERS</span>
-                  <p className="text-xs font-cyber font-black text-[#FCEE0A] mt-1">
-                    {daemonStatus.activeCount} ACTIVE SCHEDULES
-                  </p>
-                </div>
-                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
-                  <span className="text-[10px] font-cyber uppercase text-slate-400">OUTBOX DISPATCHES</span>
-                  <p className="text-xs font-cyber font-black text-white mt-1">
-                    {emailLogs.length} LOGGED TRANSMISSIONS
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* 5. Focus Radio (The Last Section) */}
+        {activeTab === 'radio' && (
+          <CyberRadio />
         )}
+
+        {/* Persistent Cyberpunk Radio Player Bar (Docked across all sections) */}
+        <CyberRadioDock
+          onOpenRadioTab={() => setActiveTab('radio')}
+          isRadioTabActive={activeTab === 'radio'}
+        />
 
         {/* Footer Technical Barcode & Disclaimer */}
         <div className="mt-10 pt-4 pb-2 border-t border-slate-800/80 flex flex-col items-center justify-center gap-2">

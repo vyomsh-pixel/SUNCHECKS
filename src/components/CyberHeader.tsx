@@ -120,20 +120,7 @@ export function CyberHeader({
               )}
             </button>
 
-            {/* 2. Focus Radio */}
-            <button
-              onClick={() => handleTabClick('radio')}
-              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
-                activeTab === 'radio'
-                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
-                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Radio className="w-4 h-4 text-[#00F0FF]" />
-              <span>{uiMode === 'serious' ? 'FOCUS RADIO' : 'CHILLWAVE FREQ'}</span>
-            </button>
-
-            {/* 3. Certifications & Projects */}
+            {/* 2. Certifications & Projects */}
             <button
               onClick={() => handleTabClick('ideas')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -146,7 +133,7 @@ export function CyberHeader({
               <span>{uiMode === 'serious' ? 'CERTS & PROJECTS' : 'HUSTLE & SHARDS'}</span>
             </button>
 
-            {/* 4. 24/7 Email Automation */}
+            {/* 3. 24/7 Email Automation */}
             <button
               onClick={() => handleTabClick('daemon')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -164,7 +151,7 @@ export function CyberHeader({
               />
             </button>
 
-            {/* 5. Workload & Profile */}
+            {/* 4. Workload & Profile */}
             <button
               onClick={() => handleTabClick('profile')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -175,6 +162,19 @@ export function CyberHeader({
             >
               <User className="w-4 h-4 text-slate-300" />
               <span>{uiMode === 'serious' ? 'MY WORKLOAD' : 'BURNOUT METER'}</span>
+            </button>
+
+            {/* 5. Focus Radio (Last Section) */}
+            <button
+              onClick={() => handleTabClick('radio')}
+              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
+                activeTab === 'radio'
+                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Radio className="w-4 h-4 text-[#00F0FF]" />
+              <span>{uiMode === 'serious' ? 'FOCUS RADIO' : 'CHILLWAVE FREQ'}</span>
             </button>
           </nav>
 
@@ -269,12 +269,6 @@ export function CyberHeader({
           {uiMode === 'serious' ? 'REMINDERS' : 'GIGS'}
         </button>
         <button
-          onClick={() => handleTabClick('radio')}
-          className={`px-2 py-1 ${activeTab === 'radio' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
-        >
-          {uiMode === 'serious' ? 'RADIO' : 'CHILL'}
-        </button>
-        <button
           onClick={() => handleTabClick('ideas')}
           className={`px-2 py-1 ${activeTab === 'ideas' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
@@ -291,6 +285,12 @@ export function CyberHeader({
           className={`px-2 py-1 ${activeTab === 'profile' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
           {uiMode === 'serious' ? 'WORKLOAD' : 'BURNOUT'}
+        </button>
+        <button
+          onClick={() => handleTabClick('radio')}
+          className={`px-2 py-1 ${activeTab === 'radio' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
+        >
+          {uiMode === 'serious' ? 'RADIO' : 'CHILL'}
         </button>
       </div>
     </header>
