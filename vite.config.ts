@@ -1,20 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'fs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Fix Windows junction path discrepancy for Vite dependency optimization
+try {
+  const realCwd = fs.realpathSync(process.cwd());
+  if (process.cwd() !== realCwd) {
+    process.chdir(realCwd);
+  }
+} catch (e) {
+  // Ignore fallback
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  root: __dirname,
   plugins: [react()],
   server: {
     host: true,
     port: 5173,
-  },
-  build: {
-    outDir: path.resolve(__dirname, 'dist'),
-    emptyOutDir: true,
   },
 });
