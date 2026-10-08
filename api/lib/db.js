@@ -190,6 +190,12 @@ export async function getReminders() {
   await initDbSchema();
   try {
     const res = await p.query('SELECT * FROM cyber_reminders ORDER BY created_at DESC');
+    if (res.rows.length === 0) {
+      for (const r of memoryStore.reminders) {
+        await createReminder(r);
+      }
+      return memoryStore.reminders;
+    }
     return res.rows.map((row) => ({
       id: row.id,
       title: row.title,
