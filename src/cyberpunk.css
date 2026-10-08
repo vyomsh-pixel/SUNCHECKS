@@ -454,3 +454,10 @@
   text-shadow: 0 0 6px rgba(251, 244, 229, 0.4);
 }
 
+/* 15. Cursor Isolation: Completely hides OS cursor when custom cyber reticle is active */
+body.hide-os-cursor,
+body.hide-os-cursor * {
+  cursor: none !important;
+}
+
+

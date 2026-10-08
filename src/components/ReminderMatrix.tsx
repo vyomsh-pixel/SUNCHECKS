@@ -61,15 +61,27 @@ export function ReminderMatrix({
   };
 
   const getThemeSender = (theme: ReminderTheme) => {
+    if (uiMode === 'serious') {
+      switch (theme) {
+        case 'work':
+          return 'Work & Internship Schedule';
+        case 'cert':
+          return 'Cloud Certifications & Study';
+        case 'freelance':
+          return 'Freelance Client Deliverables';
+        case 'life':
+          return 'Daily Routine & Wellbeing';
+      }
+    }
     switch (theme) {
       case 'work':
-        return 'Corpo Work Desk // Arasaka Intern Ops';
+        return 'Corpo Grind // Intern Overlord';
       case 'cert':
-        return 'Netrunner Shard Academy // Cloud Certs';
+        return 'Netrunner Shard Academy // Brain Melting';
       case 'freelance':
-        return 'Muamar "El Capitán" Reyes // Freelance Fixer';
+        return 'Muamar "El Capitán" Reyes // Street Hustle';
       case 'life':
-        return 'Biomonitor Sub-Net // Neural Sync';
+        return 'Biomonitor // Don\'t Flatline Yet';
     }
   };
 
@@ -86,11 +98,11 @@ export function ReminderMatrix({
           <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto font-hud text-sm">
             {(
               [
-                { id: 'all', label: 'ALL MESSAGES' },
-                { id: 'work', label: 'WORK & INTERN' },
-                { id: 'cert', label: 'CERTIFICATIONS' },
-                { id: 'freelance', label: 'FREELANCE' },
-                { id: 'life', label: 'LIFE & RESET' },
+                { id: 'all', label: uiMode === 'serious' ? 'ALL REMINDERS' : 'ALL GIGS' },
+                { id: 'work', label: uiMode === 'serious' ? 'WORK & INTERN' : 'CORPO SLAVE' },
+                { id: 'cert', label: uiMode === 'serious' ? 'CERTIFICATIONS' : 'SHARD STUDY' },
+                { id: 'freelance', label: uiMode === 'serious' ? 'FREELANCE' : 'SIDE HUSTLE' },
+                { id: 'life', label: uiMode === 'serious' ? 'DAILY LIFE' : 'SURVIVAL' },
               ] as const
             ).map((tab) => (
               <button
@@ -107,14 +119,14 @@ export function ReminderMatrix({
             ))}
           </div>
 
-          {/* New Directive CTA */}
+          {/* New Reminder CTA */}
           <CyberVideoBtn
             onClick={onAddClick}
             variant="yellow"
             icon={<Plus className="w-4 h-4 stroke-[3]" />}
             subtitle="24/7 AUTO-EMAIL DISPATCH"
           >
-            {uiMode === 'serious' ? 'NEW DIRECTIVE' : 'ADD TASK // LOCK IN'}
+            {uiMode === 'serious' ? 'NEW REMINDER' : 'ADD TASK // LOCK IN'}
           </CyberVideoBtn>
 
         </div>
@@ -148,7 +160,9 @@ export function ReminderMatrix({
             {/* Left Rail: Messages Queue (.msg-list) */}
             <div className="md:col-span-5 space-y-2.5 max-h-[520px] overflow-y-auto pr-1">
               <div className="text-[11px] font-tech text-[#00F0FF] tracking-widest uppercase mb-1">
-                INCOMING TERMINAL CHANNELS [{filtered.length}]
+                {uiMode === 'serious'
+                  ? `SCHEDULED REMINDERS & TASKS [${filtered.length}]`
+                  : `INCOMING TERMINAL CHANNELS [${filtered.length}]`}
               </div>
 
               {filtered.map((item) => {
@@ -220,7 +234,9 @@ export function ReminderMatrix({
                       {/* Message Title (Exact cyberpunkredone styling) */}
                       <div>
                         <span className="text-[10px] font-tech text-[#00F0FF] uppercase tracking-widest block mb-1">
-                          TERMINAL DECRYPTION PROTOCOL // 2077
+                          {uiMode === 'serious'
+                            ? 'REMINDER DETAILS & CADENCE // 24/7 ENGINE'
+                            : 'TERMINAL DECRYPTION PROTOCOL // 2077'}
                         </span>
                         <h3 className="font-hud text-3xl font-black text-cyber-glow leading-tight">
                           {activeReminder.title}
@@ -256,7 +272,7 @@ export function ReminderMatrix({
                               alt="Recipient avatar"
                               className="w-4 h-4 object-contain"
                             />
-                            <span>CYBERSURFER // {activeReminder.email}</span>
+                            <span>{uiMode === 'serious' ? 'OPERATOR' : 'CYBERSURFER'} // {activeReminder.email}</span>
                           </div>
                         </div>
 
@@ -290,7 +306,9 @@ export function ReminderMatrix({
                       <div className="pt-2">
                         <p className="font-hud text-lg text-cyber-body leading-relaxed whitespace-pre-line typed-words">
                           {activeReminder.description ||
-                            `Hey Choomba,\n\nThis directive is armed and running inside your 24/7 background scheduler. When the scheduled trigger hits, automated dispatches will fire straight to your inbox at ${activeReminder.email}.\n\nStay sharp,\nPixelWitch`}
+                            (uiMode === 'serious'
+                              ? `Automated reminder scheduled for delivery to ${activeReminder.email}. Running 24/7 in background to keep you on track with work, internships, and cloud certification goals.`
+                              : `Hey Choomba,\n\nThis directive is armed and running inside your 24/7 background scheduler. When the scheduled trigger hits, automated dispatches will fire straight to your inbox at ${activeReminder.email}.\n\nStay sharp,\nPixelWitch`)}
                         </p>
                       </div>
 
@@ -340,7 +358,7 @@ export function ReminderMatrix({
                               onDelete(activeReminder.id);
                             }}
                             className="p-2 border border-slate-700 hover:border-[#FF003C] hover:text-[#FF003C] text-slate-400 cyber-cut transition-colors"
-                            title="Delete Directive"
+                            title={uiMode === 'serious' ? 'Delete Reminder' : 'Delete Directive'}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -352,7 +370,9 @@ export function ReminderMatrix({
                 })()
               ) : (
                 <div className="p-8 text-center text-slate-500 font-tech">
-                  Select a message from the terminal queue.
+                  {uiMode === 'serious'
+                    ? 'Select a reminder from the schedule list to inspect details.'
+                    : 'Select a message from the terminal queue.'}
                 </div>
               )}
 

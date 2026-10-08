@@ -1,11 +1,24 @@
 // CyberHeader: Authentic Cyberpunk Redone Top Navigation Bar
 // Direct inspiration: cyberpunkredone.webflow.io .nav-bar
 // Features floating translucent cyber-nav with backdrop-blur, cyan borders,
-// active tab highlights, wallpaper switcher, audio controls, and daemon heartbeat.
+// intuitive real-world labels in serious mode, playful cyberpunk labels in meme mode,
+// cursor mode switcher (cyber crosshair vs default system pointer), wallpaper switcher, and audio controls.
 
 import { useState } from 'react';
 import { DaemonStatus, CyberProfile, UiMode } from '../types';
-import { Volume2, VolumeX, Terminal, Radio, Sparkles, Server, User, Image, Inbox } from 'lucide-react';
+import {
+  Volume2,
+  VolumeX,
+  Terminal,
+  Radio,
+  Sparkles,
+  Server,
+  User,
+  Image,
+  Inbox,
+  Crosshair,
+  MousePointer,
+} from 'lucide-react';
 import { WALLPAPERS } from './CyberCityBackdrop';
 import { playCyberClick, playCyberGlitch, isCyberAudioMuted, setCyberAudioMuted } from '../cyberAudio';
 
@@ -20,6 +33,8 @@ interface CyberHeaderProps {
   uiMode: UiMode;
   currentWallpaperId: string;
   onCycleWallpaper: () => void;
+  cursorMode: boolean;
+  onToggleCursor: () => void;
   onToggleMode: () => void;
   onOpenOutbox: () => void;
 }
@@ -33,6 +48,8 @@ export function CyberHeader({
   uiMode,
   currentWallpaperId,
   onCycleWallpaper,
+  cursorMode,
+  onToggleCursor,
   onToggleMode,
   onOpenOutbox,
 }: CyberHeaderProps) {
@@ -57,10 +74,10 @@ export function CyberHeader({
     <header className="sticky top-0 z-50 w-full cyber-redone-nav px-4 py-2.5 transition-all shadow-[0_4px_25px_rgba(0,0,0,0.6)]">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
-        {/* Left: Brand Logo & Terminal Navigation Tabs */}
+        {/* Left: Brand Logo & Intuitive Navigation Tabs */}
         <div className="flex items-center gap-6">
           
-          {/* Cyberpunk 2077 Logo */}
+          {/* Cyberpunk Brand */}
           <div
             onClick={() => handleTabClick('reminders')}
             className="flex items-center gap-2.5 cursor-pointer group select-none"
@@ -73,14 +90,15 @@ export function CyberHeader({
                 CYBERPULSE
               </span>
               <span className="text-[10px] font-tech text-[#00F0FF] tracking-wider block">
-                2077 // TERMINAL UI
+                {uiMode === 'serious' ? `${profile.name.toUpperCase()} // WORK & STUDY SCHEDULE` : '2077 // MEME TERMINAL'}
               </span>
             </div>
           </div>
 
-          {/* Navigation Links (Matching cyberpunkredone.webflow.io) */}
+          {/* Navigation Links (Meaningful in Serious, Playful in Meme) */}
           <nav className="hidden md:flex items-center gap-1 font-hud">
-            {/* 1. Messages / Directives */}
+            
+            {/* 1. Reminders & Schedule */}
             <button
               onClick={() => handleTabClick('reminders')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -91,10 +109,10 @@ export function CyberHeader({
             >
               <img
                 src="https://cdn.prod.website-files.com/666af2245cb6e7d54094d64f/6670514917ee0da841f1ccdf_1_95X6TEleBudY1EpDWnXgMQ.png"
-                alt="Messages"
+                alt="Tasks"
                 className="w-4 h-4 object-contain"
               />
-              <span>MESSAGES</span>
+              <span>{uiMode === 'serious' ? 'REMINDERS & SCHEDULE' : 'CORPO GIGS'}</span>
               {activeRemindersCount > 0 && (
                 <span className="px-1.5 py-0.2 bg-[#FCEE0A] text-black text-[11px] font-bold font-mono">
                   {activeRemindersCount}
@@ -102,7 +120,7 @@ export function CyberHeader({
               )}
             </button>
 
-            {/* 2. Radio Transceiver */}
+            {/* 2. Focus Radio */}
             <button
               onClick={() => handleTabClick('radio')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -112,10 +130,10 @@ export function CyberHeader({
               }`}
             >
               <Radio className="w-4 h-4 text-[#00F0FF]" />
-              <span>RADIO</span>
+              <span>{uiMode === 'serious' ? 'FOCUS RADIO' : 'CHILLWAVE FREQ'}</span>
             </button>
 
-            {/* 3. Net / Blueprints & Shards */}
+            {/* 3. Certifications & Projects */}
             <button
               onClick={() => handleTabClick('ideas')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -125,10 +143,10 @@ export function CyberHeader({
               }`}
             >
               <Sparkles className="w-4 h-4 text-[#FCEE0A]" />
-              <span>NET // SHARDS</span>
+              <span>{uiMode === 'serious' ? 'CERTS & PROJECTS' : 'HUSTLE & SHARDS'}</span>
             </button>
 
-            {/* 4. 24/7 Autonomous Daemon */}
+            {/* 4. 24/7 Email Automation */}
             <button
               onClick={() => handleTabClick('daemon')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -138,7 +156,7 @@ export function CyberHeader({
               }`}
             >
               <Server className="w-4 h-4 text-[#00FF66]" />
-              <span>DAEMON</span>
+              <span>{uiMode === 'serious' ? 'EMAIL AUTOMATION' : 'SPAM CANNON 24/7'}</span>
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
                   daemonStatus.online ? 'bg-[#00FF66] animate-pulse' : 'bg-slate-500'
@@ -146,7 +164,7 @@ export function CyberHeader({
               />
             </button>
 
-            {/* 5. Operator Bandwidth */}
+            {/* 5. Workload & Profile */}
             <button
               onClick={() => handleTabClick('profile')}
               className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
@@ -156,36 +174,55 @@ export function CyberHeader({
               }`}
             >
               <User className="w-4 h-4 text-slate-300" />
-              <span>{profile.name.toUpperCase()}</span>
+              <span>{uiMode === 'serious' ? 'MY WORKLOAD' : 'BURNOUT METER'}</span>
             </button>
           </nav>
 
         </div>
 
-        {/* Right Tools: Wallpaper Switcher, Audio, Mode & Outbox */}
-        <div className="flex items-center gap-2.5">
+        {/* Right Tools: Cursor Mode Toggle, Wallpaper Switcher, Outbox, Audio, and Mode */}
+        <div className="flex items-center gap-2">
           
-          {/* Wallpaper Switcher Button (Requested: Visible & Changeable Wallpaper) */}
+          {/* Cursor Mode Switcher: Fixes Dual-Cursor Issue with 1-Click Toggle */}
+          <button
+            onClick={() => {
+              playCyberClick();
+              onToggleCursor();
+            }}
+            className={`px-2.5 py-1.5 cyber-cut border text-xs font-tech flex items-center gap-1.5 transition-all ${
+              cursorMode
+                ? 'bg-[#00F0FF]/20 border-[#00F0FF] text-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.3)]'
+                : 'bg-[#0A0D16]/80 border-slate-700 text-slate-300 hover:text-white hover:border-slate-500'
+            }`}
+            title={cursorMode ? 'Cyber Reticle Active (Click to use default system pointer)' : 'Default Pointer Active (Click to use Cyber Reticle)'}
+          >
+            {cursorMode ? <Crosshair className="w-3.5 h-3.5 text-[#00F0FF]" /> : <MousePointer className="w-3.5 h-3.5 text-slate-400" />}
+            <span className="hidden lg:inline text-[11px] font-bold">
+              {cursorMode ? 'CYBER CURSOR' : 'DEFAULT POINTER'}
+            </span>
+          </button>
+
+          {/* Wallpaper Switcher Button */}
           <button
             onClick={onCycleWallpaper}
-            className="px-3 py-1.5 bg-[#0A0D16]/80 hover:bg-[#00F0FF]/15 border border-[#00F0FF]/50 text-[#00F0FF] hover:border-[#00F0FF] cyber-cut text-xs font-tech flex items-center gap-2 transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]"
-            title={`Active: ${currentWallpaper.name}. Click to cycle background wallpaper.`}
+            className="px-2.5 py-1.5 bg-[#0A0D16]/80 hover:bg-[#00F0FF]/15 border border-[#00F0FF]/50 text-[#00F0FF] hover:border-[#00F0FF] cyber-cut text-xs font-tech flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+            title={`Active: ${currentWallpaper.name}. Click to change background wallpaper.`}
           >
             <Image className="w-3.5 h-3.5" />
             <span className="hidden sm:inline font-bold">WALLPAPER</span>
-            <span className="text-[10px] text-[#FCEE0A] font-mono hidden lg:inline">
+            <span className="text-[10px] text-[#FCEE0A] font-mono hidden xl:inline">
               [{currentWallpaper.name.split(' ')[0]}]
             </span>
           </button>
 
-          {/* Outbox Inspect */}
+          {/* Outbox Logs */}
           <button
             onClick={() => {
               playCyberClick();
               onOpenOutbox();
             }}
             className="p-2 bg-[#0A0D16]/80 hover:bg-[#FCEE0A]/15 border border-slate-700 hover:border-[#FCEE0A] text-slate-300 hover:text-[#FCEE0A] cyber-cut text-xs transition-all"
-            title="Inspect 24/7 Email Outbox Logs"
+            title="Inspect 24/7 Email Outbox History"
           >
             <Inbox className="w-4 h-4" />
           </button>
@@ -198,12 +235,12 @@ export function CyberHeader({
                 ? 'bg-[#0D0F18]/80 border-slate-800 text-slate-500'
                 : 'bg-[#00F0FF]/15 border-[#00F0FF] text-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.3)]'
             }`}
-            title={muted ? 'Enable Cyberpunk UI Audio SFX' : 'Mute UI Audio SFX'}
+            title={muted ? 'Enable UI Audio SFX' : 'Mute UI Audio SFX'}
           >
             {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
 
-          {/* Serious vs Fun Mode Toggle */}
+          {/* Serious vs Fun/Meme Mode Switcher */}
           <button
             onClick={() => {
               playCyberGlitch();
@@ -214,45 +251,46 @@ export function CyberHeader({
                 ? 'bg-[#00F0FF] text-black shadow-[0_0_12px_rgba(0,240,255,0.4)]'
                 : 'bg-[#FF003C] text-white shadow-[0_0_12px_rgba(255,0,60,0.5)]'
             }`}
+            title="Switch between Serious Productive HUD and Humorous Cyberpunk Meme mode"
           >
-            <span>{uiMode === 'serious' ? 'SERIOUS' : 'MEME'}</span>
+            <span>{uiMode === 'serious' ? 'SERIOUS MODE' : 'MEME MODE'}</span>
           </button>
 
         </div>
 
       </div>
 
-      {/* Mobile Nav Drawer */}
+      {/* Mobile Nav Tabs */}
       <div className="flex md:hidden items-center justify-around gap-1 pt-2 border-t border-slate-800/80 mt-2 font-hud text-xs">
         <button
           onClick={() => handleTabClick('reminders')}
           className={`px-2 py-1 ${activeTab === 'reminders' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
-          MESSAGES
+          {uiMode === 'serious' ? 'REMINDERS' : 'GIGS'}
         </button>
         <button
           onClick={() => handleTabClick('radio')}
           className={`px-2 py-1 ${activeTab === 'radio' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
-          RADIO
+          {uiMode === 'serious' ? 'RADIO' : 'CHILL'}
         </button>
         <button
           onClick={() => handleTabClick('ideas')}
           className={`px-2 py-1 ${activeTab === 'ideas' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
-          SHARDS
+          {uiMode === 'serious' ? 'PROJECTS' : 'SHARDS'}
         </button>
         <button
           onClick={() => handleTabClick('daemon')}
           className={`px-2 py-1 ${activeTab === 'daemon' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
-          DAEMON
+          {uiMode === 'serious' ? 'EMAIL' : 'SPAM'}
         </button>
         <button
           onClick={() => handleTabClick('profile')}
           className={`px-2 py-1 ${activeTab === 'profile' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
         >
-          PROFILE
+          {uiMode === 'serious' ? 'WORKLOAD' : 'BURNOUT'}
         </button>
       </div>
     </header>

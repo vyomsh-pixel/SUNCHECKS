@@ -69,6 +69,9 @@ export default function App() {
   const [wallpaperId, setWallpaperId] = useState<string>(() => {
     return localStorage.getItem('cyber_wallpaper_id') || 'cyberpunk_redone_dark';
   });
+  const [cursorMode, setCursorMode] = useState<boolean>(() => {
+    return localStorage.getItem('cyber_cursor_enabled') === 'true';
+  });
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -81,6 +84,15 @@ export default function App() {
     const nextWallpaper = WALLPAPERS[nextIndex];
     setWallpaperId(nextWallpaper.id);
     localStorage.setItem('cyber_wallpaper_id', nextWallpaper.id);
+  };
+
+  const handleToggleCursor = () => {
+    playCyberClick();
+    setCursorMode((prev) => {
+      const next = !prev;
+      localStorage.setItem('cyber_cursor_enabled', String(next));
+      return next;
+    });
   };
 
   // Sync initial data from backend daemon and local cache
@@ -187,7 +199,7 @@ export default function App() {
       <div className="cyber-frame-line-bottom" />
 
       {/* 2. Custom Interactive Reticle Cursor */}
-      <CyberCursor />
+      <CyberCursor enabled={cursorMode} />
 
       {/* 3. Live High-Res Cyberpunk Night City Backdrop (Visible) */}
       <CyberCityBackdrop currentWallpaperId={wallpaperId} />
@@ -202,6 +214,8 @@ export default function App() {
         uiMode={profile.uiMode}
         currentWallpaperId={wallpaperId}
         onCycleWallpaper={handleCycleWallpaper}
+        cursorMode={cursorMode}
+        onToggleCursor={handleToggleCursor}
         onToggleMode={handleToggleMode}
         onOpenOutbox={() => setIsOutboxModalOpen(true)}
       />

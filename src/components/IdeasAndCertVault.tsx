@@ -95,11 +95,15 @@ export function IdeasAndCertVault({
           <div className="flex items-center gap-2.5">
             <Cpu className="w-5 h-5 text-[#FCEE0A]" />
             <h3 className="font-cyber text-sm font-black tracking-wider uppercase text-[#FCEE0A]">
-              ACTIVE NEURAL SHARDS // CERTIFICATION TARGETS
+              {uiMode === 'serious'
+                ? 'CERTIFICATION ROADMAP & TARGETS'
+                : 'ACTIVE NEURAL SHARDS // CERT TARGETS'}
             </h3>
           </div>
           <span className="font-tech text-xs text-slate-300">
-            [{certTargets.length} SHARDS INSTALLED]
+            {uiMode === 'serious'
+              ? `[${certTargets.length} ACTIVE CERTIFICATIONS]`
+              : `[${certTargets.length} SHARDS INSTALLED]`}
           </span>
         </div>
 
@@ -115,7 +119,7 @@ export function IdeasAndCertVault({
               <button
                 onClick={() => onRemoveCertTarget(cert)}
                 className="text-slate-500 hover:text-[#FF003C] transition-colors font-mono text-base ml-1"
-                title="Eject shard"
+                title={uiMode === 'serious' ? 'Remove target' : 'Eject shard'}
               >
                 &times;
               </button>
@@ -127,7 +131,11 @@ export function IdeasAndCertVault({
         <form onSubmit={handleAddCert} className="flex gap-2">
           <input
             type="text"
-            placeholder="Install target cert shard (e.g. AWS Solutions Architect, GCP Cloud Engineer, CKA)..."
+            placeholder={
+              uiMode === 'serious'
+                ? 'Add target certification (e.g. AWS Solutions Architect, GCP Cloud Engineer, CKA)...'
+                : 'Install target cert shard (e.g. AWS Solutions Architect, GCP Cloud Engineer, CKA)...'
+            }
             value={newCert}
             onChange={(e) => setNewCert(e.target.value)}
             className="flex-1 bg-[#05060A] border-2 border-slate-700 px-3.5 py-2 text-xs font-hud text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
@@ -136,7 +144,7 @@ export function IdeasAndCertVault({
             type="submit"
             className="px-4 py-2 cyber-btn-yellow text-xs font-black"
           >
-            [+ INSTALL SHARD]
+            {uiMode === 'serious' ? '[+ ADD CERTIFICATION]' : '[+ INSTALL SHARD]'}
           </button>
         </form>
       </div>
@@ -150,7 +158,9 @@ export function IdeasAndCertVault({
           <div className="flex items-center gap-2.5">
             <Lightbulb className="w-5 h-5 text-[#00F0FF]" />
             <h3 className="font-cyber text-sm font-black tracking-wider uppercase text-[#00F0FF]">
-              CYBERWARE BLUEPRINTS &amp; FREELANCE CONTRACT VAULT
+              {uiMode === 'serious'
+                ? 'PROJECTS & FREELANCE CONTRACT VAULT'
+                : 'CYBERWARE BLUEPRINTS & FREELANCE CONTRACT VAULT'}
             </h3>
           </div>
           <TechBadge mode={uiMode} type="dev" size="sm" />
@@ -161,7 +171,11 @@ export function IdeasAndCertVault({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <input
               type="text"
-              placeholder="Blueprint / Project Title..."
+              placeholder={
+                uiMode === 'serious'
+                  ? 'Project or Client Deliverable Title...'
+                  : 'Blueprint / Project Title...'
+              }
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               className="sm:col-span-2 bg-[#0C0E18] border border-slate-700 px-3 py-2 text-xs font-hud text-slate-100 focus:outline-none focus:border-[#00F0FF] cyber-cut"
@@ -171,15 +185,19 @@ export function IdeasAndCertVault({
               onChange={(e) => setNewCategory(e.target.value as any)}
               className="bg-[#0C0E18] border border-slate-700 px-2 py-2 text-xs font-cyber text-[#00F0FF] focus:outline-none focus:border-[#00F0FF] cyber-cut"
             >
-              <option value="side_project">[SIDE PROJECT]</option>
-              <option value="freelance">[FREELANCE CONTRACT]</option>
-              <option value="certification">[CERT STUDY TOOL]</option>
+              <option value="side_project">{uiMode === 'serious' ? '[SIDE PROJECT]' : '[CYBER TOOL]'}</option>
+              <option value="freelance">{uiMode === 'serious' ? '[FREELANCE CLIENT]' : '[FREELANCE CONTRACT]'}</option>
+              <option value="certification">{uiMode === 'serious' ? '[CERT STUDY PROJECT]' : '[NET SHARD STUDY]'}</option>
             </select>
           </div>
 
           <textarea
             rows={2}
-            placeholder="Concept or client deliverables (Gemini 3.8 Flash will auto-generate tech stack & sequential roadmap)..."
+            placeholder={
+              uiMode === 'serious'
+                ? 'Concept or project deliverables (Gemini 3.8 Flash will auto-generate tech stack & sequential roadmap)...'
+                : 'Concept or client deliverables (Gemini 3.8 Flash will auto-generate tech stack & sequential roadmap)...'
+            }
             value={newNotes}
             onChange={(e) => setNewNotes(e.target.value)}
             className="w-full bg-[#0C0E18] border border-slate-700 px-3 py-2 text-xs font-hud text-slate-200 focus:outline-none focus:border-[#00F0FF] cyber-cut"
@@ -192,7 +210,13 @@ export function IdeasAndCertVault({
               className="px-5 py-2 cyber-btn-cyan text-xs font-black flex items-center gap-2 disabled:opacity-40"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>{isRefining ? 'ANALYZING VIA GEMINI 3.8...' : 'COMMIT BLUEPRINT'}</span>
+              <span>
+                {isRefining
+                  ? 'ANALYZING VIA GEMINI 3.8...'
+                  : uiMode === 'serious'
+                  ? 'SAVE PROJECT & TECH STACK'
+                  : 'COMMIT BLUEPRINT'}
+              </span>
             </button>
           </div>
         </div>
