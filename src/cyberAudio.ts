@@ -106,3 +106,181 @@ export function playCyberAlert() {
     // Ignore
   }
 }
+
+export function playCyberStatic() {
+  if (isMuted || isCyberAudioMuted()) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const bufferSize = ctx.sampleRate * 0.12;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    const whiteNoise = ctx.createBufferSource();
+    whiteNoise.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1000;
+    filter.Q.value = 2;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+    whiteNoise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    whiteNoise.start();
+  } catch {
+    // Ignore
+  }
+}
+
+// Procedural Night City Cyberpunk Ambient Radio Engine
+export interface RadioStation {
+  id: string;
+  name: string;
+  frequency: string;
+  genre: string;
+  description: string;
+  baseFreq: number;
+}
+
+export const RADIO_STATIONS: RadioStation[] = [
+  {
+    id: 'morro_rock',
+    name: 'MORRO ROCK RADIO',
+    frequency: '98.7 MHz',
+    genre: 'INDUSTRIAL DARK SYNTH',
+    description: 'High-voltage distortion and raw Night City grit.',
+    baseFreq: 110,
+  },
+  {
+    id: 'pacific_dreams',
+    name: 'PACIFIC DREAMS',
+    frequency: '107.3 MHz',
+    genre: 'ATMOSPHERIC CHILLWAVE',
+    description: 'Lush neo-noir pads for deep focus and flow state.',
+    baseFreq: 146.83,
+  },
+  {
+    id: 'radio_watson',
+    name: 'RADIO WATSON',
+    frequency: '89.3 MHz',
+    genre: 'CYBERPUNK LO-FI BEATS',
+    description: 'Warm minor 7th harmonics for daily work sprints.',
+    baseFreq: 130.81,
+  },
+  {
+    id: 'royal_blue',
+    name: 'ROYAL BLUE NOIR',
+    frequency: '91.9 MHz',
+    genre: 'NEO-NOIR SUB SYNTH',
+    description: 'Deep sub-bass drone and meditative late night frequencies.',
+    baseFreq: 98,
+  },
+];
+
+let activeRadioNodes: {
+  oscillators: OscillatorNode[];
+  gain: GainNode;
+  lfo?: OscillatorNode;
+} | null = null;
+let currentStationId: string | null = null;
+
+export function isRadioPlaying(): boolean {
+  return activeRadioNodes !== null;
+}
+
+export function getCurrentStationId(): string | null {
+  return currentStationId;
+}
+
+export function stopCyberRadio() {
+  if (activeRadioNodes) {
+    try {
+      const now = activeRadioNodes.gain.context.currentTime;
+      activeRadioNodes.gain.gain.setValueAtTime(activeRadioNodes.gain.gain.value, now);
+      activeRadioNodes.gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+      setTimeout(() => {
+        if (activeRadioNodes) {
+          activeRadioNodes.oscillators.forEach((osc) => {
+            try { osc.stop(); } catch {}
+          });
+          if (activeRadioNodes.lfo) {
+            try { activeRadioNodes.lfo.stop(); } catch {}
+          }
+          activeRadioNodes = null;
+          currentStationId = null;
+        }
+      }, 250);
+    } catch {
+      activeRadioNodes = null;
+      currentStationId = null;
+    }
+  }
+}
+
+export function startCyberRadio(stationId: string = 'pacific_dreams') {
+  if (isMuted || isCyberAudioMuted()) return;
+  stopCyberRadio();
+  playCyberStatic();
+
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const station = RADIO_STATIONS.find((s) => s.id === stationId) || RADIO_STATIONS[0];
+    currentStationId = station.id;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.001, ctx.currentTime);
+    masterGain.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + 1.2);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, ctx.currentTime);
+
+    // Warm LFO filter sweep
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(0.18, ctx.currentTime);
+    lfoGain.gain.setValueAtTime(350, ctx.currentTime);
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.frequency);
+    lfo.start();
+
+    // Harmonics for a rich Cyberpunk Minor Chord (Root, Minor 3rd, 5th, Minor 7th)
+    const root = station.baseFreq;
+    const intervals = [1, 1.1892, 1.4983, 1.7818]; // Minor 7th chord ratios
+    const oscillators: OscillatorNode[] = [];
+
+    intervals.forEach((ratio, idx) => {
+      const osc = ctx.createOscillator();
+      osc.type = idx % 2 === 0 ? 'sawtooth' : 'triangle';
+      osc.frequency.setValueAtTime(root * ratio, ctx.currentTime);
+      // Slight detune for analog synth chorus warmth
+      osc.detune.setValueAtTime((idx - 1.5) * 6, ctx.currentTime);
+
+      const oscGain = ctx.createGain();
+      oscGain.gain.setValueAtTime(0.25 / intervals.length, ctx.currentTime);
+
+      osc.connect(oscGain);
+      oscGain.connect(filter);
+      osc.start();
+      oscillators.push(osc);
+    });
+
+    filter.connect(masterGain);
+    masterGain.connect(ctx.destination);
+
+    activeRadioNodes = { oscillators, gain: masterGain, lfo };
+  } catch (e) {
+    console.warn('Radio synth error:', e);
+  }
+}
+

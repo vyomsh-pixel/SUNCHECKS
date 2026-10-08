@@ -2,11 +2,11 @@
 // Features skewed angular tabs, neon yellow highlights, and audio click feedback.
 // STRICT: No yellow emojis. Clean Lucide vector icons and monospace text badges.
 
-import { Layers, Lightbulb, User, Server } from 'lucide-react';
+import { Terminal, Lightbulb, User, Server, Radio } from 'lucide-react';
 import { UiMode } from '../types';
-import { playCyberClick } from '../cyberAudio';
+import { playCyberClick, isRadioPlaying } from '../cyberAudio';
 
-export type ActiveTab = 'reminders' | 'ideas' | 'profile' | 'daemon';
+export type ActiveTab = 'reminders' | 'radio' | 'ideas' | 'profile' | 'daemon';
 
 interface CyberNavProps {
   currentTab: ActiveTab;
@@ -16,29 +16,37 @@ interface CyberNavProps {
 }
 
 export function CyberNav({ currentTab, onSelectTab, uiMode, activeCount }: CyberNavProps) {
+  const radioActive = isRadioPlaying();
+
   const tabs = [
     {
       id: 'reminders' as const,
-      label: uiMode === 'serious' ? 'GIGS MATRIX' : 'TASKS & MEMES',
-      icon: Layers,
+      label: uiMode === 'serious' ? 'COMMS & GIGS' : 'MESSAGES & GIGS',
+      icon: Terminal,
       badge: activeCount > 0 ? activeCount : null,
     },
     {
-      id: 'ideas' as const,
-      label: uiMode === 'serious' ? 'CERT & IDEA VAULT' : 'SIDE QUESTS',
-      icon: Lightbulb,
-      badge: null,
+      id: 'radio' as const,
+      label: 'RADIO FM',
+      icon: Radio,
+      badge: radioActive ? 'ON' : null,
     },
     {
-      id: 'profile' as const,
-      label: uiMode === 'serious' ? 'BANDWIDTH HUD' : 'OPERATOR PROFILE',
-      icon: User,
+      id: 'ideas' as const,
+      label: uiMode === 'serious' ? 'SHARDS & CERTS' : 'SIDE QUESTS',
+      icon: Lightbulb,
       badge: null,
     },
     {
       id: 'daemon' as const,
       label: '24/7 DAEMON',
       icon: Server,
+      badge: null,
+    },
+    {
+      id: 'profile' as const,
+      label: uiMode === 'serious' ? 'BANDWIDTH' : 'OPERATOR',
+      icon: User,
       badge: null,
     },
   ];

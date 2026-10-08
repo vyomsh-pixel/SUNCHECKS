@@ -265,3 +265,143 @@
   border-bottom: 2px solid var(--cyber-yellow);
   border-right: 2px solid var(--cyber-yellow);
 }
+
+/* 9. Blinking Terminal Cursor (cyberpunkredone.webflow.io) */
+.typed-words::after {
+  content: "|";
+  display: inline-block;
+  animation: cyber-cursor-blink 1s infinite;
+  color: var(--cyber-yellow);
+  font-weight: 900;
+  margin-left: 2px;
+}
+
+@keyframes cyber-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 10. Custom Cyberpunk Scrollbars (cyberpunkredone.webflow.io) */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(13, 14, 21, 0.9);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-yellow);
+  border-radius: 0px;
+}
+
+.scrollbar-cyan::-webkit-scrollbar-thumb {
+  background: var(--cyber-cyan);
+}
+
+.scrollbar-red::-webkit-scrollbar-thumb {
+  background: var(--cyber-red);
+}
+
+.scrollbar-green::-webkit-scrollbar-thumb {
+  background: #1CED82;
+}
+
+/* 11. Video-Background Cyber Action Button (video-bg-button.webflow.io) */
+.cyber-video-btn {
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  border: 1px solid rgba(252, 238, 10, 0.7);
+  background: #080911;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cyber-video-btn::before {
+  content: '';
+  position: absolute;
+  inset: -150%;
+  background: radial-gradient(circle at 50% 50%, rgba(252, 238, 10, 0.2), transparent 60%),
+              repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.12) 3px, transparent 4px),
+              linear-gradient(90deg, rgba(255, 0, 60, 0.15), rgba(0, 240, 255, 0.18), rgba(252, 238, 10, 0.2));
+  background-size: 200% 200%, 100% 4px, 300% 100%;
+  animation: cyber-video-stream 5s linear infinite;
+  opacity: 0.75;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cyber-video-btn:hover {
+  border-color: #FCEE0A;
+  box-shadow: 0 0 25px rgba(252, 238, 10, 0.6), inset 0 0 15px rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.cyber-video-btn:hover::before {
+  opacity: 1;
+  animation-duration: 2s;
+}
+
+@keyframes cyber-video-stream {
+  0% { transform: translateY(0); background-position: 0% 0%, 0% 0%, 0% 50%; }
+  50% { background-position: 100% 100%, 0% 50%, 100% 50%; }
+  100% { transform: translateY(8px); background-position: 0% 0%, 0% 100%, 0% 50%; }
+}
+
+/* 12. Gangs Dossier Horizontal Matrix (cyberpunk2077-gangs.webflow.io) */
+.cyber-dossier-scroll {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.75rem;
+}
+
+.cyber-dossier-card {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  position: relative;
+  background: #0B0D16;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  transition: all 0.25s ease;
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+
+.cyber-dossier-card:hover {
+  border-color: #FCEE0A;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 240, 255, 0.25);
+}
+
+/* 13. Radio Equalizer & Barcode (cyberpunkredone.webflow.io) */
+.img-barcode {
+  background: repeating-linear-gradient(
+    90deg,
+    #FCEE0A,
+    #FCEE0A 2px,
+    transparent 2px,
+    transparent 4px,
+    #00F0FF 4px,
+    #00F0FF 7px,
+    transparent 7px,
+    transparent 9px,
+    #FFFFFF 9px,
+    #FFFFFF 10px
+  );
+  height: 18px;
+  width: 100%;
+}
+
+.eq-bar {
+  animation: eq-bounce 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes eq-bounce {
+  0% { height: 20%; }
+  50% { height: 95%; }
+  100% { height: 40%; }
+}

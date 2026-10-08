@@ -36,6 +36,7 @@ import { CyberHeader } from './components/CyberHeader';
 import { CyberNav, ActiveTab } from './components/CyberNav';
 import { ReminderMatrix } from './components/ReminderMatrix';
 import { IdeasAndCertVault } from './components/IdeasAndCertVault';
+import { CyberRadio } from './components/CyberRadio';
 import { AddReminderModal } from './components/AddReminderModal';
 import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
@@ -188,6 +189,7 @@ export default function App() {
         onToggleMode={handleToggleMode}
         onOpenSettings={() => setIsProfileModalOpen(true)}
         onOpenOutbox={() => setIsOutboxModalOpen(true)}
+        onOpenRadio={() => setActiveTab('radio')}
       />
 
       {/* 5. Main Operational Content */}
@@ -203,6 +205,10 @@ export default function App() {
             onDelete={handleDeleteReminder}
             onTriggerNow={handleTriggerNow}
           />
+        )}
+
+        {activeTab === 'radio' && (
+          <CyberRadio />
         )}
 
         {activeTab === 'ideas' && (

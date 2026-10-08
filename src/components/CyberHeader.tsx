@@ -16,6 +16,7 @@ interface CyberHeaderProps {
   onToggleMode: () => void;
   onOpenSettings: () => void;
   onOpenOutbox: () => void;
+  onOpenRadio?: () => void;
 }
 
 export function CyberHeader({
@@ -26,6 +27,7 @@ export function CyberHeader({
   onToggleMode,
   onOpenSettings,
   onOpenOutbox,
+  onOpenRadio,
 }: CyberHeaderProps) {
   const [timeStr, setTimeStr] = useState<string>('');
   const [muted, setMuted] = useState(isCyberAudioMuted());
@@ -146,9 +148,24 @@ export function CyberHeader({
 
         </div>
 
-        {/* Right: Audio SFX, Serious vs Meme Toggle, Outbox & Settings */}
+        {/* Right: Audio SFX, Radio Shortcut, Serious vs Meme Toggle, Outbox & Settings */}
         <div className="flex items-center gap-2">
           
+          {/* Quick Radio Button */}
+          {onOpenRadio && (
+            <button
+              onClick={() => {
+                playCyberClick();
+                onOpenRadio();
+              }}
+              className="px-2.5 py-1.5 cyber-cut border border-[#00F0FF]/50 bg-[#00F0FF]/10 hover:border-[#00F0FF] text-[#00F0FF] text-xs font-tech flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+              title="Tune in to Night City Radio Transceiver"
+            >
+              <Radio className="w-3.5 h-3.5 animate-pulse text-[#00F0FF]" />
+              <span className="font-cyber text-[10px] font-bold hidden sm:inline">RADIO FM</span>
+            </button>
+          )}
+
           {/* Web Audio Synthesizer Toggle */}
           <button
             onClick={handleAudioToggle}
