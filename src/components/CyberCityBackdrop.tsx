@@ -1,9 +1,10 @@
-// CyberCityBackdrop: Authentic High-Resolution Night City Wallpaper & Atmosphere Engine
-// Directly uses the high-res 2.36MB Night City wallpapers from cyberpunkredone.webflow.io
-// Features customizable wallpaper selection and subtle non-intrusive cyber rain & holographic glints.
-// STRICT: The wallpaper remains 100% visible and vivid behind semi-transparent cyber glass.
+// CyberCityBackdrop: Ultra-Performance Night City Wallpaper Engine
+// Engineered for 8GB RAM setups:
+// 1. Zero 60 FPS canvas redraw loops (eliminates continuous CPU/VRAM thrashing).
+// 2. Pure static hardware-decoded high-res wallpaper display with 100% crisp visibility.
+// 3. Lightweight CSS vignette and scanline overlays that never invalidate compositor caches.
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 export interface WallpaperOption {
   id: string;
@@ -45,7 +46,6 @@ interface CyberCityBackdropProps {
 
 export function CyberCityBackdrop({ currentWallpaperId }: CyberCityBackdropProps) {
   const [activeWallpaper, setActiveWallpaper] = useState<WallpaperOption>(WALLPAPERS[0]);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const savedId = currentWallpaperId || localStorage.getItem('cyber_wallpaper_id');
@@ -55,75 +55,15 @@ export function CyberCityBackdrop({ currentWallpaperId }: CyberCityBackdropProps
     }
   }, [currentWallpaperId]);
 
-  // Subtle falling rain canvas overlay (purely atmospheric, non-obtrusive)
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', handleResize);
-
-    const rainDrops: { x: number; y: number; length: number; speed: number; opacity: number }[] = [];
-    const dropCount = 65; // Light count so the wallpaper is crystal clear
-
-    for (let i = 0; i < dropCount; i++) {
-      rainDrops.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        length: 12 + Math.random() * 20,
-        speed: 14 + Math.random() * 10,
-        opacity: 0.15 + Math.random() * 0.25,
-      });
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      // Draw faint cyber rain lines
-      for (const drop of rainDrops) {
-        ctx.strokeStyle = `rgba(41, 255, 255, ${drop.opacity})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(drop.x, drop.y);
-        ctx.lineTo(drop.x - 2, drop.y + drop.length);
-        ctx.stroke();
-
-        drop.y += drop.speed;
-        drop.x -= 1;
-        if (drop.y > height) {
-          drop.y = -20;
-          drop.x = Math.random() * (width + 50);
-        }
-      }
-
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* 1. Full High-Res Visible Night City Wallpaper */}
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+      {/* 1. Full High-Res Visible Night City Wallpaper (Hardware decoded, 0 continuous repaints) */}
       <img
         src={activeWallpaper.url}
         alt="Cyberpunk 2077 Night City Wallpaper"
-        className="fixed inset-0 w-full h-full object-cover object-center transition-all duration-700 select-none"
+        className="fixed inset-0 w-full h-full object-cover object-center select-none"
+        loading="eager"
+        decoding="async"
         style={{
           filter: 'brightness(0.92) contrast(1.08)',
         }}
@@ -132,11 +72,8 @@ export function CyberCityBackdrop({ currentWallpaperId }: CyberCityBackdropProps
       {/* 2. Light Vignette to frame the edges without hiding the wallpaper */}
       <div className="fixed inset-0 bg-radial-gradient pointer-events-none opacity-40" />
 
-      {/* 3. Subtle Cyber Rain Canvas */}
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-1" />
-
-      {/* 4. Ultra-faint CRT scanlines */}
-      <div className="fixed inset-0 scanlines-overlay opacity-25 pointer-events-none z-2" />
+      {/* 3. Ultra-faint CRT scanlines (Zero CPU cost pure CSS) */}
+      <div className="fixed inset-0 scanlines-overlay opacity-20 pointer-events-none z-1" />
     </div>
   );
 }
