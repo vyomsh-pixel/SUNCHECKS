@@ -423,35 +423,39 @@
 }
 
 .cyber-redone-msg-item {
-  background-color: rgba(12, 16, 26, 0.5);
-  background-image: url('https://cdn.prod.website-files.com/666af2245cb6e7d54094d64f/66759493fa2a61dc5f6dbc02_Rectangle%202.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  width: 100%;
+  background-color: rgba(12, 16, 26, 0.7);
+  border: 1px solid rgba(41, 255, 255, 0.3);
+  border-left: 3px solid rgba(41, 255, 255, 0.6);
   color: #29ffff;
   transition: all 0.2s ease;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
 }
 
 .cyber-redone-msg-item:hover {
+  background-color: rgba(18, 25, 40, 0.85);
+  border-color: rgba(41, 255, 255, 0.7);
+  border-left: 4px solid #00F0FF;
   color: #ffffff;
-  background-image: url('https://cdn.prod.website-files.com/666af2245cb6e7d54094d64f/667594f632a64edec2728169_Rectangle%20138.svg');
-  filter: drop-shadow(0 0 8px rgba(41, 255, 255, 0.6));
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.2);
 }
 
 .cyber-redone-msg-item.active {
-  background-image: url('https://cdn.prod.website-files.com/666af2245cb6e7d54094d64f/667594f632a64edec2728169_Rectangle%20138.svg');
+  background-color: rgba(9, 22, 35, 0.92);
+  border: 1.5px solid #00F0FF;
+  border-left: 5px solid #FCEE0A;
   color: #ffffff;
-  filter: drop-shadow(0 0 14px rgba(41, 255, 255, 0.8));
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.08);
 }
 
 .text-cyber-glow {
   color: #e0f9f3;
-  text-shadow: 0 0 8px #29ffff, 0 0 20px rgba(41, 255, 255, 0.6);
+  text-shadow: 0 0 6px rgba(41, 255, 255, 0.4);
 }
 
 .text-cyber-body {
   color: #fbf4e5;
-  text-shadow: 0 0 6px rgba(251, 244, 229, 0.4);
+  text-shadow: 0 0 4px rgba(251, 244, 229, 0.25);
 }
 
 /* 15. Cursor Isolation: Completely hides OS cursor when custom cyber reticle is active */

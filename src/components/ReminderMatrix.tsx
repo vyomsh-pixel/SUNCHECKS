@@ -203,7 +203,13 @@ export function ReminderMatrix({
                     </div>
 
                     <div className="text-right flex-shrink-0">
-                      <span className="text-[10px] font-tech text-[#1CED82] block">
+                      <span
+                        className={`text-[10px] font-tech px-2 py-0.5 border cyber-cut block ${
+                          item.autoEmail
+                            ? 'bg-[#1CED82]/15 text-[#1CED82] border-[#1CED82]/40 shadow-[0_0_8px_rgba(28,237,130,0.2)]'
+                            : 'bg-slate-800 text-slate-400 border-slate-700'
+                        }`}
+                      >
                         {item.autoEmail ? 'AUTO-LINK' : 'MUTED'}
                       </span>
                     </div>
