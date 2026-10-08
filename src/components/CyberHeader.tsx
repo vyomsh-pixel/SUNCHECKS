@@ -18,9 +18,10 @@ import {
   Inbox,
   Crosshair,
   MousePointer,
+  Lock,
 } from 'lucide-react';
 import { WALLPAPERS } from './CyberCityBackdrop';
-import { playCyberClick, playCyberGlitch, isCyberAudioMuted, setCyberAudioMuted } from '../cyberAudio';
+import { playCyberClick, playCyberGlitch, playCyberAlert, isCyberAudioMuted, setCyberAudioMuted } from '../cyberAudio';
 
 export type ActiveTab = 'reminders' | 'radio' | 'ideas' | 'daemon' | 'profile';
 
@@ -37,6 +38,7 @@ interface CyberHeaderProps {
   onToggleCursor: () => void;
   onToggleMode: () => void;
   onOpenOutbox: () => void;
+  onLockTerminal?: () => void;
 }
 
 export function CyberHeader({
@@ -52,6 +54,7 @@ export function CyberHeader({
   onToggleCursor,
   onToggleMode,
   onOpenOutbox,
+  onLockTerminal,
 }: CyberHeaderProps) {
   const [muted, setMuted] = useState(isCyberAudioMuted());
 
@@ -255,6 +258,20 @@ export function CyberHeader({
           >
             <span>{uiMode === 'serious' ? 'SERIOUS MODE' : 'MEME MODE'}</span>
           </button>
+
+          {/* Operator Terminal Lock Button */}
+          {onLockTerminal && (
+            <button
+              onClick={() => {
+                playCyberAlert();
+                onLockTerminal();
+              }}
+              className="p-2 bg-[#0A0D16]/80 hover:bg-[#FF003C]/20 border border-slate-700 hover:border-[#FF003C] text-slate-400 hover:text-[#FF003C] cyber-cut text-xs transition-all"
+              title="Lock Terminal & Shield Operator Credentials"
+            >
+              <Lock className="w-4 h-4" />
+            </button>
+          )}
 
         </div>
 

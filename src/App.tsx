@@ -1,10 +1,8 @@
-// CyberPulse 2077: Autonomous Night City Work & Study Ops Terminal
-// Inspired by authentic Cyberpunk 2077 UI & cyberpunk2077.webflow.io
-// STRICT RULES:
-// 1. Zero yellow emojis anywhere.
-// 2. Strict Gemini 3.8 Flash.
-// 3. 24/7 Autonomous background scheduler & multi-cadence auto-emailing via Resend.
-// 4. Cyberpunk 2077 chamfers, hazard stripes, reticle cursor, audio synthesizer.
+// CyberPulse: Autonomous Work & Study Ops Hub
+// Night City Cyberpunk 2077 HUD Design
+// Strictly Zero Yellow Emojis Enforced
+// SECURED: Operator Privacy Gate protects real name & email from public visitors.
+// Gemini 3.8 Flash routed securely through serverless backend (zero browser key exposure).
 
 import { useState, useEffect, useCallback } from 'react';
 import {
@@ -16,15 +14,15 @@ import {
   UiMode,
 } from './types';
 import {
-  fetchDaemonStatus,
+  fetchProfile,
+  saveProfile,
   fetchReminders,
   createReminder,
   updateReminder,
   deleteReminder,
   triggerReminderNow,
-  sendTestEmailPing,
-  fetchProfile,
-  saveProfile,
+  sendTestEmailPing as apiSendTestEmail,
+  fetchDaemonStatus,
   getProjectIdeas,
   saveProjectIdea,
   deleteProjectIdea,
@@ -33,6 +31,7 @@ import {
 import { CyberCityBackdrop, WALLPAPERS } from './components/CyberCityBackdrop';
 import { CyberCursor } from './components/CyberCursor';
 import { CyberHeader, ActiveTab } from './components/CyberHeader';
+import { CyberAuthGate } from './components/CyberAuthGate';
 import { ReminderMatrix } from './components/ReminderMatrix';
 import { IdeasAndCertVault } from './components/IdeasAndCertVault';
 import { CyberRadio } from './components/CyberRadio';
@@ -44,13 +43,44 @@ import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal'
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
 import { playCyberClick } from './cyberAudio';
 
+const GUEST_PROFILE: CyberProfile = {
+  name: 'Guest Choombatta',
+  email: 'guest@nightcity.io',
+  activeRole: 'student',
+  uiMode: 'serious',
+  certTargets: ['AWS Cloud Practitioner', 'Docker Basics'],
+  dailyCapacityHours: 8,
+};
+
+const GUEST_REMINDERS: ReminderItem[] = [
+  {
+    id: 'demo_1',
+    title: 'Explore CyberPulse Workstation',
+    theme: 'work',
+    description: 'Check out the Night City Radio, switch wallpapers, test Serious vs Meme modes.',
+    cadence: 'daily',
+    time: '12:00',
+    intervalDays: 1,
+    weekdays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+    email: 'guest@nightcity.io',
+    autoEmail: false,
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    lastTriggeredAt: null,
+    nextTriggerAt: new Date(Date.now() + 3600 * 1000).toISOString(),
+  },
+];
+
 export default function App() {
+  const [authRole, setAuthRole] = useState<'operator' | 'guest' | null>(() => {
+    return (sessionStorage.getItem('cyberpulse_auth_role') as any) || null;
+  });
+
   const [profile, setProfile] = useState<CyberProfile>({
     name: 'Vyom',
     email: 'rajkesir74@gmail.com',
     activeRole: 'student_intern_freelancer',
     uiMode: 'serious',
-    geminiApiKey: '',
     certTargets: ['AWS Solutions Architect', 'GCP Associate Cloud Engineer', 'CKA Kubernetes'],
     dailyCapacityHours: 14,
   });
@@ -75,6 +105,7 @@ export default function App() {
     return localStorage.getItem('cyber_cursor_enabled') === 'true';
   });
 
+  // Modal States
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isOutboxModalOpen, setIsOutboxModalOpen] = useState(false);
@@ -99,6 +130,22 @@ export default function App() {
 
   // Sync initial data from backend daemon and local cache
   const refreshAll = useCallback(async () => {
+    if (authRole === 'guest') {
+      setProfile(GUEST_PROFILE);
+      setReminders(GUEST_REMINDERS);
+      setDaemonStatus({
+        online: true,
+        daemonStartTime: new Date().toISOString(),
+        uptimeSeconds: 3600,
+        activeCount: 1,
+        totalReminders: 1,
+        serverTime: new Date().toISOString(),
+      });
+      setEmailLogs([]);
+      setIdeas(getProjectIdeas());
+      return;
+    }
+
     const [p, r, d, l] = await Promise.all([
       fetchProfile(),
       fetchReminders(),
@@ -110,16 +157,20 @@ export default function App() {
     setDaemonStatus(d);
     setEmailLogs(l);
     setIdeas(getProjectIdeas());
-  }, []);
+  }, [authRole]);
 
   useEffect(() => {
-    refreshAll();
-    const interval = setInterval(() => {
-      fetchDaemonStatus().then(setDaemonStatus);
-      fetchEmailLogs().then(setEmailLogs);
-    }, 15_000);
-    return () => clearInterval(interval);
-  }, [refreshAll]);
+    if (authRole) {
+      refreshAll();
+      const interval = setInterval(() => {
+        if (authRole === 'operator') {
+          fetchDaemonStatus().then(setDaemonStatus);
+          fetchEmailLogs().then(setEmailLogs);
+        }
+      }, 15_000);
+      return () => clearInterval(interval);
+    }
+  }, [authRole, refreshAll]);
 
   // Life Bandwidth Calculation (% capacity)
   const activeRemindersCount = reminders.filter((r) => r.status === 'active').length;
@@ -133,14 +184,16 @@ export default function App() {
     const nextMode: UiMode = profile.uiMode === 'serious' ? 'fun' : 'serious';
     const updated = { ...profile, uiMode: nextMode };
     setProfile(updated);
-    await saveProfile(updated);
+    if (authRole === 'operator') {
+      await saveProfile(updated);
+    }
   };
 
   // Reminders Actions
   const handleSaveReminder = async (data: Partial<ReminderItem>) => {
     const created = await createReminder(data);
     setReminders((prev) => [created, ...prev]);
-    fetchDaemonStatus().then(setDaemonStatus);
+    setIsAddModalOpen(false);
   };
 
   const handleToggleReminderStatus = async (id: string, currentStatus: string) => {
@@ -149,64 +202,88 @@ export default function App() {
     setReminders((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status: nextStatus as any } : r))
     );
-    fetchDaemonStatus().then(setDaemonStatus);
   };
 
   const handleDeleteReminder = async (id: string) => {
     await deleteReminder(id);
     setReminders((prev) => prev.filter((r) => r.id !== id));
-    fetchDaemonStatus().then(setDaemonStatus);
   };
 
   const handleTriggerNow = async (id: string) => {
-    await triggerReminderNow(id, profile.email);
-    const logs = await fetchEmailLogs();
-    setEmailLogs(logs);
-    fetchDaemonStatus().then(setDaemonStatus);
-  };
-
-  // Cert Targets Actions
-  const handleAddCertTarget = async (cert: string) => {
-    if (profile.certTargets.includes(cert)) return;
-    const updated = { ...profile, certTargets: [...profile.certTargets, cert] };
-    setProfile(updated);
-    await saveProfile(updated);
-  };
-
-  const handleRemoveCertTarget = async (cert: string) => {
-    const updated = {
-      ...profile,
-      certTargets: profile.certTargets.filter((c) => c !== cert),
-    };
-    setProfile(updated);
-    await saveProfile(updated);
+    const ok = await triggerReminderNow(id);
+    if (ok) {
+      fetchEmailLogs().then(setEmailLogs);
+    }
+    return ok;
   };
 
   // Ideas Actions
   const handleAddIdea = (idea: ProjectIdea) => {
     saveProjectIdea(idea);
-    setIdeas(getProjectIdeas());
+    setIdeas((prev) => [idea, ...prev]);
   };
 
   const handleDeleteIdea = (id: string) => {
     deleteProjectIdea(id);
-    setIdeas(getProjectIdeas());
+    setIdeas((prev) => prev.filter((i) => i.id !== id));
   };
 
+  const handleAddCertTarget = async (cert: string) => {
+    if (profile.certTargets.includes(cert)) return;
+    const updated = { ...profile, certTargets: [...profile.certTargets, cert] };
+    setProfile(updated);
+    if (authRole === 'operator') await saveProfile(updated);
+  };
+
+  const handleRemoveCertTarget = async (cert: string) => {
+    const updated = { ...profile, certTargets: profile.certTargets.filter((c) => c !== cert) };
+    setProfile(updated);
+    if (authRole === 'operator') await saveProfile(updated);
+  };
+
+  // Test Email Action
+  const sendTestEmailPing = async (targetEmail: string) => {
+    const ok = await apiSendTestEmail(targetEmail);
+    if (ok) {
+      fetchEmailLogs().then(setEmailLogs);
+    }
+    return ok;
+  };
+
+  const handleLockTerminal = () => {
+    sessionStorage.removeItem('cyberpulse_auth_role');
+    setAuthRole(null);
+  };
+
+  // If not authenticated, render the Privacy Shield & Login Gate
+  if (!authRole) {
+    return (
+      <div className="relative min-h-screen text-slate-100 flex flex-col justify-between selection:bg-[#00F0FF] selection:text-black font-hud">
+        <CyberCityBackdrop currentWallpaperId={wallpaperId} />
+        <CyberCursor enabled={cursorMode} />
+        <CyberAuthGate
+          onUnlockOperator={() => {
+            sessionStorage.setItem('cyberpulse_auth_role', 'operator');
+            setAuthRole('operator');
+          }}
+          onEnterGuest={() => {
+            sessionStorage.setItem('cyberpulse_auth_role', 'guest');
+            setAuthRole('guest');
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col font-hud relative selection:bg-[#FCEE0A] selection:text-black">
-      
-      {/* 1. Viewport Edge Cyber Lines (Like cyberpunk2077.webflow.io) */}
-      <div className="cyber-frame-line-top" />
-      <div className="cyber-frame-line-bottom" />
-
-      {/* 2. Custom Interactive Reticle Cursor */}
-      <CyberCursor enabled={cursorMode} />
-
-      {/* 3. Live High-Res Cyberpunk Night City Backdrop (Visible) */}
+    <div className="relative min-h-screen text-slate-100 flex flex-col justify-between selection:bg-[#00F0FF] selection:text-black font-hud">
+      {/* 1. Visible Night City Backdrop Wallpaper (Hardware-optimized) */}
       <CyberCityBackdrop currentWallpaperId={wallpaperId} />
 
-      {/* 4. Top Cockpit HUD Header (cyberpunkredone.webflow.io style) */}
+      {/* 2. Custom Cyber Reticle Cursor (Zero-lag unified assembly) */}
+      <CyberCursor enabled={cursorMode} />
+
+      {/* 3. Top Cyberpunk Glass Navigation */}
       <CyberHeader
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -220,12 +297,12 @@ export default function App() {
         onToggleCursor={handleToggleCursor}
         onToggleMode={handleToggleMode}
         onOpenOutbox={() => setIsOutboxModalOpen(true)}
+        onLockTerminal={handleLockTerminal}
       />
 
-      {/* 5. Main Operational Content */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 pt-6 pb-12 relative z-10">
+      {/* 4. Main Command Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 relative z-10">
         
-        {/* Navigation Tab Content */}
         {/* 1. Reminders & Schedule */}
         {activeTab === 'reminders' && (
           <ReminderMatrix
@@ -243,7 +320,6 @@ export default function App() {
           <IdeasAndCertVault
             ideas={ideas}
             uiMode={profile.uiMode}
-            apiKey={profile.geminiApiKey}
             certTargets={profile.certTargets}
             onAddIdea={handleAddIdea}
             onDeleteIdea={handleDeleteIdea}
@@ -273,7 +349,7 @@ export default function App() {
             uiMode={profile.uiMode}
             onSaveProfile={async (p) => {
               setProfile(p);
-              await saveProfile(p);
+              if (authRole === 'operator') await saveProfile(p);
             }}
             onSendTestPing={sendTestEmailPing}
           />
@@ -309,7 +385,6 @@ export default function App() {
         onSave={handleSaveReminder}
         defaultEmail={profile.email}
         uiMode={profile.uiMode}
-        apiKey={profile.geminiApiKey}
       />
 
       <ProfileAndBandwidthModal
@@ -320,7 +395,7 @@ export default function App() {
         activeRemindersCount={activeRemindersCount}
         onSaveProfile={async (p) => {
           setProfile(p);
-          await saveProfile(p);
+          if (authRole === 'operator') await saveProfile(p);
         }}
         onSendTestPing={sendTestEmailPing}
       />

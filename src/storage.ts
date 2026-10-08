@@ -2,7 +2,6 @@
 // Seamless communication between Frontend HUD and 24/7 Backend Daemon
 
 import { ReminderItem, CyberProfile, ProjectIdea, DaemonStatus, EmailLogItem } from './types';
-import { DEFAULT_API_KEY } from './gemini';
 
 const STORAGE_KEYS = {
   REMINDERS_CACHE: 'cyberpulse_reminders_cache',
@@ -15,7 +14,6 @@ const DEFAULT_PROFILE: CyberProfile = {
   email: 'rajkesir74@gmail.com',
   activeRole: 'student_intern_freelancer',
   uiMode: 'serious',
-  geminiApiKey: DEFAULT_API_KEY,
   certTargets: ['AWS Certified Solutions Architect', 'GCP Cloud Engineer', 'CKA Kubernetes'],
   dailyCapacityHours: 12,
 };
@@ -200,7 +198,6 @@ export async function fetchProfile(): Promise<CyberProfile> {
     const res = await fetch('/api/profile', { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       const data = await res.json();
-      if (!data.geminiApiKey) data.geminiApiKey = DEFAULT_API_KEY;
       localStorage.setItem(STORAGE_KEYS.PROFILE_CACHE, JSON.stringify(data));
       return data;
     }
@@ -211,9 +208,7 @@ export async function fetchProfile(): Promise<CyberProfile> {
   const cached = localStorage.getItem(STORAGE_KEYS.PROFILE_CACHE);
   if (cached) {
     try {
-      const parsed = JSON.parse(cached);
-      if (!parsed.geminiApiKey) parsed.geminiApiKey = DEFAULT_API_KEY;
-      return parsed;
+      return JSON.parse(cached);
     } catch {
       // ignore
     }

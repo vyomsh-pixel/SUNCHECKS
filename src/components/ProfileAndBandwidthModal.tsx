@@ -63,7 +63,6 @@ export function ProfileAndBandwidthModal({
   const [email, setEmail] = useState(profile.email);
   const [activeRole, setActiveRole] = useState<PersonaType>(profile.activeRole);
   const [dailyCapacityHours, setDailyCapacityHours] = useState(profile.dailyCapacityHours || 14);
-  const [geminiApiKey, setGeminiApiKey] = useState(profile.geminiApiKey || '');
   const [testEmailStatus, setTestEmailStatus] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -77,7 +76,6 @@ export function ProfileAndBandwidthModal({
       email: email.trim(),
       activeRole,
       dailyCapacityHours: Number(dailyCapacityHours) || 14,
-      geminiApiKey: geminiApiKey.trim(),
     });
     onClose();
   };
@@ -255,21 +253,10 @@ export function ProfileAndBandwidthModal({
             />
           </div>
 
-          {/* 5. Gemini 3.8 Flash API Key */}
-          <div>
-            <label className="block text-xs font-cyber text-slate-400 mb-1">
-              GEMINI API KEY (STRICT: GEMINI-3.8-FLASH)
-            </label>
-            <input
-              type="password"
-              value={geminiApiKey}
-              onChange={(e) => setGeminiApiKey(e.target.value)}
-              placeholder="Loaded from .env (models/gemini-3.8-flash)"
-              className="w-full bg-[#05060A] border-2 border-slate-700 px-3.5 py-2 text-xs font-tech text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
-            />
-            <p className="text-[11px] text-slate-500 font-tech mt-1">
-              Strictly routed to models/gemini-3.8-flash. Zero fallback to deprecated 2.5.
-            </p>
+          {/* 5. Server-Side Gemini 3.8 Flash Badge */}
+          <div className="p-3 bg-[#0A0D18] border border-[#00F0FF]/40 cyber-cut flex items-center justify-between text-xs font-tech">
+            <span className="text-[#00F0FF] font-bold">AI ENGINE: GEMINI 3.8 FLASH</span>
+            <span className="text-[#00FF66] font-bold">[SECURED SERVER-SIDE]</span>
           </div>
 
           {/* Save CTA */}

@@ -1,9 +1,11 @@
 // WorkloadView: In-Place Operator Identity, Persona Switcher & Life Bandwidth Tracker
 // STRICT: Zero yellow emojis. Clean Lucide vector icons and monospace text badges.
+// PRIVACY-FIRST: Gemini API key removed from UI (handled securely on serverless backend).
+// Operator Name & Email are shielded with an instant privacy toggle.
 
 import { useState } from 'react';
 import { CyberProfile, PersonaType, UiMode } from '../types';
-import { User, CheckCircle2, Key } from 'lucide-react';
+import { User, CheckCircle2, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { TechBadge } from './TechBadge';
 import { playCyberClick, playCyberAlert } from '../cyberAudio';
 
@@ -60,7 +62,7 @@ export function WorkloadView({
   const [email, setEmail] = useState(profile.email);
   const [activeRole, setActiveRole] = useState<PersonaType>(profile.activeRole);
   const [dailyCapacityHours, setDailyCapacityHours] = useState(profile.dailyCapacityHours || 14);
-  const [geminiApiKey, setGeminiApiKey] = useState(profile.geminiApiKey || '');
+  const [shieldActive, setShieldActive] = useState(true);
   const [savedStatus, setSavedStatus] = useState<string | null>(null);
 
   const handleSelectPersona = (p: typeof PERSONAS[0]) => {
@@ -78,7 +80,6 @@ export function WorkloadView({
       email: email.trim(),
       activeRole,
       dailyCapacityHours: Number(dailyCapacityHours) || 14,
-      geminiApiKey: geminiApiKey.trim(),
     });
     setSavedStatus('PROFILE & CAPACITY SAVED!');
     setTimeout(() => setSavedStatus(null), 3000);
@@ -178,26 +179,48 @@ export function WorkloadView({
         </div>
       </div>
 
-      {/* 3. In-Place Identity, Capacity & API Config */}
+      {/* 3. In-Place Identity, Capacity & Privacy Shield Config */}
       <div className="cyber-redone-container p-6 relative">
+        <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-[#FCEE0A]" />
+            <h3 className="font-cyber text-sm font-black tracking-wider uppercase text-white">
+              OPERATOR IDENTITY & PRIVACY SHIELD
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              playCyberClick();
+              setShieldActive(!shieldActive);
+            }}
+            className="px-2.5 py-1 bg-[#05060A] border border-slate-700 hover:border-[#00F0FF] text-xs font-tech text-slate-300 flex items-center gap-1.5 cyber-cut"
+          >
+            {shieldActive ? <EyeOff className="w-3.5 h-3.5 text-[#FCEE0A]" /> : <Eye className="w-3.5 h-3.5 text-[#00FF66]" />}
+            <span>{shieldActive ? 'SHIELDED (CLICK TO REVEAL)' : 'VISIBLE (CLICK TO SHIELD)'}</span>
+          </button>
+        </div>
+
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-hud">
             <div>
               <label className="block text-xs font-cyber text-slate-300 mb-1">OPERATOR NAME</label>
               <input
-                type="text"
+                type={shieldActive ? 'password' : 'text'}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-[#05060A] border border-slate-700 px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
+                placeholder="Operator name..."
+                className="w-full bg-[#05060A] border border-slate-700 px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut tracking-wider"
               />
             </div>
             <div>
               <label className="block text-xs font-cyber text-slate-300 mb-1">PRIMARY EMAIL DESTINATION</label>
               <input
-                type="email"
+                type={shieldActive ? 'password' : 'email'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#05060A] border border-slate-700 px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
+                placeholder="destination@domain.com"
+                className="w-full bg-[#05060A] border border-slate-700 px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut tracking-wider"
               />
             </div>
           </div>
@@ -218,18 +241,15 @@ export function WorkloadView({
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-cyber text-slate-300 mb-1 flex items-center gap-2">
-              <Key className="w-3.5 h-3.5 text-[#00F0FF]" />
-              <span>GEMINI 3.8 FLASH API KEY (OPTIONAL FOR SMART ENHANCEMENT)</span>
-            </label>
-            <input
-              type="password"
-              value={geminiApiKey}
-              onChange={(e) => setGeminiApiKey(e.target.value)}
-              placeholder="AI Studio API key (AQ.Ab8...)"
-              className="w-full bg-[#05060A] border border-slate-700 px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-[#00F0FF] cyber-cut font-mono text-xs"
-            />
+          {/* Secure Backend AI Engine Status (Zero client-side key exposure) */}
+          <div className="p-3 bg-[#060812] border border-[#00F0FF]/40 cyber-cut flex items-center justify-between gap-3 text-xs font-tech">
+            <div className="flex items-center gap-2 text-[#00F0FF]">
+              <Sparkles className="w-4 h-4 text-[#00F0FF]" />
+              <span className="font-bold">AI ENGINE // GEMINI 3.8 FLASH</span>
+            </div>
+            <span className="text-[10px] text-[#00FF66] bg-[#00FF66]/15 border border-[#00FF66]/40 px-2 py-0.5 cyber-cut font-bold">
+              SECURED SERVER-SIDE // ZERO BROWSER KEY EXPOSURE
+            </span>
           </div>
 
           <div className="flex items-center justify-between pt-2">

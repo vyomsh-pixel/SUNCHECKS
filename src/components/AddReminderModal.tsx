@@ -15,7 +15,6 @@ interface AddReminderModalProps {
   onSave: (reminder: Partial<ReminderItem>) => void;
   defaultEmail: string;
   uiMode: UiMode;
-  apiKey?: string;
 }
 
 const WEEKDAYS = [
@@ -34,7 +33,6 @@ export function AddReminderModal({
   onSave,
   defaultEmail,
   uiMode,
-  apiKey,
 }: AddReminderModalProps) {
   const [title, setTitle] = useState('');
   const [theme, setTheme] = useState<ReminderTheme>('work');
@@ -61,7 +59,7 @@ export function AddReminderModal({
     setIsEnhancing(true);
     playCyberClick();
     try {
-      const res = await enhanceReminder(title, theme, uiMode, apiKey);
+      const res = await enhanceReminder(title, theme, uiMode);
       setDescription(
         `${res.formattedSummary}\n\nKey Steps:\n${res.actionableSteps.map((s) => `• ${s}`).join('\n')}`
       );

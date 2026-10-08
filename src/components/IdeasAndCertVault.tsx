@@ -12,7 +12,6 @@ import { playCyberClick, playCyberAlert } from '../cyberAudio';
 interface IdeasAndCertVaultProps {
   ideas: ProjectIdea[];
   uiMode: UiMode;
-  apiKey?: string;
   certTargets: string[];
   onAddIdea: (idea: ProjectIdea) => void;
   onDeleteIdea: (id: string) => void;
@@ -23,7 +22,6 @@ interface IdeasAndCertVaultProps {
 export function IdeasAndCertVault({
   ideas,
   uiMode,
-  apiKey,
   certTargets,
   onAddIdea,
   onDeleteIdea,
@@ -44,10 +42,10 @@ export function IdeasAndCertVault({
     let roadmap: string[] = [];
     let valueProposition = '';
 
-    if (newNotes.trim() && apiKey) {
+    if (newNotes.trim()) {
       setIsRefining(true);
       try {
-        const refined = await refineIdea(newTitle, newCategory, apiKey);
+        const refined = await refineIdea(newTitle, newCategory);
         techStack = refined.techStack;
         roadmap = refined.roadmap;
         valueProposition = refined.valueProposition;

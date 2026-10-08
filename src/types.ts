@@ -41,7 +41,6 @@ export interface CyberProfile {
   email: string;
   activeRole: PersonaType;
   uiMode: UiMode;
-  geminiApiKey: string;
   certTargets: string[];
   dailyCapacityHours: number;
 }
