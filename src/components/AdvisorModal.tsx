@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DailyLog, ChatMessage } from '../types';
 import { askAdvisor, HEALTH_DISCLAIMER } from '../gemini';
-import { Bot, Send, X, KeyRound, Sparkles } from 'lucide-react';
+import { Bot, Send, X, Sparkles } from 'lucide-react';
 
 interface AdvisorModalProps {
   isOpen: boolean;
@@ -23,7 +23,6 @@ export const AdvisorModal: React.FC<AdvisorModalProps> = ({
   onClose,
   currentLog,
   apiKey,
-  onOpenSettings,
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -46,19 +45,6 @@ export const AdvisorModal: React.FC<AdvisorModalProps> = ({
   const handleSend = async (textToSend?: string) => {
     const text = (textToSend || input).trim();
     if (!text || loading) return;
-
-    if (!apiKey) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: String(Date.now()),
-          sender: 'assistant',
-          text: 'Please configure your Gemini API Key in Settings to start our conversation.',
-          timestamp: Date.now(),
-        },
-      ]);
-      return;
-    }
 
     const userMsg: ChatMessage = {
       id: String(Date.now()),
@@ -124,21 +110,6 @@ export const AdvisorModal: React.FC<AdvisorModalProps> = ({
 
         {/* Messages */}
         <div className="flex-1 p-4 overflow-y-auto space-y-3">
-          {!apiKey && (
-            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-200 flex items-center justify-between text-xs">
-              <div className="flex items-center space-x-2">
-                <KeyRound className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                <span>API Key needed for conversational advice</span>
-              </div>
-              <button
-                onClick={onOpenSettings}
-                className="font-bold underline hover:no-underline shrink-0"
-              >
-                Settings
-              </button>
-            </div>
-          )}
-
           {messages.map((msg) => {
             const isUser = msg.sender === 'user';
             return (

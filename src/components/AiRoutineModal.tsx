@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DailyLog, AiRoutine } from '../types';
 import { generateDailyRoutine, HEALTH_DISCLAIMER } from '../gemini';
-import { Sparkles, Sun, Sunrise, Sunset, Wind, X, RefreshCw, KeyRound } from 'lucide-react';
+import { Sparkles, Sun, Sunrise, Sunset, Wind, X, RefreshCw } from 'lucide-react';
 
 interface AiRoutineModalProps {
   isOpen: boolean;
@@ -16,7 +16,6 @@ export const AiRoutineModal: React.FC<AiRoutineModalProps> = ({
   onClose,
   currentLog,
   apiKey,
-  onOpenSettings,
 }) => {
   const [routine, setRoutine] = useState<AiRoutine | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,10 +24,6 @@ export const AiRoutineModal: React.FC<AiRoutineModalProps> = ({
   if (!isOpen) return null;
 
   const handleGenerate = async () => {
-    if (!apiKey) {
-      setError('Please add your Gemini API Key in Settings first.');
-      return;
-    }
     setLoading(true);
     setError(null);
     try {
@@ -56,7 +51,7 @@ export const AiRoutineModal: React.FC<AiRoutineModalProps> = ({
                 AI Routine Generator
               </h2>
               <p className="font-sans text-xs text-slate-400">
-                Powered by Gemini 2.5 Flash
+                Powered by Gemini 3.8 Flash
               </p>
             </div>
           </div>
@@ -70,24 +65,6 @@ export const AiRoutineModal: React.FC<AiRoutineModalProps> = ({
 
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-4">
-          {!apiKey && (
-            <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-200 flex items-start space-x-3 text-sm">
-              <KeyRound className="w-5 h-5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
-              <div>
-                <p className="font-medium">Gemini API Key Required</p>
-                <p className="text-xs text-amber-700 dark:text-amber-300 mt-1">
-                  Add your free Gemini API key to unlock personalized daily rhythms.
-                </p>
-                <button
-                  onClick={onOpenSettings}
-                  className="mt-2 text-xs font-semibold underline hover:no-underline"
-                >
-                  Configure Key in Settings →
-                </button>
-              </div>
-            </div>
-          )}
-
           {error && (
             <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 text-rose-700 dark:text-rose-300 text-xs">
               {error}
@@ -105,7 +82,7 @@ export const AiRoutineModal: React.FC<AiRoutineModalProps> = ({
               </p>
               <button
                 onClick={handleGenerate}
-                disabled={!apiKey}
+                disabled={loading}
                 className="px-5 py-2.5 rounded-full bg-sage-600 hover:bg-sage-700 text-white font-medium text-sm transition-all shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Generate Today&apos;s Routine
@@ -120,7 +97,7 @@ export const AiRoutineModal: React.FC<AiRoutineModalProps> = ({
                 Listening to today&apos;s check-in...
               </p>
               <p className="text-xs text-slate-400">
-                Synthesizing calm rhythm with Gemini 2.5 Flash
+                Synthesizing calm rhythm with Gemini 3.8 Flash
               </p>
             </div>
           )}

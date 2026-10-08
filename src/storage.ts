@@ -1,4 +1,5 @@
 import { DailyLog, UserProfile, HabitItem } from './types';
+import { DEFAULT_API_KEY } from './gemini';
 
 const STORAGE_KEYS = {
   LOGS: 'daypulse_daily_logs',
@@ -65,7 +66,11 @@ export function getUserProfile(): UserProfile {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.PROFILE);
     if (raw) {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (!parsed.geminiApiKey) {
+        parsed.geminiApiKey = DEFAULT_API_KEY;
+      }
+      return parsed;
     }
   } catch (e) {
     console.error('Failed to get user profile', e);
@@ -74,7 +79,7 @@ export function getUserProfile(): UserProfile {
     name: 'Friend',
     streakCount: 1,
     lastActiveDate: getTodayKey(),
-    geminiApiKey: '',
+    geminiApiKey: DEFAULT_API_KEY,
     isDarkMode: false,
   };
 }

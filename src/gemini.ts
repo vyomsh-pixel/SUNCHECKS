@@ -1,15 +1,56 @@
 import { DailyLog, AiRoutine } from './types';
 
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+export const DEFAULT_API_KEY = (import.meta.env.VITE_GEMINI_API_KEY || '').trim();
+
+const PRIMARY_MODEL = 'gemini-3.8-flash';
+const FALLBACK_MODEL = 'gemini-2.5-flash';
 
 export const HEALTH_DISCLAIMER =
   'DayPulse is a personal wellness visualization tool for self-tracking and reflection. It is not intended to diagnose, treat, or replace professional medical advice.';
 
-export async function generateDailyRoutine(log: DailyLog, apiKey: string): Promise<AiRoutine> {
-  if (!apiKey) {
-    throw new Error('Please configure your Gemini API Key in Settings to generate AI routines.');
+async function callGemini(payload: Record<string, unknown>, userKey?: string): Promise<string> {
+  const key = (userKey || DEFAULT_API_KEY).trim();
+  if (!key) {
+    throw new Error('Gemini API Key is missing. Please check your configuration in Settings.');
   }
 
+  const models = [PRIMARY_MODEL, FALLBACK_MODEL];
+  let lastError: Error | null = null;
+
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': key,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const message = errorData?.error?.message || `HTTP error ${response.status}`;
+        throw new Error(message);
+      }
+
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) {
+        return text;
+      }
+    } catch (err: unknown) {
+      lastError = err as Error;
+      // If 404 or model unavailable, try fallback model in loop
+      console.warn(`Gemini attempt with ${model} failed, trying fallback...`, err);
+    }
+  }
+
+  throw lastError || new Error('Failed to generate response from Gemini.');
+}
+
+export async function generateDailyRoutine(log: DailyLog, apiKey?: string): Promise<AiRoutine> {
   const moodLabels = ['', 'Rough', 'Down', 'Steady', 'Good', 'Radiant'];
   const prompt = `
 You are the DayPulse Wellness Guide. Analyze today's check-in metrics and generate a calm, realistic, grounded daily rhythm.
@@ -31,35 +72,18 @@ Instructions:
 3. Return ONLY the raw JSON object without markdown fences or extraneous text.
 `;
 
-  const response = await fetch(GEMINI_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-goog-api-key': apiKey,
+  const payload = {
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      temperature: 0.7,
     },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        responseMimeType: 'application/json',
-        temperature: 0.7,
-      },
-    }),
-  });
+  };
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    const message = errorData?.error?.message || `HTTP error ${response.status}`;
-    throw new Error(`Gemini API Error: ${message}`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    throw new Error('No response returned from Gemini.');
-  }
+  const rawJson = await callGemini(payload, apiKey);
 
   try {
-    const parsed = JSON.parse(text);
+    const parsed = JSON.parse(rawJson);
     return {
       theme: parsed.theme || 'Steady & Centered Rhythm',
       morningBlock: parsed.morningBlock || 'Start gently with a glass of water and 10 minutes of daylight.',
@@ -69,7 +93,7 @@ Instructions:
       generatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
   } catch (e) {
-    console.error('Failed to parse Gemini JSON output', text, e);
+    console.error('Failed to parse Gemini JSON output', rawJson, e);
     throw new Error('Failed to parse structured routine format.');
   }
 }
@@ -78,12 +102,8 @@ export async function askAdvisor(
   history: { sender: 'user' | 'assistant'; text: string }[],
   userMessage: string,
   currentLog: DailyLog,
-  apiKey: string
+  apiKey?: string
 ): Promise<string> {
-  if (!apiKey) {
-    throw new Error('Please configure your Gemini API Key in Settings to speak with the Advisor.');
-  }
-
   const systemPrompt = `
 You are the DayPulse Wellness Advisor — a calm, warm, supportive, and practical companion.
 Context about the user today:
@@ -106,31 +126,13 @@ Guidelines:
     { role: 'user', parts: [{ text: userMessage }] },
   ];
 
-  const response = await fetch(GEMINI_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-goog-api-key': apiKey,
+  const payload = {
+    contents,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 600,
     },
-    body: JSON.stringify({
-      contents,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 500,
-      },
-    }),
-  });
+  };
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    const message = errorData?.error?.message || `HTTP error ${response.status}`;
-    throw new Error(`Gemini API Error: ${message}`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    throw new Error('Advisor could not generate a response.');
-  }
-  return text;
+  return callGemini(payload, apiKey);
 }
