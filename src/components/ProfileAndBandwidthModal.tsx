@@ -1,10 +1,11 @@
-// ProfileAndBandwidthModal: Persona switcher, bandwidth calculator & API settings
-// STRICT RULE: No yellow emojis. Clean Lucide vector icons and monospace text badges.
+// ProfileAndBandwidthModal: Cyberpunk Operator & Bandwidth HUD
+// STRICT: No yellow emojis. Clean Lucide vector icons and monospace text badges.
 
 import { useState } from 'react';
 import { CyberProfile, PersonaType } from '../types';
 import { X, Activity, CheckCircle2 } from 'lucide-react';
 import { TechBadge } from './TechBadge';
+import { playCyberClick, playCyberAlert } from '../cyberAudio';
 
 interface ProfileAndBandwidthModalProps {
   isOpen: boolean;
@@ -61,7 +62,7 @@ export function ProfileAndBandwidthModal({
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
   const [activeRole, setActiveRole] = useState<PersonaType>(profile.activeRole);
-  const [dailyCapacityHours, setDailyCapacityHours] = useState(profile.dailyCapacityHours || 12);
+  const [dailyCapacityHours, setDailyCapacityHours] = useState(profile.dailyCapacityHours || 14);
   const [geminiApiKey, setGeminiApiKey] = useState(profile.geminiApiKey || '');
   const [testEmailStatus, setTestEmailStatus] = useState<string | null>(null);
 
@@ -69,18 +70,20 @@ export function ProfileAndBandwidthModal({
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    playCyberAlert();
     onSaveProfile({
       ...profile,
       name: name.trim(),
       email: email.trim(),
       activeRole,
-      dailyCapacityHours: Number(dailyCapacityHours) || 12,
+      dailyCapacityHours: Number(dailyCapacityHours) || 14,
       geminiApiKey: geminiApiKey.trim(),
     });
     onClose();
   };
 
   const handleTestPing = async () => {
+    playCyberClick();
     setTestEmailStatus('DISPATCHING...');
     const ok = await onSendTestPing(email);
     setTestEmailStatus(ok ? 'VERIFICATION SENT!' : 'FAILED TO DISPATCH');
@@ -88,67 +91,73 @@ export function ProfileAndBandwidthModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="w-full max-w-xl rounded-2xl bg-[#0A0F1D]/95 border border-cyan-500/30 p-6 shadow-2xl text-slate-100 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+      <div className="w-full max-w-xl bg-[#080910] border-2 border-[#FCEE0A] p-6 shadow-2xl text-slate-100 max-h-[90vh] overflow-y-auto cyber-cut-card relative">
         
+        {/* Top corner hazard stripe */}
+        <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe" />
+
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-          <div className="flex items-center gap-2.5">
+        <div className="flex items-center justify-between pb-4 border-b-2 border-slate-800">
+          <div className="flex items-center gap-3">
             <TechBadge mode={profile.uiMode} type="dev" size="sm" />
             <div>
-              <h2 className="text-base font-bold font-mono tracking-wide text-cyan-300">
-                SYSTEM OPERATOR & BANDWIDTH HUD
+              <h2 className="text-base font-cyber font-black tracking-wider text-[#FCEE0A]">
+                SYSTEM OPERATOR &amp; BANDWIDTH HUD
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs font-tech text-slate-400 mt-0.5">
                 Customize operator profile, persona schedule rules, and 24/7 mailing target.
               </p>
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            onClick={() => {
+              playCyberClick();
+              onClose();
+            }}
+            className="p-1 text-slate-400 hover:text-[#FF003C] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSave} className="mt-5 space-y-5 text-xs font-sans">
+        <form onSubmit={handleSave} className="mt-5 space-y-5 font-hud">
           
-          {/* 1. Life Bandwidth Gauge */}
-          <div className="p-4 rounded-xl bg-[#060A14] border border-cyan-500/25 space-y-2">
+          {/* 1. Life Bandwidth Capacity Gauge */}
+          <div className="p-4 bg-[#05060A] border-2 border-[#00F0FF]/60 cyber-cut space-y-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-cyan-400" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-300">
+                <Activity className="w-4 h-4 text-[#00F0FF]" />
+                <span className="font-cyber text-xs font-bold uppercase tracking-wider text-[#00F0FF]">
                   LIFE BANDWIDTH CAPACITY GAUGE
                 </span>
               </div>
               <span
-                className={`font-mono text-xs font-bold ${
+                className={`font-cyber text-xs font-black ${
                   bandwidthPercent > 80
-                    ? 'text-pink-400'
+                    ? 'text-[#FF003C]'
                     : bandwidthPercent > 50
-                    ? 'text-amber-400'
-                    : 'text-emerald-400'
+                    ? 'text-[#FCEE0A]'
+                    : 'text-[#00FF66]'
                 }`}
               >
                 {bandwidthPercent}% LOADED
               </span>
             </div>
 
-            {/* Progress Bar */}
-            <div className="w-full h-2.5 rounded-full bg-slate-900 overflow-hidden border border-slate-800">
+            {/* Progress Bar with neon glow */}
+            <div className="w-full h-3 bg-[#0D0F18] overflow-hidden border border-slate-700">
               <div
                 className={`h-full transition-all duration-500 ${
                   bandwidthPercent > 80
-                    ? 'bg-gradient-to-r from-amber-500 to-pink-500'
-                    : 'bg-gradient-to-r from-cyan-500 to-emerald-400'
+                    ? 'bg-gradient-to-r from-[#FCEE0A] to-[#FF003C]'
+                    : 'bg-gradient-to-r from-[#00F0FF] to-[#00FF66]'
                 }`}
                 style={{ width: `${Math.min(100, Math.max(5, bandwidthPercent))}%` }}
               />
             </div>
 
-            <div className="flex justify-between text-[11px] font-mono text-slate-400 pt-1">
+            <div className="flex justify-between text-xs font-tech text-slate-400 pt-1">
               <span>{activeRemindersCount} Active Directives</span>
               <span>{dailyCapacityHours}h Daily Bandwidth Ceiling</span>
             </div>
@@ -156,7 +165,7 @@ export function ProfileAndBandwidthModal({
 
           {/* 2. Persona Switcher */}
           <div>
-            <label className="block text-[11px] font-mono uppercase text-slate-400 mb-2">
+            <label className="block text-xs font-cyber uppercase text-slate-400 mb-2">
               SELECT OPERATING PERSONA
             </label>
             <div className="space-y-2">
@@ -166,24 +175,25 @@ export function ProfileAndBandwidthModal({
                   <div
                     key={p.id}
                     onClick={() => {
+                      playCyberClick();
                       setActiveRole(p.id);
                       setDailyCapacityHours(p.defaultHours);
                     }}
-                    className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                    className={`p-3.5 border-2 cursor-pointer transition-all cyber-cut ${
                       isSelected
-                        ? 'border-cyan-400 bg-cyan-950/40 shadow-[0_0_12px_rgba(0,240,255,0.2)]'
-                        : 'border-slate-800 bg-slate-900/30 hover:border-slate-700'
+                        ? 'border-[#FCEE0A] bg-[#141609] shadow-[0_0_15px_rgba(252,238,10,0.3)]'
+                        : 'border-slate-800 bg-[#0A0C14] hover:border-slate-700'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-slate-100">
+                      <span className="font-cyber text-xs font-bold text-white">
                         {p.title}
                       </span>
                       {isSelected && (
-                        <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                        <CheckCircle2 className="w-4 h-4 text-[#FCEE0A]" />
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                    <p className="text-xs font-tech text-slate-400 mt-1 leading-relaxed">
                       {p.subtitle}
                     </p>
                   </div>
@@ -195,19 +205,19 @@ export function ProfileAndBandwidthModal({
           {/* 3. Operator Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-slate-400 mb-1">
+              <label className="block text-xs font-cyber text-slate-400 mb-1">
                 OPERATOR CALLSIGN
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-lg bg-[#050811] border border-slate-700 px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-400"
+                className="w-full bg-[#05060A] border-2 border-slate-700 px-3.5 py-2 text-xs font-hud text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-slate-400 mb-1">
+              <label className="block text-xs font-cyber text-slate-400 mb-1">
                 DAILY CAPACITY CEILING (HOURS)
               </label>
               <input
@@ -215,8 +225,8 @@ export function ProfileAndBandwidthModal({
                 min="4"
                 max="24"
                 value={dailyCapacityHours}
-                onChange={(e) => setDailyCapacityHours(Number(e.target.value) || 12)}
-                className="w-full rounded-lg bg-[#050811] border border-slate-700 px-3 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-400"
+                onChange={(e) => setDailyCapacityHours(Number(e.target.value) || 14)}
+                className="w-full bg-[#05060A] border-2 border-slate-700 px-3.5 py-2 text-xs font-tech text-[#FCEE0A] focus:outline-none focus:border-[#FCEE0A] cyber-cut"
               />
             </div>
           </div>
@@ -224,13 +234,13 @@ export function ProfileAndBandwidthModal({
           {/* 4. Destination Email for 24/7 Notifications */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[11px] font-mono text-slate-400">
+              <label className="text-xs font-cyber text-slate-400">
                 24/7 NOTIFICATION DESTINATION EMAIL
               </label>
               <button
                 type="button"
                 onClick={handleTestPing}
-                className="text-[11px] font-mono text-cyan-300 hover:text-cyan-200 transition-colors"
+                className="text-xs font-cyber text-[#00F0FF] hover:text-white"
               >
                 {testEmailStatus || '[SEND TEST PING TO INBOX]'}
               </button>
@@ -240,14 +250,14 @@ export function ProfileAndBandwidthModal({
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. vyom@domain.com"
-              className="w-full rounded-lg bg-[#050811] border border-slate-700 px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-400"
+              placeholder="rajkesir74@gmail.com"
+              className="w-full bg-[#05060A] border-2 border-slate-700 px-3.5 py-2 text-xs font-tech text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
             />
           </div>
 
           {/* 5. Gemini 3.8 Flash API Key */}
           <div>
-            <label className="block text-[11px] font-mono text-slate-400 mb-1">
+            <label className="block text-xs font-cyber text-slate-400 mb-1">
               GEMINI API KEY (STRICT: GEMINI-3.8-FLASH)
             </label>
             <input
@@ -255,25 +265,28 @@ export function ProfileAndBandwidthModal({
               value={geminiApiKey}
               onChange={(e) => setGeminiApiKey(e.target.value)}
               placeholder="Loaded from .env (models/gemini-3.8-flash)"
-              className="w-full rounded-lg bg-[#050811] border border-slate-700 px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-[#05060A] border-2 border-slate-700 px-3.5 py-2 text-xs font-tech text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
             />
-            <p className="text-[10px] text-slate-500 font-mono mt-1">
+            <p className="text-[11px] text-slate-500 font-tech mt-1">
               Strictly routed to models/gemini-3.8-flash. Zero fallback to deprecated 2.5.
             </p>
           </div>
 
           {/* Save CTA */}
-          <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex justify-end gap-3 pt-4 border-t-2 border-slate-800">
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg text-xs font-mono text-slate-400 hover:text-white"
+              onClick={() => {
+                playCyberClick();
+                onClose();
+              }}
+              className="px-4 py-2 text-xs font-cyber text-slate-400 hover:text-white"
             >
               CANCEL
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono text-xs font-bold shadow-[0_0_15px_rgba(0,240,255,0.35)] transition-all"
+              className="px-6 py-2.5 cyber-btn-yellow text-xs font-black shadow-[0_0_15px_rgba(252,238,10,0.5)]"
             >
               UPDATE CONFIGURATION
             </button>

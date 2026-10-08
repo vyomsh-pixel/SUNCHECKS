@@ -1,4 +1,5 @@
-// ReminderMatrix: Multi-Cadence Operations Grid
+// ReminderMatrix: Cyberpunk 2077 Gig & Contract Operations Grid
+// Features chamfered cards, yellow hazard stripes, quest status bars, and audio feedback.
 // STRICT RULE: No yellow emojis. Clean Lucide vector icons and monospace text badges.
 
 import { useState } from 'react';
@@ -15,6 +16,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { TechBadge } from './TechBadge';
+import { playCyberClick, playCyberAlert, playCyberGlitch } from '../cyberAudio';
 
 interface ReminderMatrixProps {
   reminders: ReminderItem[];
@@ -49,66 +51,95 @@ export function ReminderMatrix({
     : reminders.filter((r) => r.theme === filterTheme);
 
   const handleInstantTrigger = async (id: string) => {
+    playCyberAlert();
     setTriggeringId(id);
     await onTriggerNow(id);
-    setTimeout(() => setTriggeringId(null), 1500);
+    setTimeout(() => setTriggeringId(null), 1800);
   };
 
-  const getThemeColor = (theme: ReminderTheme) => {
+  const handleFilterClick = (theme: ReminderTheme | 'all') => {
+    playCyberClick();
+    setFilterTheme(theme);
+  };
+
+  const getGigThemeStyles = (theme: ReminderTheme) => {
     switch (theme) {
       case 'work':
-        return 'border-cyan-500/40 text-cyan-300 bg-cyan-950/30';
+        return {
+          border: 'border-l-4 border-l-[#00F0FF] border-slate-800',
+          badge: 'bg-[#00F0FF] text-black font-extrabold',
+          accent: 'text-[#00F0FF]',
+          label: 'GIG // INTERN_WORK',
+        };
       case 'cert':
-        return 'border-amber-500/40 text-amber-300 bg-amber-950/30';
+        return {
+          border: 'border-l-4 border-l-[#FCEE0A] border-slate-800',
+          badge: 'bg-[#FCEE0A] text-black font-extrabold',
+          accent: 'text-[#FCEE0A]',
+          label: 'CONTRACT // CLOUD_CERT',
+        };
       case 'freelance':
-        return 'border-pink-500/40 text-pink-300 bg-pink-950/30';
+        return {
+          border: 'border-l-4 border-l-[#FF003C] border-slate-800',
+          badge: 'bg-[#FF003C] text-white font-extrabold',
+          accent: 'text-[#FF003C]',
+          label: 'SIDE_GIG // FREELANCE',
+        };
       case 'life':
-        return 'border-emerald-500/40 text-emerald-300 bg-emerald-950/30';
+        return {
+          border: 'border-l-4 border-l-[#00FF66] border-slate-800',
+          badge: 'bg-[#00FF66] text-black font-extrabold',
+          accent: 'text-[#00FF66]',
+          label: 'MAINTENANCE // NEURAL_RESET',
+        };
     }
   };
 
   const randomQuote = FUN_QUOTES[Math.floor(Math.random() * FUN_QUOTES.length)];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       
-      {/* Top Banner: Fun Mode Sarcastic Ribbon or Serious HUD Status */}
+      {/* Top Banner: Sarcastic Netrunner Checkin or Tactical Directives Matrix */}
       {uiMode === 'fun' ? (
-        <div className="p-3 rounded-xl bg-pink-950/30 border border-pink-500/40 flex items-center justify-between gap-3 shadow-neon-pink">
-          <div className="flex items-center gap-2.5">
+        <div className="p-4 bg-[#14060E] border-2 border-[#FF003C] cyber-cut relative overflow-hidden shadow-[0_0_20px_rgba(255,0,60,0.3)]">
+          <div className="absolute top-0 left-0 bottom-0 w-2 bg-[#FF003C]" />
+          <div className="flex items-center gap-3">
             <TechBadge mode="fun" type="cat" size="md" />
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-pink-400">
-                MEME_CHECKIN // NETRUNNER REALITY CHECK
+              <span className="text-[10px] font-cyber font-bold tracking-widest text-[#FF003C] uppercase">
+                NETRUNNER REALITY CHECK // 2077
               </span>
-              <p className="text-xs font-mono text-pink-200 mt-0.5">
+              <p className="text-sm font-hud font-bold text-pink-200 mt-0.5">
                 "{randomQuote}"
               </p>
             </div>
           </div>
         </div>
       ) : (
-        <div className="p-3 rounded-xl bg-[#0A0F1D]/80 border border-cyan-500/25 flex items-center justify-between gap-3">
+        <div className="p-3.5 bg-[#0A0C14] border-2 border-[#00F0FF]/60 cyber-cut flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-[0_0_20px_rgba(0,240,255,0.15)]">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-xs font-mono tracking-wider uppercase text-cyan-300 font-bold">
-              OPERATIONAL MATRIX // MULTI-CADENCE AUTONOMOUS DISPATCH
+            <span className="w-2.5 h-2.5 bg-[#00F0FF] animate-ping" />
+            <span className="font-cyber text-xs font-black tracking-widest text-[#00F0FF] uppercase">
+              OPERATIONAL GIG MATRIX // NIGHT CITY DISPATCH PROTOCOL
             </span>
           </div>
-          <span className="text-[11px] font-mono text-slate-400">
-            {reminders.filter((r) => r.status === 'active').length} ACTIVE DIRECTIVES
-          </span>
+          <div className="flex items-center gap-2 font-tech text-xs text-slate-300">
+            <span className="text-[#FCEE0A] font-bold">{reminders.filter((r) => r.status === 'active').length} ACTIVE GIGS</span>
+            <span className="text-slate-600">|</span>
+            <span className="text-[#00FF66]">DAEMON_24_7_HEARTBEAT</span>
+          </div>
         </div>
       )}
 
-      {/* Control Bar: Category Filters & Add Button */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 backdrop-blur-md bg-[#0A0F1D]/70 p-3 rounded-xl border border-slate-800">
+      {/* Control Bar: Category Filters & Initialize CTA */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#0D0F18]/90 p-3.5 border-t-2 border-[#FCEE0A] cyber-cut shadow-lg">
         
-        {/* Category Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 text-[11px] font-mono">
+        {/* Category Pills (Cyberpunk Skewed Tabs) */}
+        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 text-xs font-cyber">
           {(
             [
-              { id: 'all', label: 'ALL DIRECTIVES' },
+              { id: 'all', label: 'ALL GIGS' },
               { id: 'work', label: '[WORK]' },
               { id: 'cert', label: '[CERT]' },
               { id: 'freelance', label: '[FREELANCE]' },
@@ -117,11 +148,11 @@ export function ReminderMatrix({
           ).map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setFilterTheme(tab.id)}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              onClick={() => handleFilterClick(tab.id)}
+              className={`px-3 py-1.5 font-bold tracking-wider transition-all cyber-skew-tab ${
                 filterTheme === tab.id
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(0,240,255,0.4)]'
-                  : 'bg-slate-900/60 text-slate-400 border border-slate-800 hover:border-slate-700'
+                  ? 'bg-[#FCEE0A] text-black shadow-[0_0_12px_rgba(252,238,10,0.6)]'
+                  : 'bg-[#141622] text-slate-300 hover:text-[#00F0FF] hover:bg-[#1C1F30]'
               }`}
             >
               {tab.label}
@@ -129,34 +160,40 @@ export function ReminderMatrix({
           ))}
         </div>
 
-        {/* Add Reminder CTA */}
+        {/* Big Yellow Cyberpunk New Gig CTA */}
         <button
-          onClick={onAddClick}
-          className="w-full sm:w-auto px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono text-xs font-bold shadow-[0_0_15px_rgba(0,240,255,0.35)] transition-all flex items-center justify-center gap-1.5"
+          onClick={() => {
+            playCyberClick();
+            onAddClick();
+          }}
+          className="w-full sm:w-auto px-5 py-2.5 cyber-btn-yellow text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(252,238,10,0.5)]"
         >
-          <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>{uiMode === 'serious' ? 'NEW DIRECTIVE' : 'ADD TASK // LOCK IN'}</span>
+          <Plus className="w-4 h-4 stroke-[3]" />
+          <span>{uiMode === 'serious' ? 'INITIALIZE NEW GIG' : 'NEW TASK // LOCK IN'}</span>
         </button>
 
       </div>
 
-      {/* Reminders Grid */}
+      {/* Gigs & Contracts Grid */}
       {filtered.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-[#0A0F1D]/50 border border-dashed border-slate-800">
+        <div className="p-12 text-center bg-[#0A0C14]/90 border-2 border-dashed border-slate-800 cyber-cut">
           <TechBadge mode={uiMode} type="dog" size="lg" />
-          <h3 className="mt-3 text-sm font-mono font-bold text-slate-300 uppercase">
+          <h3 className="mt-4 font-cyber text-sm font-bold text-[#FCEE0A] uppercase tracking-wider">
             {uiMode === 'serious'
-              ? 'NO DIRECTIVES IN ACTIVE QUEUE'
-              : 'ZERO TASKS FOUND // YOU SLACKING?'}
+              ? 'NO DIRECTIVES FOUND IN ACTIVE QUEUE'
+              : 'ZERO TASKS FOUND // YOU SLACKING CHOOM?'}
           </h3>
-          <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">
+          <p className="mt-1 text-xs font-tech text-slate-400 max-w-md mx-auto">
             {uiMode === 'serious'
               ? 'Add an operational reminder to arm the 24/7 background scheduler.'
               : 'Add your study certs or intern tickets before your boss messages you.'}
           </p>
           <button
-            onClick={onAddClick}
-            className="mt-4 px-4 py-1.5 rounded-lg border border-cyan-500/40 text-cyan-400 text-xs font-mono font-bold hover:bg-cyan-950/40 transition-colors"
+            onClick={() => {
+              playCyberClick();
+              onAddClick();
+            }}
+            className="mt-4 px-5 py-2 cyber-btn-cyan text-xs font-bold"
           >
             [+ INITIALIZE FIRST DIRECTIVE]
           </button>
@@ -175,116 +212,129 @@ export function ReminderMatrix({
                   minute: '2-digit',
                 });
 
+            const gigStyle = getGigThemeStyles(item.theme);
+
             return (
               <div
                 key={item.id}
-                className={`group rounded-2xl p-4.5 backdrop-blur-xl border transition-all relative overflow-hidden flex flex-col justify-between ${
+                className={`p-5 bg-[#090A12]/95 border-2 cyber-cut-card transition-all relative overflow-hidden flex flex-col justify-between ${
                   isPaused
-                    ? 'bg-[#080D17]/50 border-slate-800 opacity-60'
-                    : 'bg-[#0B1020]/75 border-cyan-500/30 hover:border-cyan-400/80 shadow-[0_0_20px_rgba(0,240,255,0.08)] hover:shadow-neon-cyan'
+                    ? 'border-slate-800 opacity-60'
+                    : 'border-slate-700/80 hover:border-[#FCEE0A] shadow-[0_4px_25px_rgba(0,0,0,0.8)] hover:shadow-[0_0_25px_rgba(252,238,10,0.25)]'
                 }`}
               >
-                {/* Header: Theme & Cadence Tag */}
+                {/* Top Corner Hazard Stripe Accent */}
+                <div className="absolute top-0 right-0 w-24 h-2 hazard-stripe" />
+
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span
-                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${getThemeColor(
-                        item.theme
-                      )}`}
-                    >
-                      [{item.theme.toUpperCase()}]
+                  {/* Gig Header & Cadence Badge */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className={`text-[10px] font-cyber px-2.5 py-0.5 tracking-wider uppercase cyber-cut ${gigStyle.badge}`}>
+                      {gigStyle.label}
                     </span>
 
-                    {/* Cadence badge */}
-                    <div className="flex items-center gap-1 text-[11px] font-mono text-cyan-300 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">
+                    {/* Cadence Tag */}
+                    <div className="flex items-center gap-1.5 text-[11px] font-tech text-[#FCEE0A] bg-[#161824] px-2.5 py-0.5 border border-[#FCEE0A]/40 cyber-cut">
                       {item.cadence === 'random' ? (
                         <>
-                          <Shuffle className="w-3 h-3 text-pink-400" />
-                          <span className="text-pink-300">RANDOM 10A-11P</span>
+                          <Shuffle className="w-3.5 h-3.5 text-[#FF003C]" />
+                          <span className="text-[#FF003C] font-bold">RANDOM 10A-11P</span>
                         </>
                       ) : item.cadence === 'interval' ? (
                         <>
-                          <Clock className="w-3 h-3" />
+                          <Clock className="w-3.5 h-3.5 text-[#FCEE0A]" />
                           <span>EVERY {item.intervalDays}D @ {item.time}</span>
                         </>
                       ) : item.cadence === 'weekdays' ? (
                         <>
-                          <Calendar className="w-3 h-3" />
-                          <span>WEEKDAYS @ {item.time}</span>
+                          <Calendar className="w-3.5 h-3.5 text-[#00F0FF]" />
+                          <span className="text-[#00F0FF]">WEEKDAYS @ {item.time}</span>
                         </>
                       ) : (
                         <>
-                          <Clock className="w-3 h-3" />
-                          <span>DAILY @ {item.time}</span>
+                          <Clock className="w-3.5 h-3.5 text-[#00FF66]" />
+                          <span className="text-[#00FF66]">DAILY @ {item.time}</span>
                         </>
                       )}
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h4 className="text-sm font-bold text-white tracking-wide leading-snug">
+                  <h4 className="font-hud text-lg font-bold text-white tracking-wide leading-tight group-hover:text-[#FCEE0A] transition-colors">
                     {item.title}
                   </h4>
 
-                  {/* Description */}
+                  {/* Description Box */}
                   {item.description && (
-                    <p className="mt-2 text-xs text-slate-300 leading-relaxed font-sans whitespace-pre-line line-clamp-3">
+                    <div className="mt-2.5 p-3 bg-[#05060A] border-l-2 border-slate-700 font-tech text-xs text-slate-300 leading-relaxed whitespace-pre-line line-clamp-3">
                       {item.description}
-                    </p>
+                    </div>
                   )}
                 </div>
 
                 {/* Footer Telemetry & Actions */}
-                <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-col gap-2.5">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="mt-4 pt-3.5 border-t border-slate-800 flex flex-col gap-3">
+                  
+                  {/* Target Inbox & Next Execution */}
+                  <div className="flex items-center justify-between text-xs font-tech text-slate-400">
                     <div className="flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-cyan-400" />
-                      <span className="truncate max-w-[140px]" title={item.email}>
+                      <Mail className="w-3.5 h-3.5 text-[#00F0FF]" />
+                      <span className="truncate max-w-[140px] text-slate-300" title={item.email}>
                         {item.email}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-slate-300">
+                    <div className="flex items-center gap-1">
                       <span className="text-slate-500">NEXT:</span>
-                      <span className="text-cyan-300 font-bold">{formattedNext}</span>
+                      <span className="text-[#FCEE0A] font-bold">{formattedNext}</span>
                     </div>
                   </div>
 
                   {/* Action Buttons */}
                   <div className="flex items-center justify-between gap-2 pt-1">
+                    
+                    {/* Yellow Test Email Trigger CTA */}
                     <button
                       onClick={() => handleInstantTrigger(item.id)}
                       disabled={triggeringId === item.id}
-                      className="px-2.5 py-1 rounded bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 text-[11px] font-mono font-bold transition-all flex items-center gap-1 hover:bg-cyan-950/40"
-                      title="Dispatch test email immediately to verify inbox reception"
+                      className="px-3.5 py-1.5 cyber-btn-yellow text-[11px] font-black tracking-wider transition-all flex items-center gap-1.5 disabled:opacity-50"
+                      title="Dispatch test reminder email immediately to verify delivery"
                     >
-                      <Send className="w-3 h-3" />
-                      <span>{triggeringId === item.id ? 'DISPATCHED!' : 'TEST EMAIL NOW'}</span>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>{triggeringId === item.id ? 'PING SENT!' : 'DISPATCH PING'}</span>
                     </button>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       {/* Pause / Resume */}
                       <button
-                        onClick={() => onToggleStatus(item.id, item.status)}
-                        className={`p-1.5 rounded border transition-colors ${
+                        onClick={() => {
+                          playCyberClick();
+                          onToggleStatus(item.id, item.status);
+                        }}
+                        className={`px-2.5 py-1.5 cyber-cut border text-xs font-tech font-bold transition-colors ${
                           isPaused
-                            ? 'border-emerald-500/40 text-emerald-400 bg-emerald-950/40'
-                            : 'border-slate-800 text-slate-400 hover:text-white'
+                            ? 'border-[#00FF66] text-[#00FF66] bg-[#00FF66]/10'
+                            : 'border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
                         }`}
                         title={isPaused ? 'Resume Directive' : 'Pause Directive'}
                       >
-                        {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+                        {isPaused ? <Play className="w-3.5 h-3.5 inline mr-1" /> : <Pause className="w-3.5 h-3.5 inline mr-1" />}
+                        <span>{isPaused ? 'RESUME' : 'PAUSE'}</span>
                       </button>
 
                       {/* Delete */}
                       <button
-                        onClick={() => onDelete(item.id)}
-                        className="p-1.5 rounded border border-slate-800 text-slate-400 hover:text-pink-400 hover:border-pink-500/40 transition-colors"
+                        onClick={() => {
+                          playCyberGlitch();
+                          onDelete(item.id);
+                        }}
+                        className="p-1.5 cyber-cut border border-slate-700 text-slate-400 hover:text-[#FF003C] hover:border-[#FF003C] hover:bg-[#FF003C]/10 transition-colors"
                         title="Delete Directive"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
+
                   </div>
 
                 </div>

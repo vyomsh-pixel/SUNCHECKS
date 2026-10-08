@@ -1,0 +1,267 @@
+/* Cyberpunk 2077 Custom Styling Engine */
+/* Inspired by cyberpunk2077.webflow.io and authentic Night City game UI */
+
+:root {
+  --cyber-yellow: #FCEE0A;
+  --cyber-cyan: #00F0FF;
+  --cyber-red: #FF003C;
+  --cyber-dark: #07070A;
+  --cyber-carbon: #0D0E15;
+  --cyber-gray: #1E202B;
+}
+
+/* 1. Custom Typography */
+.font-cyber {
+  font-family: 'Orbitron', -apple-system, sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.font-hud {
+  font-family: 'Rajdhani', -apple-system, sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.font-tech {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* 2. Chamfered Angular Cut Corners */
+.cyber-cut {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+
+.cyber-cut-tr {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    0 100%
+  );
+}
+
+.cyber-cut-bl {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
+}
+
+.cyber-cut-card {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 24px) 0,
+    100% 24px,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%
+  );
+}
+
+.cyber-skew-tab {
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+/* 3. Cyberpunk Buttons */
+.cyber-btn-yellow {
+  background-color: var(--cyber-yellow);
+  color: #000000;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+.cyber-btn-yellow:hover {
+  background-color: #FFFFFF;
+  color: #000000;
+  box-shadow: 0 0 25px rgba(252, 238, 10, 0.8), 0 0 5px rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.cyber-btn-yellow:active {
+  transform: translateY(1px);
+}
+
+.cyber-btn-cyan {
+  background-color: rgba(0, 240, 255, 0.12);
+  color: var(--cyber-cyan);
+  border: 1px solid var(--cyber-cyan);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: all 0.15s ease;
+}
+
+.cyber-btn-cyan:hover {
+  background-color: var(--cyber-cyan);
+  color: #000000;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.7);
+}
+
+.cyber-btn-red {
+  background-color: rgba(255, 0, 60, 0.12);
+  color: #FF003C;
+  border: 1px solid #FF003C;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: all 0.15s ease;
+}
+
+.cyber-btn-red:hover {
+  background-color: #FF003C;
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(255, 0, 60, 0.7);
+}
+
+/* 4. Hazard Stripes */
+.hazard-stripe {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--cyber-yellow),
+    var(--cyber-yellow) 6px,
+    #000000 6px,
+    #000000 12px
+  );
+}
+
+.hazard-stripe-cyan {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--cyber-cyan),
+    var(--cyber-cyan) 6px,
+    #000000 6px,
+    #000000 12px
+  );
+}
+
+/* 5. Glitch Text Effect (RGB Chromatic Split) */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  left: -2px;
+  text-shadow: 2px 0 var(--cyber-cyan);
+  clip-path: polygon(0 20%, 100% 20%, 100% 45%, 0 45%);
+  animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: 2px;
+  text-shadow: -2px 0 var(--cyber-red);
+  clip-path: polygon(0 60%, 100% 60%, 100% 85%, 0 85%);
+  animation: glitch-anim-2 3.2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-1px, -1px); }
+  60% { transform: translate(2px, 1px); }
+  80% { transform: translate(1px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { transform: translate(0); }
+  20% { transform: translate(2px, -2px); }
+  40% { transform: translate(1px, 2px); }
+  60% { transform: translate(-2px, -1px); }
+  80% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0); }
+}
+
+/* 6. Scanlines Overlay */
+.scanlines-overlay {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.35) 50%
+  ),
+  linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+/* 7. Cyber HUD Viewport Framing Lines */
+.cyber-frame-line-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyber-yellow) 0%, transparent 20%, var(--cyber-cyan) 50%, transparent 80%, var(--cyber-red) 100%);
+  z-index: 45;
+  pointer-events: none;
+}
+
+.cyber-frame-line-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyber-cyan) 0%, transparent 30%, var(--cyber-yellow) 70%, transparent 95%, var(--cyber-red) 100%);
+  z-index: 45;
+  pointer-events: none;
+}
+
+/* 8. Corner Tech Accents */
+.cyber-bracket {
+  position: relative;
+}
+
+.cyber-bracket::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--cyber-cyan);
+  border-left: 2px solid var(--cyber-cyan);
+}
+
+.cyber-bracket::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid var(--cyber-yellow);
+  border-right: 2px solid var(--cyber-yellow);
+}

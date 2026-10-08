@@ -1,9 +1,10 @@
-// CyberPulse: 24/7 Autonomous Work & Study Ops Terminal
+// CyberPulse 2077: Autonomous Night City Work & Study Ops Terminal
+// Inspired by authentic Cyberpunk 2077 UI & cyberpunk2077.webflow.io
 // STRICT RULES:
-// 1. Zero yellow emojis anywhere. Lucide vector stroke icons and text badges only.
-// 2. Strict Gemini 3.8 Flash (no 2.5).
-// 3. 24/7 Autonomous background scheduler & multi-cadence auto-emailing.
-// 4. Live Cyberpunk Night City backdrop & obsidian glass UI.
+// 1. Zero yellow emojis anywhere.
+// 2. Strict Gemini 3.8 Flash.
+// 3. 24/7 Autonomous background scheduler & multi-cadence auto-emailing via Resend.
+// 4. Cyberpunk 2077 chamfers, hazard stripes, reticle cursor, audio synthesizer.
 
 import { useState, useEffect, useCallback } from 'react';
 import {
@@ -30,6 +31,7 @@ import {
   fetchEmailLogs,
 } from './storage';
 import { CyberCityBackdrop } from './components/CyberCityBackdrop';
+import { CyberCursor } from './components/CyberCursor';
 import { CyberHeader } from './components/CyberHeader';
 import { CyberNav, ActiveTab } from './components/CyberNav';
 import { ReminderMatrix } from './components/ReminderMatrix';
@@ -38,6 +40,7 @@ import { AddReminderModal } from './components/AddReminderModal';
 import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
 import { TechBadge } from './components/TechBadge';
+import { playCyberClick } from './cyberAudio';
 
 export default function App() {
   const [profile, setProfile] = useState<CyberProfile>({
@@ -87,7 +90,7 @@ export default function App() {
     const interval = setInterval(() => {
       fetchDaemonStatus().then(setDaemonStatus);
       fetchEmailLogs().then(setEmailLogs);
-    }, 20_000);
+    }, 15_000);
     return () => clearInterval(interval);
   }, [refreshAll]);
 
@@ -95,7 +98,7 @@ export default function App() {
   const activeRemindersCount = reminders.filter((r) => r.status === 'active').length;
   const bandwidthPercent = Math.min(
     100,
-    Math.round(((activeRemindersCount * 1.5) / (profile.dailyCapacityHours || 12)) * 100)
+    Math.round(((activeRemindersCount * 1.5) / (profile.dailyCapacityHours || 14)) * 100)
   );
 
   // Toggle Serious vs Fun / Meme Mode
@@ -164,12 +167,19 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen text-slate-100 flex flex-col font-sans relative selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen text-slate-100 flex flex-col font-hud relative selection:bg-[#FCEE0A] selection:text-black">
       
-      {/* 1. Live Looping Cyberpunk Night City Wallpaper */}
+      {/* 1. Viewport Edge Cyber Lines (Like cyberpunk2077.webflow.io) */}
+      <div className="cyber-frame-line-top" />
+      <div className="cyber-frame-line-bottom" />
+
+      {/* 2. Custom Interactive Reticle Cursor */}
+      <CyberCursor />
+
+      {/* 3. Live 4-Layer Cyberpunk Night City Megacity Backdrop */}
       <CyberCityBackdrop />
 
-      {/* 2. Top Glass HUD Header */}
+      {/* 4. Top Cockpit HUD Header */}
       <CyberHeader
         profile={profile}
         daemonStatus={daemonStatus}
@@ -180,8 +190,8 @@ export default function App() {
         onOpenOutbox={() => setIsOutboxModalOpen(true)}
       />
 
-      {/* 3. Main Operational Content */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 pt-6 pb-28 relative z-10">
+      {/* 5. Main Operational Content */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 pt-6 pb-28 relative z-10">
         
         {/* Navigation Tab Content */}
         {activeTab === 'reminders' && (
@@ -210,48 +220,54 @@ export default function App() {
 
         {activeTab === 'profile' && (
           <div className="space-y-6">
-            <div className="p-6 rounded-2xl bg-[#0B1020]/80 backdrop-blur-xl border border-cyan-500/30 shadow-[0_0_25px_rgba(0,240,255,0.1)]">
-              <div className="flex items-center justify-between mb-4">
+            <div className="p-6 bg-[#080A12]/95 border-2 border-[#FCEE0A] cyber-cut-card relative shadow-[0_0_30px_rgba(252,238,10,0.15)]">
+              {/* Top corner hazard stripe */}
+              <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe" />
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
                 <div className="flex items-center gap-3">
                   <TechBadge mode={profile.uiMode} type="dev" size="lg" />
                   <div>
-                    <h2 className="text-base font-bold font-mono tracking-wider text-cyan-300">
+                    <h2 className="font-cyber text-lg font-black tracking-wider text-[#FCEE0A]">
                       OPERATOR IDENTITY: {profile.name.toUpperCase()}
                     </h2>
-                    <p className="text-xs text-slate-300 font-mono">
-                      ACTIVE PERSONA: {profile.activeRole.toUpperCase().replace(/_/g, ' ')}
+                    <p className="text-xs font-tech text-slate-300">
+                      ACTIVE ROLE: {profile.activeRole.toUpperCase().replace(/_/g, ' ')}
                     </p>
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsProfileModalOpen(true)}
-                  className="px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 text-xs font-mono font-bold transition-all"
+                  onClick={() => {
+                    playCyberClick();
+                    setIsProfileModalOpen(true);
+                  }}
+                  className="px-4 py-2 cyber-btn-yellow text-xs font-black"
                 >
-                  [EDIT CONFIG]
+                  [CONFIGURE OPERATOR]
                 </button>
               </div>
 
               {/* Bandwidth Gauge Box */}
-              <div className="p-4 rounded-xl bg-[#060A14] border border-cyan-500/20 space-y-2.5">
-                <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-400">DAILY CAPACITY CONSUMPTION</span>
-                  <span className="text-cyan-300 font-bold">{bandwidthPercent}%</span>
+              <div className="p-4 bg-[#05060A] border-2 border-[#00F0FF]/50 cyber-cut space-y-3">
+                <div className="flex justify-between items-center text-xs font-cyber">
+                  <span className="text-slate-300">DAILY LIFE BANDWIDTH CONSUMPTION</span>
+                  <span className="text-[#FCEE0A] font-black text-sm">{bandwidthPercent}%</span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-slate-900 border border-slate-800 overflow-hidden">
+                <div className="w-full h-3 bg-[#0D0F18] border border-slate-700 overflow-hidden">
                   <div
                     className={`h-full transition-all duration-500 ${
                       bandwidthPercent > 80
-                        ? 'bg-gradient-to-r from-amber-500 to-pink-500'
-                        : 'bg-gradient-to-r from-cyan-500 to-emerald-400'
+                        ? 'bg-gradient-to-r from-[#FCEE0A] to-[#FF003C]'
+                        : 'bg-gradient-to-r from-[#00F0FF] to-[#00FF66]'
                     }`}
                     style={{ width: `${Math.min(100, Math.max(5, bandwidthPercent))}%` }}
                   />
                 </div>
-                <p className="text-[11px] text-slate-400 font-mono leading-relaxed pt-1">
-                  Calculated against your {profile.dailyCapacityHours}h daily bandwidth ceiling.
+                <p className="text-xs font-tech text-slate-400 leading-relaxed pt-1">
+                  Operating against your {profile.dailyCapacityHours}h daily bandwidth ceiling.
                   {bandwidthPercent > 80
-                    ? ' High workload velocity across student exams, intern tickets, and freelance tasks.'
-                    : ' Bandwidth balanced. Capacity available for additional certification modules.'}
+                    ? ' Heavy velocity: balanced across student exams, intern tickets, and freelance deliverables.'
+                    : ' Bandwidth balanced. Sufficient cognitive capacity for additional cloud certification modules.'}
                 </p>
               </div>
             </div>
@@ -260,43 +276,49 @@ export default function App() {
 
         {activeTab === 'daemon' && (
           <div className="space-y-6">
-            <div className="p-6 rounded-2xl bg-[#0B1020]/80 backdrop-blur-xl border border-cyan-500/30 shadow-[0_0_25px_rgba(0,240,255,0.1)]">
-              <div className="flex items-center justify-between mb-4">
+            <div className="p-6 bg-[#080A12]/95 border-2 border-[#00F0FF] cyber-cut-card relative shadow-[0_0_30px_rgba(0,240,255,0.15)]">
+              {/* Top corner cyan hazard stripe */}
+              <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe-cyan" />
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
                 <div className="flex items-center gap-3">
                   <TechBadge mode={profile.uiMode} type="bot" size="lg" />
                   <div>
-                    <h2 className="text-base font-bold font-mono tracking-wider text-cyan-300">
-                      24/7 AUTONOMOUS BACKGROUND ENGINE
+                    <h2 className="font-cyber text-lg font-black tracking-wider text-[#00F0FF]">
+                      24/7 AUTONOMOUS NEURAL DAEMON
                     </h2>
-                    <p className="text-xs text-slate-400 font-mono">
-                      Continuous minute-by-minute heartbeat daemon running on Node.js
+                    <p className="text-xs font-tech text-slate-400">
+                      Minute-by-minute heartbeat engine executing continuously via Node.js
                     </p>
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsOutboxModalOpen(true)}
-                  className="px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 text-xs font-mono font-bold transition-all"
+                  onClick={() => {
+                    playCyberClick();
+                    setIsOutboxModalOpen(true);
+                  }}
+                  className="px-4 py-2 cyber-btn-cyan text-xs font-black"
                 >
-                  [OPEN OUTBOX]
+                  [INSPECT OUTBOX]
                 </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-xl bg-[#060A14] border border-slate-800">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">STATUS</span>
-                  <p className="text-xs font-mono font-bold text-emerald-400 mt-1">
-                    {daemonStatus.online ? 'ONLINE 24/7' : 'OFFLINE (LOCAL CACHE)'}
+                <div className="p-4 bg-[#05060A] border-2 border-slate-800 cyber-cut">
+                  <span className="text-[10px] font-cyber uppercase text-slate-400">STATUS</span>
+                  <p className="text-xs font-cyber font-black text-[#00FF66] mt-1">
+                    {daemonStatus.online ? 'ONLINE 24/7 // HEARTBEAT' : 'OFFLINE (LOCAL CACHE)'}
                   </p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-[#060A14] border border-slate-800">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">ARMED REMINDERS</span>
-                  <p className="text-xs font-mono font-bold text-cyan-300 mt-1">
+                <div className="p-4 bg-[#05060A] border-2 border-slate-800 cyber-cut">
+                  <span className="text-[10px] font-cyber uppercase text-slate-400">ARMED REMINDERS</span>
+                  <p className="text-xs font-cyber font-black text-[#FCEE0A] mt-1">
                     {daemonStatus.activeCount} ACTIVE SCHEDULES
                   </p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-[#060A14] border border-slate-800">
-                  <span className="text-[10px] font-mono uppercase text-slate-400">OUTBOX DISPATCHES</span>
-                  <p className="text-xs font-mono font-bold text-slate-100 mt-1">
+                <div className="p-4 bg-[#05060A] border-2 border-slate-800 cyber-cut">
+                  <span className="text-[10px] font-cyber uppercase text-slate-400">OUTBOX DISPATCHES</span>
+                  <p className="text-xs font-cyber font-black text-white mt-1">
                     {emailLogs.length} LOGGED TRANSMISSIONS
                   </p>
                 </div>
@@ -305,16 +327,19 @@ export default function App() {
           </div>
         )}
 
-        {/* Footer Disclaimer (No medical claims, strictly personal work reminder ops) */}
-        <div className="mt-8 pt-4 pb-2 text-center border-t border-slate-800/80">
-          <p className="text-[11px] font-mono text-slate-500 leading-relaxed max-w-lg mx-auto">
-            CYBERPULSE // Autonomous work &amp; study reminder ops hub. Running 24/7 in background. Strictly for self-tracking, task cadence, and certification milestones.
+        {/* Footer Technical Barcode & Disclaimer */}
+        <div className="mt-10 pt-4 pb-2 border-t-2 border-slate-800/80 flex flex-col items-center justify-center gap-2">
+          <div className="font-tech text-xs tracking-widest text-[#FCEE0A]/60">
+            ||| | |||| | || | 2077 // NIGHT CITY // 34.0522° N, 118.2437° W | |||| || | |||
+          </div>
+          <p className="text-[11px] font-tech text-slate-500 text-center max-w-xl">
+            CYBERPULSE // Autonomous work &amp; study ops hub. Running 24/7 in background. Strictly for self-tracking, task cadence, and certification milestones.
           </p>
         </div>
 
       </main>
 
-      {/* 4. Bottom Tab Bar Navigation */}
+      {/* 6. Bottom Tab Selector */}
       <CyberNav
         currentTab={activeTab}
         onSelectTab={setActiveTab}
@@ -322,7 +347,7 @@ export default function App() {
         activeCount={activeRemindersCount}
       />
 
-      {/* Modals */}
+      {/* 7. Cyberpunk Modals */}
       <AddReminderModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

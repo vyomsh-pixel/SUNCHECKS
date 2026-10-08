@@ -1,8 +1,10 @@
-// CyberNav: Sleek glassmorphic tab selector
-// STRICT RULE: No yellow emojis. Clean Lucide vector icons and monospace text badges.
+// CyberNav: Cyberpunk 2077 HUD Tab Selector
+// Features skewed angular tabs, neon yellow highlights, and audio click feedback.
+// STRICT: No yellow emojis. Clean Lucide vector icons and monospace text badges.
 
 import { Layers, Lightbulb, User, Server } from 'lucide-react';
 import { UiMode } from '../types';
+import { playCyberClick } from '../cyberAudio';
 
 export type ActiveTab = 'reminders' | 'ideas' | 'profile' | 'daemon';
 
@@ -17,7 +19,7 @@ export function CyberNav({ currentTab, onSelectTab, uiMode, activeCount }: Cyber
   const tabs = [
     {
       id: 'reminders' as const,
-      label: uiMode === 'serious' ? 'DIRECTIVES MATRIX' : 'TASKS & MEMES',
+      label: uiMode === 'serious' ? 'GIGS MATRIX' : 'TASKS & MEMES',
       icon: Layers,
       badge: activeCount > 0 ? activeCount : null,
     },
@@ -41,9 +43,17 @@ export function CyberNav({ currentTab, onSelectTab, uiMode, activeCount }: Cyber
     },
   ];
 
+  const handleTabClick = (tabId: ActiveTab) => {
+    playCyberClick();
+    onSelectTab(tabId);
+  };
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 backdrop-blur-xl bg-[#080D1A]/90 border-t border-cyan-500/25 px-4 py-2.5 shadow-[0_-4px_25px_rgba(0,0,0,0.8)]">
-      <div className="max-w-2xl mx-auto flex items-center justify-around gap-2 font-mono text-[11px]">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#07080D]/95 border-t-2 border-[#FCEE0A] px-4 py-2 shadow-[0_-4px_30px_rgba(252,238,10,0.15)]">
+      {/* Bottom hazard stripe accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 hazard-stripe opacity-80" />
+
+      <div className="max-w-2xl mx-auto flex items-center justify-around gap-2 font-cyber text-xs">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;
@@ -51,22 +61,26 @@ export function CyberNav({ currentTab, onSelectTab, uiMode, activeCount }: Cyber
           return (
             <button
               key={tab.id}
-              onClick={() => onSelectTab(tab.id)}
-              className={`flex-1 flex flex-col items-center py-1.5 px-2 rounded-xl transition-all relative ${
+              onClick={() => handleTabClick(tab.id)}
+              className={`flex-1 flex flex-col items-center py-2 px-2 transition-all relative cyber-skew-tab ${
                 isActive
-                  ? 'text-cyan-300 bg-cyan-950/50 border border-cyan-500/40 shadow-[0_0_12px_rgba(0,240,255,0.25)] font-bold'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                  ? 'bg-[#FCEE0A] text-black font-black shadow-[0_0_20px_rgba(252,238,10,0.6)]'
+                  : 'bg-[#0E101A] text-slate-400 hover:text-[#00F0FF] hover:bg-[#151828]'
               }`}
             >
               <div className="relative">
-                <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-black stroke-[2.5]' : 'text-slate-400'}`} />
                 {tab.badge !== null && (
-                  <span className="absolute -top-1.5 -right-2.5 w-4 h-4 rounded-full bg-cyan-500 text-slate-950 text-[9px] font-bold flex items-center justify-center">
+                  <span
+                    className={`absolute -top-1.5 -right-3 px-1 py-0.2 rounded text-[9px] font-black tracking-tighter ${
+                      isActive ? 'bg-black text-[#FCEE0A]' : 'bg-[#FF003C] text-white'
+                    }`}
+                  >
                     {tab.badge}
                   </span>
                 )}
               </div>
-              <span className="mt-1 tracking-wider uppercase text-[10px] truncate max-w-[85px] sm:max-w-none">
+              <span className="mt-1 tracking-wider uppercase text-[10px] truncate max-w-[90px] sm:max-w-none">
                 {tab.label}
               </span>
             </button>
