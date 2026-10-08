@@ -1,46 +1,42 @@
-// CyberHeader: Cyberpunk 2077 Cockpit HUD Header
-// Features glitch title, Cyberpunk yellow branding, technical coordinates,
-// Web Audio sound toggle, and angular chamfered status blocks.
+// CyberHeader: Authentic Cyberpunk Redone Top Navigation Bar
+// Direct inspiration: cyberpunkredone.webflow.io .nav-bar
+// Features floating translucent cyber-nav with backdrop-blur, cyan borders,
+// active tab highlights, wallpaper switcher, audio controls, and daemon heartbeat.
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DaemonStatus, CyberProfile, UiMode } from '../types';
-import { Sliders, Bell, Volume2, VolumeX, Terminal, Activity, Radio } from 'lucide-react';
-import { TechBadge } from './TechBadge';
+import { Volume2, VolumeX, Terminal, Radio, Sparkles, Server, User, Image, Inbox } from 'lucide-react';
+import { WALLPAPERS } from './CyberCityBackdrop';
 import { playCyberClick, playCyberGlitch, isCyberAudioMuted, setCyberAudioMuted } from '../cyberAudio';
 
+export type ActiveTab = 'reminders' | 'radio' | 'ideas' | 'daemon' | 'profile';
+
 interface CyberHeaderProps {
+  activeTab: ActiveTab;
+  onSelectTab: (tab: ActiveTab) => void;
+  activeRemindersCount: number;
   profile: CyberProfile;
   daemonStatus: DaemonStatus;
   uiMode: UiMode;
-  bandwidthPercent: number;
+  currentWallpaperId: string;
+  onCycleWallpaper: () => void;
   onToggleMode: () => void;
-  onOpenSettings: () => void;
   onOpenOutbox: () => void;
-  onOpenRadio?: () => void;
 }
 
 export function CyberHeader({
+  activeTab,
+  onSelectTab,
+  activeRemindersCount,
   profile,
   daemonStatus,
   uiMode,
-  bandwidthPercent,
+  currentWallpaperId,
+  onCycleWallpaper,
   onToggleMode,
-  onOpenSettings,
   onOpenOutbox,
-  onOpenRadio,
 }: CyberHeaderProps) {
-  const [timeStr, setTimeStr] = useState<string>('');
   const [muted, setMuted] = useState(isCyberAudioMuted());
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTimeStr(now.toTimeString().split(' ')[0]);
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleAudioToggle = () => {
     const next = !muted;
@@ -49,129 +45,157 @@ export function CyberHeader({
     if (!next) playCyberClick();
   };
 
-  const handleModeClick = () => {
-    playCyberGlitch();
-    onToggleMode();
+  const handleTabClick = (tab: ActiveTab) => {
+    playCyberClick();
+    onSelectTab(tab);
   };
 
+  const currentWallpaper =
+    WALLPAPERS.find((w) => w.id === currentWallpaperId) || WALLPAPERS[0];
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#07080D]/95 border-b-2 border-[#FCEE0A] px-4 py-2.5 shadow-[0_4px_30px_rgba(252,238,10,0.15)] relative">
-      {/* Top micro hazard stripe line */}
-      <div className="absolute top-0 left-0 right-0 h-1 hazard-stripe opacity-80" />
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 pt-1">
+    <header className="sticky top-0 z-50 w-full cyber-redone-nav px-4 py-2.5 transition-all shadow-[0_4px_25px_rgba(0,0,0,0.6)]">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
-        {/* Left: Cyberpunk 2077 Glitch Brand & Operator Callsign */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
-          <div className="flex items-center gap-3">
-            {/* Terminal Icon Box with cut corner */}
-            <div className="w-10 h-10 bg-[#FCEE0A] text-black flex items-center justify-center font-black cyber-cut shadow-[0_0_15px_rgba(252,238,10,0.5)]">
-              <Terminal className="w-6 h-6 stroke-[2.5]" />
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2">
-                <span
-                  data-text="CYBERPULSE"
-                  className="font-cyber text-base font-black tracking-widest text-[#FCEE0A] glitch-text uppercase"
-                >
-                  CYBERPULSE
-                </span>
-                <span className="text-[10px] font-cyber px-2 py-0.5 bg-[#00F0FF] text-black font-extrabold tracking-wider cyber-cut">
-                  2077 // V2
-                </span>
-              </div>
-              <p className="text-[11px] font-tech text-slate-300 tracking-wider flex items-center gap-1.5 mt-0.5">
-                <span className="text-[#00F0FF] font-bold">OP: {profile.name.toUpperCase()}</span>
-                <span className="text-slate-500">//</span>
-                <span className="text-[#FCEE0A] font-bold">STUDENT &bull; INTERN &bull; FREELANCER</span>
-              </p>
-            </div>
-          </div>
-
-          {/* Mobile Quick Mode Toggle */}
-          <button
-            onClick={handleModeClick}
-            className={`md:hidden px-3 py-1 text-xs font-cyber font-bold tracking-wider cyber-cut ${
-              uiMode === 'serious'
-                ? 'bg-[#00F0FF] text-black'
-                : 'bg-[#FF003C] text-white shadow-[0_0_12px_rgba(255,0,60,0.6)]'
-            }`}
-          >
-            {uiMode === 'serious' ? 'SERIOUS' : 'MEME'}
-          </button>
-        </div>
-
-        {/* Center: System Telemetry, Coordinates, & Daemon Status */}
-        <div className="flex items-center gap-3 text-xs font-tech">
+        {/* Left: Brand Logo & Terminal Navigation Tabs */}
+        <div className="flex items-center gap-6">
           
-          {/* Night City Clock & Lat/Lng */}
-          <div className="hidden lg:flex flex-col items-end px-3 py-1 bg-[#0D0F18] border-l-2 border-[#00F0FF] text-slate-300">
-            <span className="text-[9px] text-slate-500 tracking-widest">NIGHT_CITY_LOCAL</span>
-            <span className="text-[#00F0FF] font-bold tracking-wider">{timeStr || '17:24:00'} // NC_NET</span>
-          </div>
-
-          {/* 24/7 Autonomous Daemon Heartbeat Badge */}
+          {/* Cyberpunk 2077 Logo */}
           <div
-            className={`px-3 py-1.5 flex items-center gap-2 cyber-cut border ${
-              daemonStatus.online
-                ? 'bg-[#051A10] border-[#00FF66] text-[#00FF66] shadow-[0_0_12px_rgba(0,255,102,0.25)]'
-                : 'bg-[#1F1405] border-[#FCEE0A] text-[#FCEE0A]'
-            }`}
+            onClick={() => handleTabClick('reminders')}
+            className="flex items-center gap-2.5 cursor-pointer group select-none"
           >
-            <Radio
-              className={`w-3.5 h-3.5 ${
-                daemonStatus.online ? 'animate-pulse text-[#00FF66]' : 'text-[#FCEE0A]'
-              }`}
-            />
-            <span className="font-bold text-[11px] tracking-widest">
-              {daemonStatus.online ? '24/7 DAEMON: ACTIVE' : 'LOCAL CACHE SYNC'}
-            </span>
+            <div className="w-8 h-8 bg-[#FCEE0A] text-black flex items-center justify-center font-black cyber-cut shadow-[0_0_15px_rgba(252,238,10,0.6)]">
+              <Terminal className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div>
+              <span className="font-cyber text-sm font-black tracking-widest text-[#FCEE0A] glitch-text uppercase block leading-tight">
+                CYBERPULSE
+              </span>
+              <span className="text-[10px] font-tech text-[#00F0FF] tracking-wider block">
+                2077 // TERMINAL UI
+              </span>
+            </div>
           </div>
 
-          {/* Bandwidth Consumption */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#0D0F18] border border-slate-700/80 cyber-cut">
-            <Activity className="w-3.5 h-3.5 text-[#00F0FF]" />
-            <span className="text-slate-400 text-[10px]">LOAD:</span>
-            <span
-              className={`font-bold text-[11px] ${
-                bandwidthPercent > 80
-                  ? 'text-[#FF003C]'
-                  : bandwidthPercent > 50
-                  ? 'text-[#FCEE0A]'
-                  : 'text-[#00FF66]'
+          {/* Navigation Links (Matching cyberpunkredone.webflow.io) */}
+          <nav className="hidden md:flex items-center gap-1 font-hud">
+            {/* 1. Messages / Directives */}
+            <button
+              onClick={() => handleTabClick('reminders')}
+              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
+                activeTab === 'reminders'
+                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
               }`}
             >
-              {bandwidthPercent}%
-            </span>
-          </div>
+              <img
+                src="https://cdn.prod.website-files.com/666af2245cb6e7d54094d64f/6670514917ee0da841f1ccdf_1_95X6TEleBudY1EpDWnXgMQ.png"
+                alt="Messages"
+                className="w-4 h-4 object-contain"
+              />
+              <span>MESSAGES</span>
+              {activeRemindersCount > 0 && (
+                <span className="px-1.5 py-0.2 bg-[#FCEE0A] text-black text-[11px] font-bold font-mono">
+                  {activeRemindersCount}
+                </span>
+              )}
+            </button>
+
+            {/* 2. Radio Transceiver */}
+            <button
+              onClick={() => handleTabClick('radio')}
+              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
+                activeTab === 'radio'
+                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Radio className="w-4 h-4 text-[#00F0FF]" />
+              <span>RADIO</span>
+            </button>
+
+            {/* 3. Net / Blueprints & Shards */}
+            <button
+              onClick={() => handleTabClick('ideas')}
+              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
+                activeTab === 'ideas'
+                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Sparkles className="w-4 h-4 text-[#FCEE0A]" />
+              <span>NET // SHARDS</span>
+            </button>
+
+            {/* 4. 24/7 Autonomous Daemon */}
+            <button
+              onClick={() => handleTabClick('daemon')}
+              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
+                activeTab === 'daemon'
+                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Server className="w-4 h-4 text-[#00FF66]" />
+              <span>DAEMON</span>
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  daemonStatus.online ? 'bg-[#00FF66] animate-pulse' : 'bg-slate-500'
+                }`}
+              />
+            </button>
+
+            {/* 5. Operator Bandwidth */}
+            <button
+              onClick={() => handleTabClick('profile')}
+              className={`px-4 py-1.5 flex items-center gap-2 text-sm uppercase tracking-wider font-semibold transition-all cyber-cut ${
+                activeTab === 'profile'
+                  ? 'bg-[#00F0FF]/20 border-b-2 border-[#00F0FF] text-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                  : 'text-[#29ffff] hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <User className="w-4 h-4 text-slate-300" />
+              <span>{profile.name.toUpperCase()}</span>
+            </button>
+          </nav>
 
         </div>
 
-        {/* Right: Audio SFX, Radio Shortcut, Serious vs Meme Toggle, Outbox & Settings */}
-        <div className="flex items-center gap-2">
+        {/* Right Tools: Wallpaper Switcher, Audio, Mode & Outbox */}
+        <div className="flex items-center gap-2.5">
           
-          {/* Quick Radio Button */}
-          {onOpenRadio && (
-            <button
-              onClick={() => {
-                playCyberClick();
-                onOpenRadio();
-              }}
-              className="px-2.5 py-1.5 cyber-cut border border-[#00F0FF]/50 bg-[#00F0FF]/10 hover:border-[#00F0FF] text-[#00F0FF] text-xs font-tech flex items-center gap-1.5 transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]"
-              title="Tune in to Night City Radio Transceiver"
-            >
-              <Radio className="w-3.5 h-3.5 animate-pulse text-[#00F0FF]" />
-              <span className="font-cyber text-[10px] font-bold hidden sm:inline">RADIO FM</span>
-            </button>
-          )}
+          {/* Wallpaper Switcher Button (Requested: Visible & Changeable Wallpaper) */}
+          <button
+            onClick={onCycleWallpaper}
+            className="px-3 py-1.5 bg-[#0A0D16]/80 hover:bg-[#00F0FF]/15 border border-[#00F0FF]/50 text-[#00F0FF] hover:border-[#00F0FF] cyber-cut text-xs font-tech flex items-center gap-2 transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+            title={`Active: ${currentWallpaper.name}. Click to cycle background wallpaper.`}
+          >
+            <Image className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline font-bold">WALLPAPER</span>
+            <span className="text-[10px] text-[#FCEE0A] font-mono hidden lg:inline">
+              [{currentWallpaper.name.split(' ')[0]}]
+            </span>
+          </button>
 
-          {/* Web Audio Synthesizer Toggle */}
+          {/* Outbox Inspect */}
+          <button
+            onClick={() => {
+              playCyberClick();
+              onOpenOutbox();
+            }}
+            className="p-2 bg-[#0A0D16]/80 hover:bg-[#FCEE0A]/15 border border-slate-700 hover:border-[#FCEE0A] text-slate-300 hover:text-[#FCEE0A] cyber-cut text-xs transition-all"
+            title="Inspect 24/7 Email Outbox Logs"
+          >
+            <Inbox className="w-4 h-4" />
+          </button>
+
+          {/* Web Audio Mute Toggle */}
           <button
             onClick={handleAudioToggle}
             className={`p-2 cyber-cut border transition-all ${
               muted
-                ? 'bg-[#0D0F18] border-slate-700 text-slate-500'
+                ? 'bg-[#0D0F18]/80 border-slate-800 text-slate-500'
                 : 'bg-[#00F0FF]/15 border-[#00F0FF] text-[#00F0FF] shadow-[0_0_10px_rgba(0,240,255,0.3)]'
             }`}
             title={muted ? 'Enable Cyberpunk UI Audio SFX' : 'Mute UI Audio SFX'}
@@ -179,45 +203,57 @@ export function CyberHeader({
             {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
 
-          {/* Serious vs Fun/Meme Mode Toggle (Desktop) */}
+          {/* Serious vs Fun Mode Toggle */}
           <button
-            onClick={handleModeClick}
-            className={`hidden md:flex items-center gap-2 px-3.5 py-1.5 text-xs font-cyber font-bold tracking-wider transition-all cyber-cut ${
+            onClick={() => {
+              playCyberGlitch();
+              onToggleMode();
+            }}
+            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-cyber font-bold tracking-wider cyber-cut transition-all ${
               uiMode === 'serious'
-                ? 'bg-[#00F0FF] text-black hover:bg-white shadow-[0_0_15px_rgba(0,240,255,0.4)]'
-                : 'bg-[#FF003C] text-white hover:bg-pink-400 shadow-[0_0_18px_rgba(255,0,60,0.6)]'
+                ? 'bg-[#00F0FF] text-black shadow-[0_0_12px_rgba(0,240,255,0.4)]'
+                : 'bg-[#FF003C] text-white shadow-[0_0_12px_rgba(255,0,60,0.5)]'
             }`}
           >
-            <TechBadge mode={uiMode} type="cat" size="sm" />
-            <span>{uiMode === 'serious' ? 'MODE: SERIOUS HUD' : 'MODE: FUN // MEME'}</span>
-          </button>
-
-          {/* Outbox Logs */}
-          <button
-            onClick={() => {
-              playCyberClick();
-              onOpenOutbox();
-            }}
-            className="p-2 bg-[#0D0F18] border border-slate-700 text-slate-300 hover:text-[#00F0FF] hover:border-[#00F0FF] cyber-cut transition-all"
-            title="View 24/7 Email Outbox Logs"
-          >
-            <Bell className="w-4 h-4" />
-          </button>
-
-          {/* Settings */}
-          <button
-            onClick={() => {
-              playCyberClick();
-              onOpenSettings();
-            }}
-            className="p-2 bg-[#0D0F18] border border-slate-700 text-slate-300 hover:text-[#FCEE0A] hover:border-[#FCEE0A] cyber-cut transition-all"
-            title="Configure System & Profile"
-          >
-            <Sliders className="w-4 h-4" />
+            <span>{uiMode === 'serious' ? 'SERIOUS' : 'MEME'}</span>
           </button>
 
         </div>
 
+      </div>
+
+      {/* Mobile Nav Drawer */}
+      <div className="flex md:hidden items-center justify-around gap-1 pt-2 border-t border-slate-800/80 mt-2 font-hud text-xs">
+        <button
+          onClick={() => handleTabClick('reminders')}
+          className={`px-2 py-1 ${activeTab === 'reminders' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
+        >
+          MESSAGES
+        </button>
+        <button
+          onClick={() => handleTabClick('radio')}
+          className={`px-2 py-1 ${activeTab === 'radio' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
+        >
+          RADIO
+        </button>
+        <button
+          onClick={() => handleTabClick('ideas')}
+          className={`px-2 py-1 ${activeTab === 'ideas' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
+        >
+          SHARDS
+        </button>
+        <button
+          onClick={() => handleTabClick('daemon')}
+          className={`px-2 py-1 ${activeTab === 'daemon' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
+        >
+          DAEMON
+        </button>
+        <button
+          onClick={() => handleTabClick('profile')}
+          className={`px-2 py-1 ${activeTab === 'profile' ? 'text-[#00F0FF] font-bold' : 'text-slate-400'}`}
+        >
+          PROFILE
+        </button>
       </div>
     </header>
   );

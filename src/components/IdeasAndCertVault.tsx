@@ -87,7 +87,7 @@ export function IdeasAndCertVault({
     <div className="space-y-6">
       
       {/* 1. Neural Shards / Certification Target Tracker */}
-      <div className="p-5 bg-[#090A12]/95 border-2 border-[#FCEE0A] cyber-cut-card relative shadow-[0_0_25px_rgba(252,238,10,0.15)]">
+      <div className="cyber-redone-container p-6 relative mb-6">
         {/* Top corner hazard stripe */}
         <div className="absolute top-0 right-0 w-28 h-2.5 hazard-stripe" />
 
@@ -142,7 +142,7 @@ export function IdeasAndCertVault({
       </div>
 
       {/* 2. Building & Freelance Ideas Vault */}
-      <div className="p-5 bg-[#090A12]/95 border-2 border-[#00F0FF] cyber-cut-card relative shadow-[0_0_25px_rgba(0,240,255,0.12)]">
+      <div className="cyber-redone-container p-6 relative">
         {/* Top corner cyan hazard stripe */}
         <div className="absolute top-0 right-0 w-28 h-2.5 hazard-stripe-cyan" />
 

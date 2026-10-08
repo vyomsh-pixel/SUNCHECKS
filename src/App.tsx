@@ -30,10 +30,9 @@ import {
   deleteProjectIdea,
   fetchEmailLogs,
 } from './storage';
-import { CyberCityBackdrop } from './components/CyberCityBackdrop';
+import { CyberCityBackdrop, WALLPAPERS } from './components/CyberCityBackdrop';
 import { CyberCursor } from './components/CyberCursor';
-import { CyberHeader } from './components/CyberHeader';
-import { CyberNav, ActiveTab } from './components/CyberNav';
+import { CyberHeader, ActiveTab } from './components/CyberHeader';
 import { ReminderMatrix } from './components/ReminderMatrix';
 import { IdeasAndCertVault } from './components/IdeasAndCertVault';
 import { CyberRadio } from './components/CyberRadio';
@@ -67,9 +66,22 @@ export default function App() {
   const [emailLogs, setEmailLogs] = useState<EmailLogItem[]>([]);
 
   const [activeTab, setActiveTab] = useState<ActiveTab>('reminders');
+  const [wallpaperId, setWallpaperId] = useState<string>(() => {
+    return localStorage.getItem('cyber_wallpaper_id') || 'cyberpunk_redone_dark';
+  });
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isOutboxModalOpen, setIsOutboxModalOpen] = useState(false);
+
+  const handleCycleWallpaper = () => {
+    playCyberClick();
+    const currentIndex = WALLPAPERS.findIndex((w) => w.id === wallpaperId);
+    const nextIndex = (currentIndex + 1) % WALLPAPERS.length;
+    const nextWallpaper = WALLPAPERS[nextIndex];
+    setWallpaperId(nextWallpaper.id);
+    localStorage.setItem('cyber_wallpaper_id', nextWallpaper.id);
+  };
 
   // Sync initial data from backend daemon and local cache
   const refreshAll = useCallback(async () => {
@@ -177,23 +189,25 @@ export default function App() {
       {/* 2. Custom Interactive Reticle Cursor */}
       <CyberCursor />
 
-      {/* 3. Live 4-Layer Cyberpunk Night City Megacity Backdrop */}
-      <CyberCityBackdrop />
+      {/* 3. Live High-Res Cyberpunk Night City Backdrop (Visible) */}
+      <CyberCityBackdrop currentWallpaperId={wallpaperId} />
 
-      {/* 4. Top Cockpit HUD Header */}
+      {/* 4. Top Cockpit HUD Header (cyberpunkredone.webflow.io style) */}
       <CyberHeader
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        activeRemindersCount={activeRemindersCount}
         profile={profile}
         daemonStatus={daemonStatus}
         uiMode={profile.uiMode}
-        bandwidthPercent={bandwidthPercent}
+        currentWallpaperId={wallpaperId}
+        onCycleWallpaper={handleCycleWallpaper}
         onToggleMode={handleToggleMode}
-        onOpenSettings={() => setIsProfileModalOpen(true)}
         onOpenOutbox={() => setIsOutboxModalOpen(true)}
-        onOpenRadio={() => setActiveTab('radio')}
       />
 
       {/* 5. Main Operational Content */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 pt-6 pb-28 relative z-10">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 pt-6 pb-12 relative z-10">
         
         {/* Navigation Tab Content */}
         {activeTab === 'reminders' && (
@@ -226,7 +240,7 @@ export default function App() {
 
         {activeTab === 'profile' && (
           <div className="space-y-6">
-            <div className="p-6 bg-[#080A12]/95 border-2 border-[#FCEE0A] cyber-cut-card relative shadow-[0_0_30px_rgba(252,238,10,0.15)]">
+            <div className="cyber-redone-container p-6 relative">
               {/* Top corner hazard stripe */}
               <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe" />
 
@@ -254,7 +268,7 @@ export default function App() {
               </div>
 
               {/* Bandwidth Gauge Box */}
-              <div className="p-4 bg-[#05060A] border-2 border-[#00F0FF]/50 cyber-cut space-y-3">
+              <div className="p-4 bg-[#05060A]/80 border-2 border-[#00F0FF]/50 cyber-cut space-y-3">
                 <div className="flex justify-between items-center text-xs font-cyber">
                   <span className="text-slate-300">DAILY LIFE BANDWIDTH CONSUMPTION</span>
                   <span className="text-[#FCEE0A] font-black text-sm">{bandwidthPercent}%</span>
@@ -282,7 +296,7 @@ export default function App() {
 
         {activeTab === 'daemon' && (
           <div className="space-y-6">
-            <div className="p-6 bg-[#080A12]/95 border-2 border-[#00F0FF] cyber-cut-card relative shadow-[0_0_30px_rgba(0,240,255,0.15)]">
+            <div className="cyber-redone-container p-6 relative">
               {/* Top corner cyan hazard stripe */}
               <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe-cyan" />
 
@@ -310,19 +324,19 @@ export default function App() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 bg-[#05060A] border-2 border-slate-800 cyber-cut">
+                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
                   <span className="text-[10px] font-cyber uppercase text-slate-400">STATUS</span>
                   <p className="text-xs font-cyber font-black text-[#00FF66] mt-1">
                     {daemonStatus.online ? 'ONLINE 24/7 // HEARTBEAT' : 'OFFLINE (LOCAL CACHE)'}
                   </p>
                 </div>
-                <div className="p-4 bg-[#05060A] border-2 border-slate-800 cyber-cut">
+                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
                   <span className="text-[10px] font-cyber uppercase text-slate-400">ARMED REMINDERS</span>
                   <p className="text-xs font-cyber font-black text-[#FCEE0A] mt-1">
                     {daemonStatus.activeCount} ACTIVE SCHEDULES
                   </p>
                 </div>
-                <div className="p-4 bg-[#05060A] border-2 border-slate-800 cyber-cut">
+                <div className="p-4 bg-[#05060A]/80 border-2 border-slate-800 cyber-cut">
                   <span className="text-[10px] font-cyber uppercase text-slate-400">OUTBOX DISPATCHES</span>
                   <p className="text-xs font-cyber font-black text-white mt-1">
                     {emailLogs.length} LOGGED TRANSMISSIONS
@@ -334,7 +348,7 @@ export default function App() {
         )}
 
         {/* Footer Technical Barcode & Disclaimer */}
-        <div className="mt-10 pt-4 pb-2 border-t-2 border-slate-800/80 flex flex-col items-center justify-center gap-2">
+        <div className="mt-10 pt-4 pb-2 border-t border-slate-800/80 flex flex-col items-center justify-center gap-2">
           <div className="font-tech text-xs tracking-widest text-[#FCEE0A]/60">
             ||| | |||| | || | 2077 // NIGHT CITY // 34.0522° N, 118.2437° W | |||| || | |||
           </div>
@@ -344,14 +358,6 @@ export default function App() {
         </div>
 
       </main>
-
-      {/* 6. Bottom Tab Selector */}
-      <CyberNav
-        currentTab={activeTab}
-        onSelectTab={setActiveTab}
-        uiMode={profile.uiMode}
-        activeCount={activeRemindersCount}
-      />
 
       {/* 7. Cyberpunk Modals */}
       <AddReminderModal

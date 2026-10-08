@@ -64,7 +64,7 @@ export function CyberRadio() {
   };
 
   return (
-    <div className="p-5 bg-[#090A12]/95 border-2 border-[#00F0FF] cyber-cut-card relative shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+    <div className="cyber-redone-container p-6 relative">
       {/* Top Corner Hazard Stripe */}
       <div className="absolute top-0 right-0 w-32 h-2.5 hazard-stripe-cyan" />
 
