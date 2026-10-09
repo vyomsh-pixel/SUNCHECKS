@@ -6,6 +6,7 @@ import { DaemonStatus, EmailLogItem, UiMode } from '../types';
 import { Send, RefreshCw, Mail, Activity } from 'lucide-react';
 import { TechBadge } from './TechBadge';
 import { playCyberClick, playCyberAlert } from '../cyberAudio';
+import { triggerCronScan } from '../storage';
 
 interface DaemonViewProps {
   daemonStatus: DaemonStatus;
@@ -27,6 +28,28 @@ export function DaemonView({
   const [testEmail, setTestEmail] = useState(userEmail);
   const [isSending, setIsSending] = useState(false);
   const [sendResult, setSendResult] = useState<string | null>(null);
+  const [isScanningCron, setIsScanningCron] = useState(false);
+  const [cronScanResult, setCronScanResult] = useState<string | null>(null);
+
+  const handleRunCronScan = async () => {
+    playCyberAlert();
+    setIsScanningCron(true);
+    setCronScanResult(null);
+    try {
+      const res = await triggerCronScan();
+      if (res.success) {
+        setCronScanResult(`SCAN COMPLETE: Dispatched ${res.dispatchedCount} due reminder(s)`);
+      } else {
+        setCronScanResult(`SCAN ALERT: ${res.error || 'No response'}`);
+      }
+      onRefresh();
+    } catch (err: any) {
+      setCronScanResult(`ERROR: ${err.message || 'Scan failed'}`);
+    } finally {
+      setIsScanningCron(false);
+      setTimeout(() => setCronScanResult(null), 5000);
+    }
+  };
 
   const handleSendTest = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,17 +95,36 @@ export function DaemonView({
             </div>
           </div>
 
-          <button
-            onClick={() => {
-              playCyberClick();
-              onRefresh();
-            }}
-            className="px-3.5 py-1.5 bg-[#090C16] border border-slate-700 hover:border-[#00F0FF] text-slate-300 hover:text-white cyber-cut text-xs font-tech flex items-center gap-2 transition-all"
-          >
-            <RefreshCw className="w-3.5 h-3.5 text-[#00F0FF]" />
-            <span>SYNC TELEMETRY</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleRunCronScan}
+              disabled={isScanningCron}
+              className="px-3.5 py-1.5 bg-[#00F0FF]/15 border border-[#00F0FF] text-[#00F0FF] hover:bg-[#00F0FF]/25 cyber-cut text-xs font-tech flex items-center gap-2 transition-all shadow-[0_0_10px_rgba(0,240,255,0.25)] disabled:opacity-50"
+              title="Immediately evaluate all scheduled tasks and fire any that are due"
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>{isScanningCron ? 'SCANNING ENGINE...' : 'RUN SCHEDULER SCAN'}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                playCyberClick();
+                onRefresh();
+              }}
+              className="px-3.5 py-1.5 bg-[#090C16] border border-slate-700 hover:border-[#00F0FF] text-slate-300 hover:text-white cyber-cut text-xs font-tech flex items-center gap-2 transition-all"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-[#00F0FF]" />
+              <span>SYNC TELEMETRY</span>
+            </button>
+          </div>
         </div>
+
+        {cronScanResult && (
+          <div className="mb-4 p-2.5 bg-[#00F0FF]/10 border border-[#00F0FF] text-xs font-hud text-[#00F0FF] cyber-cut flex items-center justify-between">
+            <span>{cronScanResult}</span>
+            <span className="text-[10px] text-slate-400">TELEMETRY UPDATED</span>
+          </div>
+        )}
 
         {/* Telemetry Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-6 font-hud">

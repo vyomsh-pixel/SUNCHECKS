@@ -217,21 +217,81 @@ export async function getReminders() {
   }
 }
 
+// Cadence calculation engine for accurate schedule tracking
+export function computeNextTrigger(cadence, config = {}, forceTomorrow = false) {
+  const now = new Date();
+  const timeStr = config.time || '10:00';
+  const [targetH, targetM] = (timeStr.includes(':') ? timeStr.split(':') : ['10', '00']).map(
+    (n) => parseInt(n, 10) || 0
+  );
+
+  if (cadence === 'random') {
+    // 10:00 AM (600m) to 11:00 PM (1380m)
+    const randomMinutesOffset = Math.floor(Math.random() * 780);
+    const totalMinutes = 600 + randomMinutesOffset;
+    const randH = Math.floor(totalMinutes / 60);
+    const randM = totalMinutes % 60;
+    const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), randH, randM, 0, 0);
+    if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
+      return candidate.toISOString();
+    }
+    candidate.setDate(candidate.getDate() + 1);
+    return candidate.toISOString();
+  }
+
+  if (cadence === 'interval') {
+    const intervalDays = Math.max(1, parseInt(config.intervalDays, 10) || 2);
+    const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetH, targetM, 0, 0);
+    if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
+      return candidate.toISOString();
+    }
+    candidate.setDate(candidate.getDate() + intervalDays);
+    return candidate.toISOString();
+  }
+
+  if (cadence === 'weekdays') {
+    const dayMap = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+    const allowed = (config.weekdays || ['mon', 'tue', 'wed', 'thu', 'fri'])
+      .map((d) => (typeof d === 'string' ? dayMap[d.toLowerCase()] : d))
+      .filter((d) => d !== undefined);
+    const safeAllowed = allowed.length > 0 ? allowed : [1, 2, 3, 4, 5];
+
+    for (let dayOffset = forceTomorrow ? 1 : 0; dayOffset <= 14; dayOffset++) {
+      const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + dayOffset, targetH, targetM, 0, 0);
+      if (safeAllowed.includes(candidate.getDay())) {
+        if (candidate.getTime() > now.getTime() + 60000) {
+          return candidate.toISOString();
+        }
+      }
+    }
+  }
+
+  // Default: daily
+  const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetH, targetM, 0, 0);
+  if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
+    return candidate.toISOString();
+  }
+  candidate.setDate(candidate.getDate() + 1);
+  return candidate.toISOString();
+}
+
 export async function createReminder(data) {
   const p = getDbPool();
+  const cadence = data.cadence || 'daily';
+  const calculatedNext = computeNextTrigger(cadence, data);
   const item = {
     id: data.id || `rem_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     title: data.title || 'Untitled Directive',
     theme: data.theme || 'work',
     description: data.description || '',
-    cadence: data.cadence || 'daily',
+    cadence,
     time: data.time || '10:00',
     intervalDays: Number(data.intervalDays) || 1,
     weekdays: data.weekdays || ['mon', 'tue', 'wed', 'thu', 'fri'],
     email: data.email || 'rajkesir74@gmail.com',
     autoEmail: data.autoEmail !== false,
     status: data.status || 'active',
-    nextTriggerAt: data.nextTriggerAt || new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+    nextTriggerAt: data.nextTriggerAt || calculatedNext,
     createdAt: new Date().toISOString(),
   };
 

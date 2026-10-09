@@ -20,13 +20,13 @@ import {
   createReminder,
   updateReminder,
   deleteReminder,
-  triggerReminderNow,
   sendTestEmailPing as apiSendTestEmail,
   fetchDaemonStatus,
   getProjectIdeas,
   saveProjectIdea,
   deleteProjectIdea,
   fetchEmailLogs,
+  triggerCronScan,
 } from './storage';
 import { CyberCityBackdrop, WALLPAPERS } from './components/CyberCityBackdrop';
 import { CyberCursor } from './components/CyberCursor';
@@ -41,6 +41,7 @@ import { WorkloadView } from './components/WorkloadView';
 import { AddReminderModal } from './components/AddReminderModal';
 import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
+import { CyberTransmissionPortal } from './components/CyberTransmissionPortal';
 import { playCyberClick } from './cyberAudio';
 
 const GUEST_PROFILE: CyberProfile = {
@@ -109,6 +110,7 @@ export default function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isOutboxModalOpen, setIsOutboxModalOpen] = useState(false);
+  const [portalReminder, setPortalReminder] = useState<ReminderItem | null>(null);
 
   const handleCycleWallpaper = () => {
     playCyberClick();
@@ -172,6 +174,25 @@ export default function App() {
     }
   }, [authRole, refreshAll]);
 
+  // Autonomous Scheduler Heartbeat: Runs /api/cron every 60s while HUD is active
+  useEffect(() => {
+    if (authRole === 'operator') {
+      const runPulse = () => {
+        triggerCronScan()
+          .then((res) => {
+            if (res.dispatchedCount > 0) {
+              fetchEmailLogs().then(setEmailLogs);
+              fetchReminders().then(setReminders);
+            }
+          })
+          .catch(() => {});
+      };
+      runPulse();
+      const cronTimer = setInterval(runPulse, 60_000);
+      return () => clearInterval(cronTimer);
+    }
+  }, [authRole]);
+
   // Life Bandwidth Calculation (% capacity)
   const activeRemindersCount = reminders.filter((r) => r.status === 'active').length;
   const bandwidthPercent = Math.min(
@@ -209,12 +230,8 @@ export default function App() {
     setReminders((prev) => prev.filter((r) => r.id !== id));
   };
 
-  const handleTriggerNow = async (id: string) => {
-    const ok = await triggerReminderNow(id);
-    if (ok) {
-      fetchEmailLogs().then(setEmailLogs);
-    }
-    return ok;
+  const handleTriggerNow = (reminder: ReminderItem) => {
+    setPortalReminder(reminder);
   };
 
   // Ideas Actions
@@ -408,6 +425,16 @@ export default function App() {
         userEmail={profile.email}
         uiMode={profile.uiMode}
         onTriggerTestEmail={sendTestEmailPing}
+      />
+
+      {/* 8. Instant Transmission Portal */}
+      <CyberTransmissionPortal
+        isOpen={Boolean(portalReminder)}
+        onClose={() => setPortalReminder(null)}
+        reminder={portalReminder}
+        uiMode={profile.uiMode}
+        onOpenOutbox={() => setIsOutboxModalOpen(true)}
+        onRefreshData={refreshAll}
       />
 
     </div>

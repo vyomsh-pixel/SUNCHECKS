@@ -166,16 +166,67 @@ export async function deleteReminder(id: string): Promise<boolean> {
   return true;
 }
 
-export async function triggerReminderNow(id: string, email?: string): Promise<boolean> {
+export interface TriggerResult {
+  success: boolean;
+  messageId?: string;
+  recipient?: string;
+  error?: string;
+}
+
+export async function triggerReminderNow(id: string, email?: string): Promise<TriggerResult> {
   try {
-    const res = await fetch(`/api/reminders/${id}/trigger-now`, {
+    const res = await fetch(`/api/reminders/${id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
-    return res.ok;
-  } catch {
-    return false;
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.success !== false) {
+      return {
+        success: true,
+        messageId: data.messageId || data.data?.id,
+        recipient: data.recipient,
+      };
+    }
+    return {
+      success: false,
+      error: data.error || `HTTP ${res.status}: Delivery rejected`,
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      error: err.message || 'Network error communicating with serverless engine',
+    };
+  }
+}
+
+export async function triggerCronScan(): Promise<{
+  success: boolean;
+  dispatchedCount: number;
+  checkedAt?: string;
+  error?: string;
+}> {
+  try {
+    const res = await fetch('/api/cron');
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      return {
+        success: true,
+        dispatchedCount: data.dispatchedCount || 0,
+        checkedAt: data.checkedAt,
+      };
+    }
+    return {
+      success: false,
+      dispatchedCount: 0,
+      error: data.error || data.warning || 'Scheduler cycle check failed',
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      dispatchedCount: 0,
+      error: err.message || 'Network error executing scheduler cycle',
+    };
   }
 }
 

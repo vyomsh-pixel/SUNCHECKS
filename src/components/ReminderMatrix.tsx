@@ -24,7 +24,7 @@ interface ReminderMatrixProps {
   onAddClick: () => void;
   onToggleStatus: (id: string, currentStatus: string) => void;
   onDelete: (id: string) => void;
-  onTriggerNow: (id: string) => void;
+  onTriggerNow: (reminder: ReminderItem) => void;
 }
 
 export function ReminderMatrix({
@@ -37,7 +37,6 @@ export function ReminderMatrix({
 }: ReminderMatrixProps) {
   const [filterTheme, setFilterTheme] = useState<ReminderTheme | 'all'>('all');
   const [selectedReminderId, setSelectedReminderId] = useState<string | null>(null);
-  const [triggeringId, setTriggeringId] = useState<string | null>(null);
 
   const filtered =
     filterTheme === 'all'
@@ -48,11 +47,9 @@ export function ReminderMatrix({
   const activeReminder =
     filtered.find((r) => r.id === selectedReminderId) || filtered[0] || null;
 
-  const handleInstantTrigger = async (id: string) => {
+  const handleInstantTrigger = (reminder: ReminderItem) => {
     playCyberAlert();
-    setTriggeringId(id);
-    await onTriggerNow(id);
-    setTimeout(() => setTriggeringId(null), 2000);
+    onTriggerNow(reminder);
   };
 
   const handleFilterClick = (theme: ReminderTheme | 'all') => {
@@ -323,16 +320,12 @@ export function ReminderMatrix({
                       {/* Action Bar */}
                       <div className="pt-5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
                         <button
-                          onClick={() => handleInstantTrigger(activeReminder.id)}
-                          disabled={triggeringId === activeReminder.id}
-                          className="px-5 py-2.5 cyber-btn-yellow text-xs font-black flex items-center gap-2 shadow-[0_0_15px_rgba(252,238,10,0.5)] disabled:opacity-50"
+                          onClick={() => handleInstantTrigger(activeReminder)}
+                          className="px-5 py-2.5 cyber-btn-yellow text-xs font-black flex items-center gap-2 shadow-[0_0_15px_rgba(252,238,10,0.5)]"
+                          title="Open Transmission Portal to execute instant email dispatch"
                         >
                           <Send className="w-4 h-4" />
-                          <span>
-                            {triggeringId === activeReminder.id
-                              ? 'DISPATCHED TO INBOX!'
-                              : 'TRIGGER TEST DISPATCH'}
-                          </span>
+                          <span>TRIGGER TEST DISPATCH</span>
                         </button>
 
                         <div className="flex items-center gap-2 font-hud text-xs">

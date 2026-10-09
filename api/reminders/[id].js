@@ -82,12 +82,26 @@ export default async function handler(req, res) {
         title: rem.title,
         recipient: targetEmail,
         provider: 'RESEND',
-        status: emailRes.ok ? 'dispatched' : 'failed',
+        status: emailRes.ok ? 'dispatched' : `failed: ${emailData?.error?.message || emailRes.statusText}`,
       });
 
-      return res.status(200).json({ success: emailRes.ok, data: emailData });
+      if (!emailRes.ok) {
+        return res.status(400).json({
+          success: false,
+          error: emailData?.error?.message || 'Email delivery failed via Resend relay',
+          data: emailData,
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        messageId: emailData?.id,
+        recipient: targetEmail,
+        title: rem.title,
+        timestamp: new Date().toISOString(),
+      });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({ success: false, error: err.message });
     }
   }
 

@@ -1,7 +1,15 @@
-import { getReminders, updateReminder, addEmailLog, getProfile } from './lib/db.js';
+import { getReminders, updateReminder, addEmailLog, getProfile, computeNextTrigger } from './lib/db.js';
 
 export default async function handler(req, res) {
-  // Can be called by Vercel Cron or manual health check
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Can be called by Vercel Cron, client background heartbeat, or manual trigger
   const now = new Date();
   const reminders = await getReminders();
   const profile = await getProfile();
@@ -9,10 +17,17 @@ export default async function handler(req, res) {
   const fromAddress = process.env.EMAIL_FROM || 'CyberPulse <onboarding@resend.dev>';
 
   if (!resendApiKey) {
-    return res.status(200).json({ warning: 'RESEND_API_KEY not configured on server' });
+    return res.status(200).json({
+      success: false,
+      warning: 'RESEND_API_KEY not configured on server',
+      checkedAt: now.toISOString(),
+      dispatchedCount: 0,
+      activeReminders: reminders.filter((r) => r.status === 'active').length,
+    });
   }
 
   let dispatchedCount = 0;
+  const executionLogs = [];
 
   for (const rem of reminders) {
     if (rem.status !== 'active' || !rem.autoEmail) continue;
@@ -39,27 +54,36 @@ export default async function handler(req, res) {
                 <h3 style="color: #00F0FF; margin: 0 0 16px 0;">${rem.title}</h3>
                 <p style="color: #CCCCCC; font-size: 14px; line-height: 1.5;">${rem.description || 'Scheduled reminder execution.'}</p>
                 <div style="margin-top: 20px; padding: 12px; background-color: #0F121D; border-left: 3px solid #00FF66; font-size: 12px; color: #888888;">
-                  CADENCE: ${rem.cadence.toUpperCase()} &bull; NEXT SYNC: 24H
+                  CADENCE: ${rem.cadence.toUpperCase()} &bull; TIMESTAMP: ${now.toISOString()}
                 </div>
               </div>
             `,
           }),
         });
 
+        const emailData = await emailRes.json().catch(() => ({}));
+
         await addEmailLog({
           reminderId: rem.id,
           title: rem.title,
           recipient: targetEmail,
           provider: 'RESEND',
-          status: emailRes.ok ? 'dispatched' : 'failed',
+          status: emailRes.ok ? 'dispatched' : `failed: ${emailData?.error?.message || emailRes.statusText}`,
         });
 
-        // Compute next trigger (default: +24h for daily)
-        const nextTime = new Date(now.getTime() + 24 * 3600 * 1000).toISOString();
+        // Compute next trigger accurately
+        const nextTime = computeNextTrigger(rem.cadence, rem, true);
         await updateReminder(rem.id, { nextTriggerAt: nextTime });
-        dispatchedCount++;
+
+        if (emailRes.ok) {
+          dispatchedCount++;
+          executionLogs.push({ id: rem.id, status: 'dispatched', messageId: emailData?.id });
+        } else {
+          executionLogs.push({ id: rem.id, status: 'failed', error: emailData?.error?.message });
+        }
       } catch (err) {
         console.error(`Cron trigger error for ${rem.id}:`, err);
+        executionLogs.push({ id: rem.id, status: 'error', error: err.message });
       }
     }
   }
@@ -68,5 +92,7 @@ export default async function handler(req, res) {
     success: true,
     checkedAt: now.toISOString(),
     dispatchedCount,
+    remindersChecked: reminders.length,
+    executionLogs,
   });
 }
