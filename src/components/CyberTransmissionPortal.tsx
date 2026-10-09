@@ -67,7 +67,7 @@ export function CyberTransmissionPortal({
     setMessageId(null);
 
     appendLog('INITIATING DISPATCH HANDSHAKE...');
-    appendLog(`CONNECTING TO VERCEL SERVERLESS ENDPOINT /api/reminders/${reminder.id}...`);
+    appendLog('CONNECTING TO VERCEL SERVERLESS ENDPOINT /api/reminders/trigger...');
 
     try {
       const res: TriggerResult = await triggerReminderNow(reminder.id, targetEmail);

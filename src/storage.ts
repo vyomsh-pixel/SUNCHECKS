@@ -175,10 +175,10 @@ export interface TriggerResult {
 
 export async function triggerReminderNow(id: string, email?: string): Promise<TriggerResult> {
   try {
-    const res = await fetch(`/api/reminders/${id}`, {
+    const res = await fetch('/api/reminders/trigger', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ id, email }),
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.success !== false) {

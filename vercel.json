@@ -11,15 +11,7 @@
   ],
   "rewrites": [
     {
-      "source": "/api/reminders/:id/trigger-now",
-      "destination": "/api/reminders/:id"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
