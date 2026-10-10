@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { TechBadge } from './TechBadge';
 import { playCyberClick, playCyberAlert } from '../cyberAudio';
+import { SECOND_BRAIN_VAULT_NOTES } from '../data/secondBrainVault';
 
 export interface ObsidianSubItem {
   id: string;
@@ -50,160 +51,183 @@ interface ObsidianVaultModalProps {
   uiMode: UiMode;
 }
 
-const VAULT_STORAGE_KEY = 'cyberpulse_obsidian_vault_v1';
+const VAULT_STORAGE_KEY = 'cyberpulse_obsidian_vault_v2';
 
-const STARTER_VAULT_NOTES: ObsidianNote[] = [
-  {
-    id: 'starter_aws_saa',
-    title: 'AWS Solutions Architect Associate',
-    topic: 'Cloud Certifications',
-    relativePath: 'VYOM/Cloud Certifications/AWS Solutions Architect Associate.md',
-    suggestedTheme: 'cert',
-    rawSnippet: 'Core architecture modules, VPC peering, IAM policies, and high-availability patterns.',
-    sections: [
-      {
-        heading: 'VPC & Networking Deep Dive',
-        items: [
-          { id: 'i_1', text: 'Configure Public vs Private Subnets, NAT Gateways & Route Tables', isTask: true, completed: false },
-          { id: 'i_2', text: 'Review VPC Peering, Transit Gateway & VPC Endpoints (Gateway vs Interface)', isTask: true, completed: false },
-          { id: 'i_3', text: 'Security Groups (Stateful) vs Network ACLs (Stateless) practice drills', isTask: false, completed: false },
-        ],
-      },
-      {
-        heading: 'IAM, S3 & Storage Security',
-        items: [
-          { id: 'i_4', text: 'Cross-account IAM Role assumption & STS temporary credentials', isTask: true, completed: false },
-          { id: 'i_5', text: 'S3 Lifecycle rules, Glacier tiers & Bucket Policies vs ACLs', isTask: true, completed: false },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'starter_intern_sprint',
-    title: 'Backend API & Database Optimization',
-    topic: 'Work & Internship',
-    relativePath: 'VYOM/Work & Internship/Backend API & Database Optimization.md',
-    suggestedTheme: 'work',
-    rawSnippet: 'Current sprint deliverables, PostgreSQL indexing, and serverless edge routes.',
-    sections: [
-      {
-        heading: 'Sprint Backlog & PR Reviews',
-        items: [
-          { id: 'i_6', text: 'Audit PostgreSQL connection pooling and query latency', isTask: true, completed: false },
-          { id: 'i_7', text: 'Write integration tests for authentication & rate-limiting middleware', isTask: true, completed: false },
-          { id: 'i_8', text: 'Prepare daily standup notes and blocker summary', isTask: false, completed: false },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'starter_python_dsa',
-    title: 'Python Study & Algorithms',
-    topic: 'Study & DSA',
-    relativePath: 'VYOM/Study & DSA/Python Study & Algorithms.md',
-    suggestedTheme: 'cert',
-    rawSnippet: 'Core data structures, dynamic programming patterns, and system design fundamentals.',
-    sections: [
-      {
-        heading: 'Core Patterns & Problem Sets',
-        items: [
-          { id: 'i_9', text: 'Sliding Window & Two-Pointer medium/hard problems', isTask: true, completed: false },
-          { id: 'i_10', text: 'Graph BFS/DFS & Dijkstra shortest-path implementations', isTask: true, completed: false },
-          { id: 'i_11', text: 'Asyncio concurrency & generator memory optimization in Python', isTask: false, completed: false },
-        ],
-      },
-    ],
-  },
-];
+function stripWikilinks(str: string): string {
+  return str
+    .replace(/\[\[(?:[^|\]]+\\?\|)?([^\]]+)\]\]/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+}
+
+function cleanText(str: string): string {
+  return stripWikilinks(str)
+    .replace(/\p{Extended_Pictographic}|\uFE0F|\u200D/gu, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 function detectTheme(topic: string, title: string, content: string): ReminderTheme {
+  const t = topic.toLowerCase();
   const combined = `${topic} ${title} ${content}`.toLowerCase();
-  if (combined.includes('cert') || combined.includes('aws') || combined.includes('study') || combined.includes('python') || combined.includes('dsa') || combined.includes('exam') || combined.includes('learn')) {
+  if (
+    t === 'studies' ||
+    combined.includes('cert') ||
+    combined.includes('sc-900') ||
+    combined.includes('sc900') ||
+    combined.includes('roadmap') ||
+    combined.includes('checklist')
+  ) {
     return 'cert';
   }
-  if (combined.includes('freelance') || combined.includes('client') || combined.includes('invoice') || combined.includes('contract')) {
+  if (
+    combined.includes('freelance') ||
+    combined.includes('pneumatic') ||
+    combined.includes('financial') ||
+    combined.includes('vedanta')
+  ) {
     return 'freelance';
   }
-  if (combined.includes('health') || combined.includes('gym') || combined.includes('routine') || combined.includes('life') || combined.includes('habit')) {
+  if (
+    t === 'life' ||
+    combined.includes('health') ||
+    combined.includes('rhythm') ||
+    combined.includes('audit')
+  ) {
     return 'life';
   }
   return 'work';
 }
 
-function parseMarkdownFile(relativePath: string, content: string, index: number): ObsidianNote {
-  const parts = relativePath.replace(/\\/g, '/').split('/');
-  const fileName = parts[parts.length - 1] || 'Untitled.md';
-  const title = fileName.replace(/\.md$/i, '');
+function parseMarkdownFile(relativePath: string, rawContent: string, index: number): ObsidianNote {
+  const normalized = relativePath.replace(/\\/g, '/');
+  const rawParts = normalized.split('/');
+  // Strip root container folder name (e.g. 'VYOM' or 'Second-Brain') if present
+  const parts =
+    rawParts.length >= 2 &&
+    (rawParts[0].toLowerCase() === 'vyom' ||
+      rawParts[0].toLowerCase() === 'second-brain' ||
+      rawParts[0].toLowerCase() === 'vault')
+      ? rawParts.slice(1)
+      : rawParts;
 
-  // Determine Topic from folder hierarchy (skip root vault container name like 'VYOM' or 'vault' if deeper folders exist)
-  let topic = 'General Notes';
+  const topic = parts.length >= 2 ? parts[0] : 'General Notes';
+  const rawFileName = (parts[parts.length - 1] || 'Untitled.md')
+    .replace(/\.md$/i, '')
+    .replace(/_/g, ' ');
+
+  let title = rawFileName;
   if (parts.length >= 3) {
-    topic = parts[parts.length - 2];
-  } else if (parts.length === 2) {
-    topic = parts[0];
+    const subFolder = parts[1].replace(/_/g, ' ');
+    if (subFolder.toLowerCase() === rawFileName.toLowerCase()) {
+      title = `${subFolder} // Master Note`;
+    } else {
+      title = `${subFolder} // ${rawFileName}`;
+    }
+  }
+  title = cleanText(title);
+
+  // Strip YAML frontmatter if present
+  let content = rawContent;
+  if (content.startsWith('---')) {
+    const endFrontmatter = content.indexOf('\n---', 3);
+    if (endFrontmatter !== -1) {
+      content = content.slice(endFrontmatter + 4);
+    }
   }
 
   const lines = content.split(/\r?\n/);
   const sections: ObsidianSection[] = [];
   let currentSection: ObsidianSection = {
-    heading: 'Overview & Core Items',
+    heading: 'Overview & Key Items',
     items: [],
   };
 
   let itemCounter = 0;
+  let inCodeBlock = false;
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
-    if (!line || line === '---') continue;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.startsWith('```')) {
+      inCodeBlock = !inCodeBlock;
+      continue;
+    }
+    if (inCodeBlock || !line || line === '---') continue;
 
     // Match Markdown headings (#, ##, ###, ####)
     const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
     if (headingMatch) {
-      if (currentSection.items.length > 0) {
-        sections.push(currentSection);
+      const hText = cleanText(headingMatch[2].replace(/#/g, ''));
+      if (hText) {
+        if (currentSection.items.length > 0) {
+          sections.push(currentSection);
+        }
+        currentSection = {
+          heading: hText,
+          items: [],
+        };
       }
-      currentSection = {
-        heading: headingMatch[2].replace(/[#*`]/g, '').trim(),
-        items: [],
-      };
+      continue;
+    }
+
+    if (currentSection.items.length >= 12) continue;
+
+    // Match Markdown Table Rows
+    if (line.startsWith('|') && line.endsWith('|')) {
+      if (/^\|[\s:|-]+\|$/.test(line)) continue;
+      const nextLine = (lines[i + 1] || '').trim();
+      if (/^\|[\s:|-]+\|$/.test(nextLine)) continue;
+
+      const preCleaned = stripWikilinks(line);
+      const cells = preCleaned
+        .slice(1, -1)
+        .split('|')
+        .map((c) => cleanText(c))
+        .filter(Boolean);
+      if (cells.length > 0) {
+        const rowText = cells.join(' :: ');
+        if (rowText.length > 3) {
+          currentSection.items.push({
+            id: `obs_${index}_${itemCounter++}`,
+            text: rowText.slice(0, 160),
+            isTask: true,
+            completed: false,
+          });
+        }
+      }
       continue;
     }
 
     // Match Markdown checklists: - [ ] or - [x] or * [ ]
     const taskMatch = line.match(/^[-*+]\s+\[([ xX])\]\s+(.+)$/);
     if (taskMatch) {
-      currentSection.items.push({
-        id: `obs_${index}_${itemCounter++}`,
-        text: taskMatch[2].trim(),
-        isTask: true,
-        completed: taskMatch[1].toLowerCase() === 'x',
-      });
+      const tText = cleanText(taskMatch[2]);
+      if (tText) {
+        currentSection.items.push({
+          id: `obs_${index}_${itemCounter++}`,
+          text: tText.slice(0, 160),
+          isTask: true,
+          completed: taskMatch[1].toLowerCase() === 'x',
+        });
+      }
       continue;
     }
 
     // Match bullet points or numbered lists: - item, * item, 1. item
     const bulletMatch = /^(?:[-*+]|\d+\.)\s+(.+)$/.exec(line);
     if (bulletMatch) {
-      const cleanText = bulletMatch[1].trim();
-      if (cleanText.length > 2) {
+      const cleanBullet = cleanText(bulletMatch[1]);
+      if (cleanBullet.length > 2) {
         currentSection.items.push({
           id: `obs_${index}_${itemCounter++}`,
-          text: cleanText,
+          text: cleanBullet.slice(0, 160),
           isTask: false,
           completed: false,
         });
       }
       continue;
-    }
-
-    // Also capture standalone non-empty lines if they look like actionable notes (and aren't YAML tags)
-    if (line.length > 8 && !line.startsWith('tags:') && !line.startsWith('created:') && !line.startsWith('```')) {
-      currentSection.items.push({
-        id: `obs_${index}_${itemCounter++}`,
-        text: line.slice(0, 160),
-        isTask: false,
-        completed: false,
-      });
     }
   }
 
@@ -218,7 +242,7 @@ function parseMarkdownFile(relativePath: string, content: string, index: number)
       items: [
         {
           id: `obs_${index}_fallback`,
-          text: `Review and execute note: ${title}`,
+          text: `Review & execute Second-Brain note: ${title}`,
           isTask: true,
           completed: false,
         },
@@ -226,11 +250,7 @@ function parseMarkdownFile(relativePath: string, content: string, index: number)
     });
   }
 
-  const rawSnippet = content
-    .replace(/[#*`>-]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 140);
+  const rawSnippet = cleanText(content.replace(/[#*`>|_-]/g, ' ')).slice(0, 120);
 
   return {
     id: `note_${index}_${Date.now()}`,
@@ -239,7 +259,7 @@ function parseMarkdownFile(relativePath: string, content: string, index: number)
     relativePath,
     suggestedTheme: detectTheme(topic, title, content),
     sections,
-    rawSnippet: rawSnippet || `Obsidian note inside ${topic}`,
+    rawSnippet: rawSnippet || `Second-Brain note in ${topic}`,
   };
 }
 
@@ -260,7 +280,7 @@ export function ObsidianVaultModal({
     } catch {
       // ignore
     }
-    return STARTER_VAULT_NOTES;
+    return SECOND_BRAIN_VAULT_NOTES;
   });
 
   const [selectedTopic, setSelectedTopic] = useState<string>('ALL');
@@ -448,11 +468,11 @@ export function ObsidianVaultModal({
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
                 <h2 className="text-base sm:text-lg font-cyber font-black tracking-wider text-[#00F0FF]">
-                  OBSIDIAN NEURAL SHARD // VAULT DIRECTIVE LINKER
+                  SECOND-BRAIN // OBSIDIAN VAULT LINKER (D:\vault\VYOM)
                 </h2>
               </div>
               <p className="text-xs font-tech text-slate-400 mt-0.5">
-                Step 1: Select a Topic &amp; Note &rarr; Step 2: Select what it contains &rarr; Arm 24/7 Email Schedule.
+                {notes.length} Notes Indexed &bull; Step 1: Select Topic &amp; Note &rarr; Step 2: Select Sub-Items &rarr; Arm 24/7 Email Schedule.
               </p>
             </div>
           </div>
@@ -465,10 +485,10 @@ export function ObsidianVaultModal({
                 folderInputRef.current?.click();
               }}
               className="px-3.5 py-2 bg-[#00F0FF]/15 border border-[#00F0FF] text-[#00F0FF] hover:bg-[#00F0FF]/25 cyber-cut text-xs font-cyber font-bold flex items-center gap-2 shadow-[0_0_12px_rgba(0,240,255,0.2)] transition-all"
-              title="Select D:\vault\VYOM or any local Obsidian Vault folder"
+              title="Re-sync D:\vault\VYOM after adding or editing notes in Obsidian"
             >
               <FolderOpen className="w-4 h-4" />
-              <span>SYNC VAULT FOLDER (D:\vault)</span>
+              <span>RE-SYNC D:\vault\VYOM</span>
             </button>
 
             <button
