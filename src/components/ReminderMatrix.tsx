@@ -14,6 +14,7 @@ import {
   Play,
   Pause,
   Plus,
+  FolderOpen,
 } from 'lucide-react';
 import { CyberVideoBtn } from './CyberVideoBtn';
 import { playCyberClick, playCyberAlert, playCyberGlitch } from '../cyberAudio';
@@ -22,6 +23,7 @@ interface ReminderMatrixProps {
   reminders: ReminderItem[];
   uiMode: UiMode;
   onAddClick: () => void;
+  onOpenObsidian?: () => void;
   onToggleStatus: (id: string, currentStatus: string) => void;
   onDelete: (id: string) => void;
   onTriggerNow: (reminder: ReminderItem) => void;
@@ -31,6 +33,7 @@ export function ReminderMatrix({
   reminders,
   uiMode,
   onAddClick,
+  onOpenObsidian,
   onToggleStatus,
   onDelete,
   onTriggerNow,
@@ -116,15 +119,32 @@ export function ReminderMatrix({
             ))}
           </div>
 
-          {/* New Reminder CTA */}
-          <CyberVideoBtn
-            onClick={onAddClick}
-            variant="yellow"
-            icon={<Plus className="w-4 h-4 stroke-[3]" />}
-            subtitle="24/7 AUTO-EMAIL DISPATCH"
-          >
-            {uiMode === 'serious' ? 'NEW REMINDER' : 'ADD TASK // LOCK IN'}
-          </CyberVideoBtn>
+          {/* Action CTAs: Obsidian Vault Sync & New Reminder */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {onOpenObsidian && (
+              <button
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  onOpenObsidian();
+                }}
+                className="px-4 py-2.5 bg-[#00F0FF]/15 hover:bg-[#00F0FF]/25 border-2 border-[#00F0FF] text-[#00F0FF] cyber-cut text-xs font-cyber font-black flex items-center gap-2 shadow-[0_0_15px_rgba(0,240,255,0.25)] transition-all"
+                title="Select Topic & Sub-Items from your Obsidian Vault (D:\vault\VYOM)"
+              >
+                <FolderOpen className="w-4 h-4" />
+                <span>OBSIDIAN VAULT</span>
+              </button>
+            )}
+
+            <CyberVideoBtn
+              onClick={onAddClick}
+              variant="yellow"
+              icon={<Plus className="w-4 h-4 stroke-[3]" />}
+              subtitle="24/7 AUTO-EMAIL DISPATCH"
+            >
+              {uiMode === 'serious' ? 'NEW REMINDER' : 'ADD TASK // LOCK IN'}
+            </CyberVideoBtn>
+          </div>
 
         </div>
 

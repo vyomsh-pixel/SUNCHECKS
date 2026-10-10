@@ -42,6 +42,7 @@ import { AddReminderModal } from './components/AddReminderModal';
 import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
 import { DaemonOutboxModal } from './components/DaemonOutboxModal';
 import { CyberTransmissionPortal } from './components/CyberTransmissionPortal';
+import { ObsidianVaultModal } from './components/ObsidianVaultModal';
 import { playCyberClick } from './cyberAudio';
 
 const GUEST_PROFILE: CyberProfile = {
@@ -110,6 +111,7 @@ export default function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isOutboxModalOpen, setIsOutboxModalOpen] = useState(false);
+  const [isObsidianModalOpen, setIsObsidianModalOpen] = useState(false);
   const [portalReminder, setPortalReminder] = useState<ReminderItem | null>(null);
 
   const handleCycleWallpaper = () => {
@@ -164,8 +166,9 @@ export default function App() {
   useEffect(() => {
     if (authRole) {
       refreshAll();
+      // 8GB RAM optimization: pause UI telemetry polling when tab is hidden
       const interval = setInterval(() => {
-        if (authRole === 'operator') {
+        if (authRole === 'operator' && !document.hidden) {
           fetchDaemonStatus().then(setDaemonStatus);
           fetchEmailLogs().then(setEmailLogs);
         }
@@ -326,6 +329,7 @@ export default function App() {
             reminders={reminders}
             uiMode={profile.uiMode}
             onAddClick={() => setIsAddModalOpen(true)}
+            onOpenObsidian={() => setIsObsidianModalOpen(true)}
             onToggleStatus={handleToggleReminderStatus}
             onDelete={handleDeleteReminder}
             onTriggerNow={handleTriggerNow}
@@ -435,6 +439,15 @@ export default function App() {
         uiMode={profile.uiMode}
         onOpenOutbox={() => setIsOutboxModalOpen(true)}
         onRefreshData={refreshAll}
+      />
+
+      {/* 9. Obsidian Vault Neural Shard Linker */}
+      <ObsidianVaultModal
+        isOpen={isObsidianModalOpen}
+        onClose={() => setIsObsidianModalOpen(false)}
+        onArmDirective={handleSaveReminder}
+        defaultEmail={profile.email}
+        uiMode={profile.uiMode}
       />
 
     </div>

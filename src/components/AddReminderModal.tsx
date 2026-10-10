@@ -128,6 +128,65 @@ export function AddReminderModal({
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4 font-hud">
           
+          {/* 0. 1-Click Quick Presets (Ease-of-Life) */}
+          <div>
+            <span className="block text-[10px] font-cyber uppercase text-slate-400 mb-1.5">
+              1-CLICK QUICK PRESETS:
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                {
+                  label: 'CERT STUDY SPRINT',
+                  title: 'Cloud Certification Module & Lab Practice',
+                  theme: 'cert' as ReminderTheme,
+                  desc: 'Complete 1 module, review architecture notes in Obsidian, and run 15 practice questions.',
+                  cadence: 'daily' as ReminderCadence,
+                  time: '10:00',
+                },
+                {
+                  label: 'INTERN STANDUP & PRs',
+                  title: 'Daily Standup Sync & Ticket Delivery',
+                  theme: 'work' as ReminderTheme,
+                  desc: 'Review open pull requests, update sprint ticket status, and clear high-priority blockers.',
+                  cadence: 'weekdays' as ReminderCadence,
+                  time: '09:30',
+                },
+                {
+                  label: 'PYTHON / DSA DRILL',
+                  title: 'Algorithm & Problem Solving Block',
+                  theme: 'cert' as ReminderTheme,
+                  desc: 'Solve 2 medium/hard problems and document time/space complexity in Obsidian vault.',
+                  cadence: 'daily' as ReminderCadence,
+                  time: '19:00',
+                },
+                {
+                  label: 'OBSIDIAN NIGHT REVIEW',
+                  title: 'Evening Obsidian Vault Sync & Next-Day Plan',
+                  theme: 'life' as ReminderTheme,
+                  desc: 'Check off completed tasks in D:\\vault\\VYOM and queue top 3 priorities for tomorrow.',
+                  cadence: 'daily' as ReminderCadence,
+                  time: '21:30',
+                },
+              ].map((preset) => (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => {
+                    playCyberClick();
+                    setTitle(preset.title);
+                    setTheme(preset.theme);
+                    setDescription(preset.desc);
+                    setCadence(preset.cadence);
+                    setTime(preset.time);
+                  }}
+                  className="px-2.5 py-1 bg-[#0B0E18] hover:bg-[#00F0FF]/15 border border-slate-700 hover:border-[#00F0FF] text-[10px] font-cyber text-[#00F0FF] cyber-cut transition-all"
+                >
+                  + {preset.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* 1. Theme / Topic Selector */}
           <div>
             <label className="block text-xs font-cyber uppercase text-slate-400 mb-2 flex items-center gap-2">
