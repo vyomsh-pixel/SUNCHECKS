@@ -51,7 +51,7 @@ interface ObsidianVaultModalProps {
   uiMode: UiMode;
 }
 
-const VAULT_STORAGE_KEY = 'cyberpulse_obsidian_vault_v2';
+const VAULT_STORAGE_KEY = 'cyberpulse_obsidian_vault_v3';
 
 function stripWikilinks(str: string): string {
   return str
