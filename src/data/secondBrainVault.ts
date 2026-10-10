@@ -16,18 +16,24 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "items": [
           {
             "id": "sb_0_0",
-            "text": "CyberPulse (SUNCHECKS) :: React 19 · Vite 6 · Neon PostgreSQL · Resend · Gemini 2.5 Flash :: Live on Vercel (sunchecks.vercel.app) · 24/7 Email Cron + 65-Note O",
+            "text": "CyberPulse (SUNCHECKS) :: React 19 · Vite 6 · Neon PostgreSQL · Resend · Gemini 2.5 Flash :: Live on Vercel (sunchecks.vercel.app) · 24/7 Email Cron + 68-Note O",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_1",
-            "text": "ForgeKit (SIH PS7) :: React 19 · Redux · Tailwind v4 · Vercel Serverless :: Live on Vercel (forge-kitv1.vercel.app) · Unified Full-Stack Build Clean :: Finalize",
+            "text": "NCPOR Antarctic Digital Twin (SIH Main) :: React · Express · Supabase Postgres · Open-Meteo · scikit-learn RandomForest :: Active Flagship (C:\\Users\\Vyom\\vibed\\",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_2",
+            "text": "ForgeKit (SIH PS7) :: React 19 · Redux · Tailwind v4 · Vercel Serverless :: Live on Vercel (forge-kitv1.vercel.app) · Unified Full-Stack Build Clean :: Finalize",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_0_3",
             "text": "Vedanta Website & Deliverables :: Next.js · WeasyPrint · Cursor :: Phase 1 Live · Phase 2 Pending :: Build mobile menu, enquiry form, Hindi toggle",
             "isTask": true,
             "completed": false
@@ -38,7 +44,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Tier 2: Non-Negotiable Daily Habit (1 Slot)",
         "items": [
           {
-            "id": "sb_0_3",
+            "id": "sb_0_4",
             "text": "Python Foundation Sprint :: AI/aiml(fromthestart) :: 30–45 mins daily, zero autocomplete (Scheduled via CyberPulse) :: Sprint Progress",
             "isTask": true,
             "completed": false
@@ -49,67 +55,73 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Tier 3: Production Suite & Staged Queue",
         "items": [
           {
-            "id": "sb_0_4",
+            "id": "sb_0_5",
             "text": "BandMate :: Live in Production (bandmate-main.vercel.app) :: 30 Studio Soundfonts (MusyngKite HD) + 2-Handed Piano Mode Live. Technical Context · Audit · 3-Phas",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_0_5",
+            "id": "sb_0_6",
             "text": "PocketLedger :: Live in Production (Pocket-Ledger) :: Mindful financial journal with deterministic integer-cent spending insights, Privacy Mode masking, and Fir",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_0_6",
-            "text": "Health.io :: Live on Vercel + Supabase Postgres :: Migrated to Vercel Serverless + Postgres (healthifyme-project) & Firebase Auth (healthio-13cb9) + Phase 2 BMI",
-            "isTask": true,
-            "completed": false
-          },
-          {
             "id": "sb_0_7",
-            "text": "Mercury Pneumatics :: Active Business Strategy :: Executive Sales Strategy & Management Master Guide (.docx generators)",
+            "text": "Health.io :: Live on Vercel + Supabase Postgres :: Migrated to Vercel Serverless + Postgres (healthifyme-project) & Firebase Auth (healthio-13cb9). Decision Fra",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_8",
-            "text": "SLM Factory :: Phase 2 Complete :: Next: Phase 3 Planner Agent (After SIH/Vedanta)",
+            "text": "PantryChef :: Staged for Personal Upgrade (pantry-chef) :: Retained in C:\\Users\\Vyom\\vibed\\pantry-chef to receive Vyom's signature UI & architecture overhaul",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_9",
-            "text": "PDF Notes Generator :: Live on Streamlit Cloud :: Dev Container added & sidebar API key masked (pdf-notes-generator) · Context Report",
+            "text": "IdeaForge :: Retained (ideaforge) :: Monorepo (pnpm + Express 5 + Drizzle + Gemini 2.5 Flash) cloned in C:\\Users\\Vyom\\vibed\\ideaforge",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_10",
-            "text": "Resume ATS Tool :: Masterplan & PRD Ready :: Architecture Masterplan · PRD · SRS",
+            "text": "PDF Notes Generator :: Live on Streamlit Cloud :: Dev Container added & sidebar API key masked (pdf-notes-generator) · Context Report",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_11",
-            "text": "Pneumatic House :: Freelance in Progress :: Logo done, complete site build",
+            "text": "Mercury Pneumatics :: Active Business Strategy :: Executive Sales Strategy & Management Master Guide (.docx generators)",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_12",
-            "text": "IdeaForge :: Paused :: v1 concept archived — Full arch doc updated",
+            "text": "SLM Factory :: Phase 2 Complete :: Next: Phase 3 Planner Agent (After SIH/Vedanta)",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_13",
-            "text": "Project 10K :: Paused :: Commerce catalogue app — WhatsApp ordering",
+            "text": "Resume ATS Tool :: Masterplan & PRD Ready :: Architecture Masterplan · PRD · SRS",
             "isTask": true,
             "completed": false
           },
           {
             "id": "sb_0_14",
+            "text": "Pneumatic House :: Freelance in Progress :: Logo done, complete site build",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_0_15",
+            "text": "Project 10K :: Paused :: Commerce catalogue app — WhatsApp ordering",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_0_16",
             "text": "API Experiments :: Archive :: Early LLM API scratchpad",
             "isTask": true,
             "completed": false
@@ -120,73 +132,73 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Knowledge Base & Studies",
         "items": [
           {
-            "id": "sb_0_15",
+            "id": "sb_0_17",
             "text": "Life Audit: 18th Year Strategic Life Audit & Rating (7.5/10)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_16",
+            "id": "sb_0_18",
             "text": "Microsoft SC-900 Security: Microsoft SC-900: Security & Compliance Concepts · 15-Min Video Master Prompt",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_17",
+            "id": "sb_0_19",
             "text": "AI Agents Study Prompts: NotebookLM Prompts — AI Agents & System Architecture",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_18",
+            "id": "sb_0_20",
             "text": "Agentic AI Engineering: Agentic AI Engineer — Quick Notebook Checklist",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_19",
+            "id": "sb_0_21",
             "text": "Cybersecurity Roadmap: Becoming Proper at Cybersecurity — Execution Roadmap",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_20",
+            "id": "sb_0_22",
             "text": "API Systems: API Master Report Master Note, API Master Report (12-Phase Curriculum)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_21",
+            "id": "sb_0_23",
             "text": "Certifications: Official Credentials Whitelist, Anthropic Notes",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_22",
+            "id": "sb_0_24",
             "text": "AIML Sprint: AIML From The Start – Foundational Scripts",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_23",
+            "id": "sb_0_25",
             "text": "Fluency: Fluency – AI Grading & Prompt Engineering Toolkit",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_24",
+            "id": "sb_0_26",
             "text": "Hardware Roadmap: Compute & Rig Upgrade Roadmap",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_25",
+            "id": "sb_0_27",
             "text": "Financial Engine: Freelance & Financial Playbook",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_26",
+            "id": "sb_0_28",
             "text": "Physical Calibration: Physical Health & Rhythm",
             "isTask": false,
             "completed": false
@@ -197,49 +209,49 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "AI Context Cards",
         "items": [
           {
-            "id": "sb_0_27",
+            "id": "sb_0_29",
             "text": "Antigravity (Anti - Lead Orchestrator)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_28",
+            "id": "sb_0_30",
             "text": "Vyom Profile & Working Style",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_29",
+            "id": "sb_0_31",
             "text": "CyberPulse (SUNCHECKS) Context Card",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_30",
+            "id": "sb_0_32",
             "text": "BandMate Context Card",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_31",
+            "id": "sb_0_33",
             "text": "Claude Context Card",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_32",
+            "id": "sb_0_34",
             "text": "Gemini Context Card",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_33",
+            "id": "sb_0_35",
             "text": "ChatGPT Context Card",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_34",
+            "id": "sb_0_36",
             "text": "Perplexity Context Card",
             "isTask": false,
             "completed": false
@@ -250,43 +262,49 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Archives & Logs",
         "items": [
           {
-            "id": "sb_0_35",
+            "id": "sb_0_37",
             "text": "CyberPulse Master Note · Technical Context · Context Report",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_0_36",
-            "text": "Vedanta Technologies Master Note · Internship Log",
-            "isTask": false,
-            "completed": false
-          },
-          {
-            "id": "sb_0_37",
-            "text": "Vibe Coded Archive",
-            "isTask": false,
-            "completed": false
-          },
-          {
             "id": "sb_0_38",
-            "text": "AI Studio Connection Log",
+            "text": "NCPOR Antarctic Digital Twin (Maitri & Bharati)",
             "isTask": false,
             "completed": false
           },
           {
             "id": "sb_0_39",
-            "text": "Daily Log (2026-10-10)",
+            "text": "Vedanta Technologies Master Note · Internship Log",
             "isTask": false,
             "completed": false
           },
           {
             "id": "sb_0_40",
-            "text": "Daily Log (2026-09-02)",
+            "text": "Vibe Coded Archive",
             "isTask": false,
             "completed": false
           },
           {
             "id": "sb_0_41",
+            "text": "AI Studio Connection Log",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_0_42",
+            "text": "Daily Log (2026-10-10)",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_0_43",
+            "text": "Daily Log (2026-09-02)",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_0_44",
             "text": "Daily Note Template",
             "isTask": false,
             "completed": false
@@ -4689,6 +4707,73 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
   },
   {
     "id": "sb_note_30",
+    "title": "PantryChef // Context Report Oct 2026",
+    "topic": "Projects",
+    "relativePath": "VYOM/Projects/PantryChef/Context_Report_Oct_2026.md",
+    "suggestedTheme": "work",
+    "sections": [
+      {
+        "heading": "Overview & Vision",
+        "items": [
+          {
+            "id": "sb_30_0",
+            "text": "Originally built as a fast Python/Flask + AI recipe generator (app.py, ai_client.py, db.py, tests/) for a friend's submission.",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_30_1",
+            "text": "Upcoming Personal Upgrade Goal: Strip out generic template patterns and rebuild with Vyom's signature engineering aesthetic, deterministic macro/ingredient matc",
+            "isTask": false,
+            "completed": false
+          }
+        ]
+      },
+      {
+        "heading": "Current Structure",
+        "items": [
+          {
+            "id": "sb_30_2",
+            "text": "app.py: Flask web server and route handlers.",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_30_3",
+            "text": "ai_client.py: LLM integration for recipe synthesis from available pantry ingredients.",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_30_4",
+            "text": "db.py: Database persistence layer.",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_30_5",
+            "text": "tests/: Automated unit tests.",
+            "isTask": false,
+            "completed": false
+          }
+        ]
+      },
+      {
+        "heading": "Related Notes",
+        "items": [
+          {
+            "id": "sb_30_6",
+            "text": "Second Brain Dashboard",
+            "isTask": false,
+            "completed": false
+          }
+        ]
+      }
+    ],
+    "rawSnippet": "PantryChef — AI Recipe & Ingredient Intelligence Local Workspace : C:\\Users\\Vyom\\vibed\\pantry chef GitHub Repository : v"
+  },
+  {
+    "id": "sb_note_31",
     "title": "PDF Notes Generator",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/PDF Notes Generator.md",
@@ -4698,31 +4783,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Architecture",
         "items": [
           {
-            "id": "sb_30_0",
+            "id": "sb_31_0",
             "text": "app.py — single file Streamlit app, 285 lines",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_1",
+            "id": "sb_31_1",
             "text": "split_into_chunks() — splits text at natural newline boundaries",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_2",
+            "id": "sb_31_2",
             "text": "call_api() — POST to OpenRouter with timeout=60, proper error handling",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_3",
+            "id": "sb_31_3",
             "text": "log_to_history() — session_state based history, no disk writes",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_4",
+            "id": "sb_31_4",
             "text": "Secrets via st.secrets[\"OPENROUTER_API_KEY\"] — never hardcoded",
             "isTask": false,
             "completed": false
@@ -4733,49 +4818,49 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Features built",
         "items": [
           {
-            "id": "sb_30_5",
+            "id": "sb_31_5",
             "text": "Notes mode — key points + concept definitions",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_6",
+            "id": "sb_31_6",
             "text": "Questions mode — 3/5/10 marks, evenly distributed",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_7",
+            "id": "sb_31_7",
             "text": "Chunked processing with progress bar",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_8",
+            "id": "sb_31_8",
             "text": "Merge + deduplication pass for notes",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_9",
+            "id": "sb_31_9",
             "text": "Download output as .txt",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_10",
+            "id": "sb_31_10",
             "text": "Session history in sidebar",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_11",
+            "id": "sb_31_11",
             "text": "Deployed on Streamlit Cloud",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_30_12",
+            "id": "sb_31_12",
             "text": "Pushed to GitHub",
             "isTask": true,
             "completed": true
@@ -4786,25 +4871,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Key decisions made",
         "items": [
           {
-            "id": "sb_30_13",
+            "id": "sb_31_13",
             "text": "OpenRouter free tier instead of paid Anthropic API — zero cost",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_14",
+            "id": "sb_31_14",
             "text": "mistral-7b-instruct pinned instead of openrouter/auto — stable, no surprises",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_15",
+            "id": "sb_31_15",
             "text": "temperature: 0.3 — low randomness for academic content",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_30_16",
+            "id": "sb_31_16",
             "text": "Session state for history instead of disk — Streamlit Cloud compatibility",
             "isTask": false,
             "completed": false
@@ -4815,7 +4900,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "PDF Notes Generator Status: Live URL: https://pdf notes generatorgit.streamlit.app GitHub: https://github.com/vyomsh pix"
   },
   {
-    "id": "sb_note_31",
+    "id": "sb_note_32",
     "title": "PDF Notes Generator // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/PDF Notes Generator/Context_Report_Aug_2026.md",
@@ -4825,67 +4910,67 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Timeline & Build (April–May 2026)",
         "items": [
           {
-            "id": "sb_31_0",
+            "id": "sb_32_0",
             "text": "Stack: Python / Streamlit app using pdfplumber + OpenRouter.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_1",
+            "id": "sb_32_1",
             "text": "Features:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_2",
+            "id": "sb_32_2",
             "text": "Chunked processing (12,000 chars/chunk at natural newline boundaries).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_3",
+            "id": "sb_32_3",
             "text": "Notes merge/deduplication.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_4",
+            "id": "sb_32_4",
             "text": "Question distribution across chunks.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_5",
+            "id": "sb_32_5",
             "text": "Temperature set to 0.3.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_6",
+            "id": "sb_32_6",
             "text": "Truncation warning & retry button.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_7",
+            "id": "sb_32_7",
             "text": "Markdown rendering & timestamped history logging.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_8",
+            "id": "sb_32_8",
             "text": "Deployment: Streamlit Community Cloud (API key in encrypted secrets vault).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_9",
+            "id": "sb_32_9",
             "text": "Repo: vyomsh-pixel/pdf-notes-generator",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_10",
+            "id": "sb_32_10",
             "text": "Documentation: Documented in a Word report submitted to an IIT senior.",
             "isTask": false,
             "completed": false
@@ -4896,7 +4981,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Next Steps",
         "items": [
           {
-            "id": "sb_31_11",
+            "id": "sb_32_11",
             "text": "Build Answer Evaluation System.",
             "isTask": true,
             "completed": false
@@ -4907,13 +4992,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_31_12",
+            "id": "sb_32_12",
             "text": "PDF Notes Generator Master Note",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_31_13",
+            "id": "sb_32_13",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -4924,7 +5009,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "PDF Study Assistant Compiled from memory log August 21, 2026 Timeline & Build (April–May 2026) Stack : Python / Streamli"
   },
   {
-    "id": "sb_note_32",
+    "id": "sb_note_33",
     "title": "Pneumatic House // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Pneumatic House/Context_Report_Aug_2026.md",
@@ -4934,13 +5019,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Client",
         "items": [
           {
-            "id": "sb_32_0",
+            "id": "sb_33_0",
             "text": "Business: Industrial pneumatic parts distributor (Vasai). Proprietor: Arun Sharma. Est. 2018.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_32_1",
+            "id": "sb_33_1",
             "text": "Terms: Flat fee ₹5,000, one-time build, no CMS/admin panel.",
             "isTask": false,
             "completed": false
@@ -4951,13 +5036,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Deliverables",
         "items": [
           {
-            "id": "sb_32_2",
+            "id": "sb_33_2",
             "text": "Logo: Bundled in. Went through several rounds. Winner: Metallic navy \"PH\" + gold flowing arrow + \"PNEUMATIC HOUSE\" wordmark. (Finalized around July 21).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_32_3",
+            "id": "sb_33_3",
             "text": "Website: Build is currently ongoing.",
             "isTask": false,
             "completed": false
@@ -4968,7 +5053,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Pneumatic House Mid July 2026 — Freelance Work Client Business : Industrial pneumatic parts distributor (Vasai). Proprie"
   },
   {
-    "id": "sb_note_33",
+    "id": "sb_note_34",
     "title": "PocketLedger // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/PocketLedger/Context_Report_Aug_2026.md",
@@ -4978,67 +5063,67 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "1. October 2026 Full-Stack Production Upgrade (C:\\Users\\Vyom\\vibed\\Pocket-Ledger)",
         "items": [
           {
-            "id": "sb_33_0",
+            "id": "sb_34_0",
             "text": "Repository: vyomsh-pixel/Pocket-Ledger",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_1",
+            "id": "sb_34_1",
             "text": "Philosophy: Mindful, grounded financial journal focused on clarity and calm bookkeeping. Accompanied by strict disclaimer: \"For informational and self-reflectio",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_2",
+            "id": "sb_34_2",
             "text": "Deterministic Spending Insights Engine (commit 12ab121):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_3",
+            "id": "sb_34_3",
             "text": "Uses integer-cent arithmetic (Math.round(amount * 100)) to eliminate floating-point drift.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_4",
+            "id": "sb_34_4",
             "text": "Generates neutral, practical spending observations with a month-keyed client cache.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_5",
+            "id": "sb_34_5",
             "text": "Privacy Mode & Keyboard Ergonomics (commit df3f479):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_6",
+            "id": "sb_34_6",
             "text": "Synchronous privacy initialization on boot, DOM text masking (••••) for balances/amounts, and safe keyboard shortcuts with input element focus guards.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_7",
+            "id": "sb_34_7",
             "text": "Security, Database & Auth Hardening (commit f1d44ca, bd5f65d, dbfe3cb):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_8",
+            "id": "sb_34_8",
             "text": "Enforced SECRET_KEY in production with ephemeral dev fallback and normalized API error shapes.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_9",
+            "id": "sb_34_9",
             "text": "Added DB_PATH with Vercel /tmp serverless SQLite fallback and Firebase Auth domain diagnostics.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_10",
+            "id": "sb_34_10",
             "text": "Full ARIA modal/table accessibility (aria-modal, htmlFor label bindings, isAuthOpen state).",
             "isTask": false,
             "completed": false
@@ -5049,25 +5134,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2. July 2026 Origin (Agile Software Engineering Course)",
         "items": [
           {
-            "id": "sb_33_11",
+            "id": "sb_34_11",
             "text": "Team: Farhan, Monish, Neelavanshi, Vyom.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_12",
+            "id": "sb_34_12",
             "text": "UML Topic Taught: Use Case Diagrams.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_13",
+            "id": "sb_34_13",
             "text": "Presentation: Built 10-slide PowerPoint (UseCaseDiagrams.pptx) using pptxgenjs. Covered components, relationship types, Online Food Ordering System example, use",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_14",
+            "id": "sb_34_14",
             "text": "Diagrams: Drawn in StarUML, prepped a board-drawable backup version.",
             "isTask": false,
             "completed": false
@@ -5078,13 +5163,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_33_15",
+            "id": "sb_34_15",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_33_16",
+            "id": "sb_34_16",
             "text": "18th Year Life Audit",
             "isTask": false,
             "completed": false
@@ -5095,7 +5180,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "PocketLedger — Mindful Financial Journal July – October 2026 — Evolved from Agile Software Engineering Course Project to"
   },
   {
-    "id": "sb_note_34",
+    "id": "sb_note_35",
     "title": "Project10K // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Project10K/Context_Report_Aug_2026.md",
@@ -5105,55 +5190,55 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "File Landscape",
         "items": [
           {
-            "id": "sb_34_0",
+            "id": "sb_35_0",
             "text": "app/ :: Next.js App Router pages",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_1",
+            "id": "sb_35_1",
             "text": "components/ :: React components (shadcn/ui base + custom)",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_2",
+            "id": "sb_35_2",
             "text": "components/ui/ :: Full shadcn/ui component library",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_3",
+            "id": "sb_35_3",
             "text": "hooks/ :: Custom React hooks (use-mobile, use-toast)",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_4",
+            "id": "sb_35_4",
             "text": "lib/catalogue-data.ts (4.7 KB) :: Product catalogue data — the core data source",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_5",
+            "id": "sb_35_5",
             "text": "lib/whatsapp.ts (0.4 KB) :: WhatsApp message generation for order flow",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_6",
+            "id": "sb_35_6",
             "text": "lib/utils.ts :: Shared utility functions",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_7",
+            "id": "sb_35_7",
             "text": "styles/globals.css (4.3 KB) :: Global styles + Tailwind config",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_8",
+            "id": "sb_35_8",
             "text": "openJdk-25/ :: OpenJDK 25 bundled in project folder — this is just a runtime download, not part of the app",
             "isTask": true,
             "completed": false
@@ -5164,19 +5249,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Architecture Note",
         "items": [
           {
-            "id": "sb_34_9",
+            "id": "sb_35_9",
             "text": "Standard Next.js App Router structure.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_34_10",
+            "id": "sb_35_10",
             "text": "WhatsApp ordering: likely generates a wa.me/?text=... link with order details.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_34_11",
+            "id": "sb_35_11",
             "text": "The openJdk-25/ directory is noise — a downloaded JDK sitting in the project folder, not part of the codebase.",
             "isTask": false,
             "completed": false
@@ -5187,19 +5272,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Next Steps",
         "items": [
           {
-            "id": "sb_34_12",
+            "id": "sb_35_12",
             "text": "Clarify current deployment status",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_13",
+            "id": "sb_35_13",
             "text": "Define the ₹10K/month revenue strategy",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_34_14",
+            "id": "sb_35_14",
             "text": "Remove openJdk-25/ from the project directory",
             "isTask": true,
             "completed": false
@@ -5210,7 +5295,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Project 10K – Commerce Platform / Catalogue App Location : C:\\Users\\vansh\\Desktop\\AI\\project10k Stack : Next.js · TypeSc"
   },
   {
-    "id": "sb_note_35",
+    "id": "sb_note_36",
     "title": "Resume ATS Tool // Architecture Masterplan",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Resume ATS Tool/Architecture_Masterplan.md",
@@ -5220,31 +5305,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "1. Competitive Landscape",
         "items": [
           {
-            "id": "sb_35_0",
+            "id": "sb_36_0",
             "text": "Jobscan: Keyword matcher. Pure matcher, no rewrite.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_1",
+            "id": "sb_36_1",
             "text": "Rezi: AI builder + metric score.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_2",
+            "id": "sb_36_2",
             "text": "Enhancv / Pikaresume: LLM critique + visual templates (which actually fail ATS parsing 30-45% of the time).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_3",
+            "id": "sb_36_3",
             "text": "Resume Matcher (Open Source): Parses + vector similarity via Qdrant. Closest open-source baseline.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_4",
+            "id": "sb_36_4",
             "text": "The Gap: Every commercial tool treats the score as a lead magnet and hides the fix. None show why the number is what it is.",
             "isTask": false,
             "completed": false
@@ -5255,13 +5340,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2. What \"ATS Scoring\" Actually Is",
         "items": [
           {
-            "id": "sb_35_5",
+            "id": "sb_36_5",
             "text": "Layer 1: The real ATS parser: Deterministic, rules-based text extraction (PyMuPDF, pdfplumber). Extracts text, reconstructs reading order, maps to fields.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_6",
+            "id": "sb_36_6",
             "text": "Layer 2: The LLM-based \"resume checker\": Soft, vendor-tunable prompt (\"Rate this 1-100\").",
             "isTask": false,
             "completed": false
@@ -5272,7 +5357,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Stage 1: Ingest",
         "items": [
           {
-            "id": "sb_35_7",
+            "id": "sb_36_7",
             "text": "Accept PDF/DOCX. Reject scanned images (require OCR).",
             "isTask": false,
             "completed": false
@@ -5283,19 +5368,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Stage 2: Parse (The Deterministic Core)",
         "items": [
           {
-            "id": "sb_35_8",
+            "id": "sb_36_8",
             "text": "PyMuPDF (fitz): Primary text extraction (reconstruct reading order).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_9",
+            "id": "sb_36_9",
             "text": "pdfplumber: Fallback/tables.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_10",
+            "id": "sb_36_10",
             "text": "Crucial: Use sort=True / layout=True to simulate real parser reading order.",
             "isTask": false,
             "completed": false
@@ -5306,19 +5391,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Stage 3: Structure (NER)",
         "items": [
           {
-            "id": "sb_35_11",
+            "id": "sb_36_11",
             "text": "Turn raw text into JSON schema.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_12",
+            "id": "sb_36_12",
             "text": "Approach 1: Classical NER (spaCy) for speed/cost.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_13",
+            "id": "sb_36_13",
             "text": "Approach 2: LLM fallback for messy resumes.",
             "isTask": false,
             "completed": false
@@ -5329,37 +5414,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Stage 4: Score (Deterministic + ML)",
         "items": [
           {
-            "id": "sb_35_14",
+            "id": "sb_36_14",
             "text": "Parseability: Rules-based.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_15",
+            "id": "sb_36_15",
             "text": "Section/Contact Completeness: Dictionary/Regex.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_16",
+            "id": "sb_36_16",
             "text": "Quantification Density: Regex.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_17",
+            "id": "sb_36_17",
             "text": "Weak Verbs: spaCy POS tagging.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_18",
+            "id": "sb_36_18",
             "text": "Semantic Relevance: sentence-transformers embeddings (local, no API cost).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_19",
+            "id": "sb_36_19",
             "text": "Bullet Quality: LLM judgment (Soft score).",
             "isTask": false,
             "completed": false
@@ -5370,7 +5455,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Stage 5: Advise",
         "items": [
           {
-            "id": "sb_35_20",
+            "id": "sb_36_20",
             "text": "Show specific rules/heuristics that flagged issues. Don't gate behind payments.",
             "isTask": false,
             "completed": false
@@ -5381,19 +5466,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "4. The Parseability Simulator (Crown Jewel Feature)",
         "items": [
           {
-            "id": "sb_35_21",
+            "id": "sb_36_21",
             "text": "Extract text exactly like an ATS.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_22",
+            "id": "sb_36_22",
             "text": "Show raw extracted text side-by-side with formatted resume.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_23",
+            "id": "sb_36_23",
             "text": "Flag risks: tables for layout, multi-column scrambling, text in headers.",
             "isTask": false,
             "completed": false
@@ -5404,37 +5489,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "5. Tech Stack",
         "items": [
           {
-            "id": "sb_35_24",
+            "id": "sb_36_24",
             "text": "Frontend: Next.js + TypeScript + Tailwind",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_25",
+            "id": "sb_36_25",
             "text": "Backend: FastAPI (Python)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_26",
+            "id": "sb_36_26",
             "text": "Database: Supabase Postgres",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_27",
+            "id": "sb_36_27",
             "text": "Parsing: PyMuPDF + pdfplumber",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_28",
+            "id": "sb_36_28",
             "text": "NLP/ML: spaCy, sentence-transformers (all-MiniLM-L6-v2)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_29",
+            "id": "sb_36_29",
             "text": "LLMs: Anthropic SDK (primary), OpenRouter (fallback)",
             "isTask": false,
             "completed": false
@@ -5445,13 +5530,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "6. LLM API Strategy",
         "items": [
           {
-            "id": "sb_35_30",
+            "id": "sb_36_30",
             "text": "Run bullet critique per-bullet, in parallel, with strict JSON schema output.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_31",
+            "id": "sb_36_31",
             "text": "Route cheap calls to OpenRouter, complex rewrites to Anthropic.",
             "isTask": false,
             "completed": false
@@ -5462,31 +5547,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "7. Build Phases",
         "items": [
           {
-            "id": "sb_35_32",
+            "id": "sb_36_32",
             "text": "Phase 0 (1-2 weeks): Validate core hypothesis. Parseability simulator only (Upload → raw text side-by-side). No LLM calls yet.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_33",
+            "id": "sb_36_33",
             "text": "Phase 1 (3-5 weeks): MVP scoring (Structure extraction + deterministic scores).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_34",
+            "id": "sb_36_34",
             "text": "Phase 2 (2-3 weeks): Semantic matching (sentence-transformers).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_35",
+            "id": "sb_36_35",
             "text": "Phase 3 (2-3 weeks): LLM-powered qualitative critique.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_36",
+            "id": "sb_36_36",
             "text": "Phase 4: Auto-rewrite / ATS-safe PDF export.",
             "isTask": false,
             "completed": false
@@ -5497,13 +5582,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Parent Context & Navigation",
         "items": [
           {
-            "id": "sb_35_37",
+            "id": "sb_36_37",
             "text": "Resume ATS Tool Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_35_38",
+            "id": "sb_36_38",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -5514,7 +5599,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Resume ATS Scoring & Parsing Tool — Research & Architecture Plan v0.1 · 2026 08 21 · Compiled for Vyom Sharma 0. The Goa"
   },
   {
-    "id": "sb_note_36",
+    "id": "sb_note_37",
     "title": "Resume ATS Tool // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Resume ATS Tool/Context_Report_Aug_2026.md",
@@ -5524,13 +5609,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Overview",
         "items": [
           {
-            "id": "sb_36_0",
+            "id": "sb_37_0",
             "text": "Goal: A production-grade, real ML/NLP-based resume ATS scorer/parser competing with Jobscan/Enhancv/Pikaresume.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_36_1",
+            "id": "sb_37_1",
             "text": "Differentiator: No LLM-wrapper shortcuts, no paywall despite premium quality bar.",
             "isTask": false,
             "completed": false
@@ -5541,19 +5626,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Planning",
         "items": [
           {
-            "id": "sb_36_2",
+            "id": "sb_37_2",
             "text": "Received a full research + architecture master plan (RESUME_ATS_TOOL_MASTER_PLAN.md).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_36_3",
+            "id": "sb_37_3",
             "text": "Architecture: Two-layer ATS explanation (deterministic parser vs. LLM critique).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_36_4",
+            "id": "sb_37_4",
             "text": "Status: 4-phase build plan drafted. Not yet started; scope still undecided.",
             "isTask": false,
             "completed": false
@@ -5564,25 +5649,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Deep Architecture & Specs",
         "items": [
           {
-            "id": "sb_36_5",
+            "id": "sb_37_5",
             "text": "Architecture Masterplan",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_36_6",
+            "id": "sb_37_6",
             "text": "Product Requirements Document (PRD)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_36_7",
+            "id": "sb_37_7",
             "text": "Software Requirements Specification (SRS)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_36_8",
+            "id": "sb_37_8",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -5593,7 +5678,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Resume ATS Tool Created: August 21, 2026 Overview Goal : A production grade, real ML/NLP based resume ATS scorer/parser "
   },
   {
-    "id": "sb_note_37",
+    "id": "sb_note_38",
     "title": "Resume ATS Tool // PRD",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Resume ATS Tool/PRD.md",
@@ -5603,67 +5688,67 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "3. Core Features (Phase 0 MVP)",
         "items": [
           {
-            "id": "sb_37_0",
+            "id": "sb_38_0",
             "text": "Document Upload: Support for PDF (primary) and DOCX (secondary). Max size 5MB.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_1",
+            "id": "sb_38_1",
             "text": "Verification View:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_2",
+            "id": "sb_38_2",
             "text": "Desktop: Side-by-side view (Original PDF vs. Raw Extracted Text).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_3",
+            "id": "sb_38_3",
             "text": "Mobile: Stacked toggle view to preserve usability on small viewports.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_4",
+            "id": "sb_38_4",
             "text": "Bi-Directional Traceability (Scroll Sync):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_5",
+            "id": "sb_38_5",
             "text": "Clicking a mangled text block in the extracted view must highlight the exact bounding box it came from in the PDF view.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_6",
+            "id": "sb_38_6",
             "text": "Deterministic Risk Flagging:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_7",
+            "id": "sb_38_7",
             "text": "Image-Only: Detect if the document is a scanned image (zero selectable text).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_8",
+            "id": "sb_38_8",
             "text": "Column Scrambling: Flag if multi-column layouts cause text to read across instead of down.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_9",
+            "id": "sb_38_9",
             "text": "Invisible Keywords: Detect and flag \"keyword stuffing\" (e.g., white text on a white background).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_10",
+            "id": "sb_38_10",
             "text": "Garbage Encoding: Flag if custom fonts lack ToUnicode tables (resulting in cid:12 output).",
             "isTask": false,
             "completed": false
@@ -5674,25 +5759,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "4. Out of Scope (For Phase 0)",
         "items": [
           {
-            "id": "sb_37_11",
+            "id": "sb_38_11",
             "text": "Any LLM API calls (no Anthropic/OpenRouter).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_12",
+            "id": "sb_38_12",
             "text": "Semantic matching against Job Descriptions (embeddings).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_13",
+            "id": "sb_38_13",
             "text": "AI rewriting suggestions.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_14",
+            "id": "sb_38_14",
             "text": "User accounts or saving resumes to a database.",
             "isTask": false,
             "completed": false
@@ -5703,13 +5788,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "5. Success Metrics",
         "items": [
           {
-            "id": "sb_37_15",
+            "id": "sb_38_15",
             "text": "A user can upload a resume and immediately understand if their layout is breaking extraction.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_16",
+            "id": "sb_38_16",
             "text": "Zero API cost per user (100% local Python extraction).",
             "isTask": false,
             "completed": false
@@ -5720,13 +5805,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Parent Context & Navigation",
         "items": [
           {
-            "id": "sb_37_17",
+            "id": "sb_38_17",
             "text": "Resume ATS Tool Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_37_18",
+            "id": "sb_38_18",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -5737,7 +5822,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Product Requirements Document (PRD) Project: Resume ATS Parseability Simulator (Phase 0) 1. Objective Build a determinis"
   },
   {
-    "id": "sb_note_38",
+    "id": "sb_note_39",
     "title": "Resume ATS Tool // SRS",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Resume ATS Tool/SRS.md",
@@ -5747,19 +5832,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "1. System Architecture",
         "items": [
           {
-            "id": "sb_38_0",
+            "id": "sb_39_0",
             "text": "Frontend: Next.js (React), TypeScript, Tailwind CSS. Single-page application.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_1",
+            "id": "sb_39_1",
             "text": "Backend: FastAPI (Python), Uvicorn. Stateless API.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_2",
+            "id": "sb_39_2",
             "text": "Parser Core: PyMuPDF (fitz) for primary PDF extraction, python-docx for Word.",
             "isTask": false,
             "completed": false
@@ -5770,19 +5855,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2.1 File Upload & Validation",
         "items": [
           {
-            "id": "sb_38_3",
+            "id": "sb_39_3",
             "text": "The frontend must provide a drag-and-drop zone accepting .pdf and .docx.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_4",
+            "id": "sb_39_4",
             "text": "The backend must reject files larger than 5MB with a 413 Payload Too Large error.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_5",
+            "id": "sb_39_5",
             "text": "The backend must validate magic bytes, not just the .pdf extension.",
             "isTask": false,
             "completed": false
@@ -5793,25 +5878,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2.2 Text Extraction",
         "items": [
           {
-            "id": "sb_38_6",
+            "id": "sb_39_6",
             "text": "The backend must process the PDF entirely in memory. It must NEVER save the file to disk using the user-provided filename to prevent directory traversal attacks",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_7",
+            "id": "sb_39_7",
             "text": "Extraction MUST use PyMuPDF's page.get_text(\"dict\") (block-level dictionary extraction) instead of just strings. This retains spatial coordinates (bounding boxe",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_8",
+            "id": "sb_39_8",
             "text": "DoS Mitigation: Parsing must be wrapped in a strict asyncio.wait_for timeout (e.g., 5 seconds) to prevent malicious \"decompression bomb\" PDFs from OOM-killing t",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_9",
+            "id": "sb_39_9",
             "text": "If total extracted text is < 50 chars, throw an OCR-required 422 Unprocessable Entity error.",
             "isTask": false,
             "completed": false
@@ -5822,19 +5907,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2.3 Response Formatting",
         "items": [
           {
-            "id": "sb_38_10",
+            "id": "sb_39_10",
             "text": "The API must return a JSON object containing:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_11",
+            "id": "sb_39_11",
             "text": "blocks: Array of text blocks with their {x0, y0, x1, y1} coordinates and text content.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_12",
+            "id": "sb_39_12",
             "text": "flags: Array of detected risk warnings (e.g., [\"White text on white background detected\"]).",
             "isTask": false,
             "completed": false
@@ -5845,19 +5930,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "3. Non-Functional Requirements",
         "items": [
           {
-            "id": "sb_38_13",
+            "id": "sb_39_13",
             "text": "Performance: The entire upload-to-display loop must take < 2.0 seconds.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_14",
+            "id": "sb_39_14",
             "text": "Privacy & Security: ZERO RETENTION. Files processed in RAM and immediately discarded. No PII is logged.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_15",
+            "id": "sb_39_15",
             "text": "Scalability: Handle concurrent uploads securely without blocking the event loop.",
             "isTask": false,
             "completed": false
@@ -5868,13 +5953,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Parent Context & Navigation",
         "items": [
           {
-            "id": "sb_38_16",
+            "id": "sb_39_16",
             "text": "Resume ATS Tool Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_38_17",
+            "id": "sb_39_17",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -5885,7 +5970,122 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Software Requirements Specification (SRS) Project: Resume ATS Parseability Simulator (Phase 0) 1. System Architecture Fr"
   },
   {
-    "id": "sb_note_39",
+    "id": "sb_note_40",
+    "title": "SIH Antarctica Polar Console // Context Report Oct 2026",
+    "topic": "Projects",
+    "relativePath": "VYOM/Projects/SIH Antarctica Polar Console/Context_Report_Oct_2026.md",
+    "suggestedTheme": "life",
+    "sections": [
+      {
+        "heading": "2. Architecture & Technical Stack",
+        "items": [
+          {
+            "id": "sb_40_0",
+            "text": "Frontend Console :: React + Vite + Framer Motion :: Glacial ice-blue & Antarctic basalt polar HUD palette, route code-splitting, animated HUD toast notification",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_40_1",
+            "text": "Digital Twin SCADA :: Interactive Dual Blueprints :: Live dual Maitri & Bharati station blueprints with interactive subsystem navigation and crisis telemetry sy",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_40_2",
+            "text": "Backend API :: Node.js + Express (backend/server.js) :: REST telemetry routes (apiRoutes.js), station state synchronization, and ML inference bridge",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_40_3",
+            "text": "Cloud Database :: Supabase PostgreSQL :: Persistent cloud storage for polar station logs, alerts, and subsystem metrics",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_40_4",
+            "text": "Live Weather Feed :: Open-Meteo Polar API :: Real-time Antarctic atmospheric, wind-chill, and temperature telemetry for Maitri & Bharati coordinates",
+            "isTask": true,
+            "completed": false
+          },
+          {
+            "id": "sb_40_5",
+            "text": "Predictive ML Engine :: Python + scikit-learn (RandomForest) :: Trained predictive maintenance model (train_model.py, predict.py, rf_maintenance_model.joblib, m",
+            "isTask": true,
+            "completed": false
+          }
+        ]
+      },
+      {
+        "heading": "3. Key Engineering Milestones",
+        "items": [
+          {
+            "id": "sb_40_6",
+            "text": "Complete NCPOR Antarctic Digital Twin Frontend (commit 43b3087): Full monitoring console for Maitri & Bharati stations.",
+            "isTask": true,
+            "completed": true
+          },
+          {
+            "id": "sb_40_7",
+            "text": "Dual SCADA Blueprints & Subsystem Links (commit dce07b5, b97cf9e): Vertical dual-station blueprints inside the Digital Twin hero panel with direct subsystem rou",
+            "isTask": true,
+            "completed": true
+          },
+          {
+            "id": "sb_40_8",
+            "text": "Supabase PostgreSQL & Open-Meteo Live Weather (commit 79fcc40): Cloud persistence and live Antarctic meteorological feeds.",
+            "isTask": true,
+            "completed": true
+          },
+          {
+            "id": "sb_40_9",
+            "text": "Simulation & Telemetry Fixes (commit bcf6abd, 5ca57a4): Fixed simulation double-delta drift, map tooltip clipping, station sync on mount, and dynamic dashboard ",
+            "isTask": true,
+            "completed": true
+          },
+          {
+            "id": "sb_40_10",
+            "text": "Polar Glacial Ice & Basalt Theme Overhaul (commit cb35f50, b7f27ab): High-contrast signal indicators and authentic Antarctic atmospheric palette.",
+            "isTask": true,
+            "completed": true
+          },
+          {
+            "id": "sb_40_11",
+            "text": "RandomForest Predictive Maintenance ML (commit 7b1dc45): End-to-end scikit-learn model training and live Express inference endpoint.",
+            "isTask": true,
+            "completed": true
+          }
+        ]
+      },
+      {
+        "heading": "Related Notes",
+        "items": [
+          {
+            "id": "sb_40_12",
+            "text": "ForgeKit (SIH PS7)",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_40_13",
+            "text": "Second Brain Dashboard",
+            "isTask": false,
+            "completed": false
+          },
+          {
+            "id": "sb_40_14",
+            "text": "Vyom Profile & Style",
+            "isTask": false,
+            "completed": false
+          }
+        ]
+      }
+    ],
+    "rawSnippet": "NCPOR Antarctic Digital Twin Platform — Maitri & Bharati Research Stations Joint SIH Flagship Project w/ Nikunj Purohit "
+  },
+  {
+    "id": "sb_note_41",
     "title": "SIH Hackathon 2026 // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/SIH Hackathon 2026/Context_Report_Aug_2026.md",
@@ -5895,13 +6095,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Problem Statement 7: ForgeKit (AI UI Studio & CMS)",
         "items": [
           {
-            "id": "sb_39_0",
+            "id": "sb_41_0",
             "text": "Product Overview: An intelligent design-to-code studio that turns natural language prompts and hand-drawn / digital wireframe uploads into interactive, responsi",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_1",
+            "id": "sb_41_1",
             "text": "Team Size: 6 members.",
             "isTask": false,
             "completed": false
@@ -5912,31 +6112,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Tech Stack & All-in-One Vercel Architecture (Oct 2026 Upgrade)",
         "items": [
           {
-            "id": "sb_39_2",
+            "id": "sb_41_2",
             "text": "Frontend: React 19, Vite, Tailwind CSS v4, React Router DOM v7.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_3",
+            "id": "sb_41_3",
             "text": "State Management: Redux Toolkit with custom cmsSlice.js for dynamic live element mutation and CSS overlay injection.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_4",
+            "id": "sb_41_4",
             "text": "Unified Full-Stack Vercel Deployment (commits 09c4eaa – 7e588a5):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_5",
+            "id": "sb_41_5",
             "text": "Configured all-in-one Vercel serverless architecture bundling backend dependencies in root package.json with vercel-build static output and BOM-free vercel.json",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_6",
+            "id": "sb_41_6",
             "text": "Backend Service: Node.js / Express serverless routes processing multipart wireframe images, vision analysis, and element schema delivery.",
             "isTask": false,
             "completed": false
@@ -5947,37 +6147,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Deliverable & Submission Checklist",
         "items": [
           {
-            "id": "sb_39_7",
+            "id": "sb_41_7",
             "text": "Studio shell & prompt/wireframe upload interface (GeneratePage.jsx).",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_39_8",
+            "id": "sb_41_8",
             "text": "Redux Toolkit dynamic CMS runtime (cmsSlice.js).",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_39_9",
+            "id": "sb_41_9",
             "text": "ErrorBoundary & DOM sanitization with dompurify.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_39_10",
+            "id": "sb_41_10",
             "text": "All-in-one full-stack Vercel serverless deployment (https://forge-kitv1.vercel.app/wireframe).",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_39_11",
+            "id": "sb_41_11",
             "text": "Finalize team presentation slide deck matching official SIH template.",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_39_12",
+            "id": "sb_41_12",
             "text": "Rehearse live demonstration walkthrough for the jury.",
             "isTask": true,
             "completed": false
@@ -5988,19 +6188,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_39_13",
+            "id": "sb_41_13",
             "text": "18th Year Life Audit (Active Focus)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_14",
+            "id": "sb_41_14",
             "text": "Main Dashboard",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_39_15",
+            "id": "sb_41_15",
             "text": "Vyom Profile & Style",
             "isTask": false,
             "completed": false
@@ -6011,7 +6211,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "SIH Internal Hackathon 2026 — ForgeKit Status: Live on Vercel Live App URL: https://forge kitv1.vercel.app/wireframe Git"
   },
   {
-    "id": "sb_note_40",
+    "id": "sb_note_42",
     "title": "SLM Factory // Context Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/SLM Factory/Context_Report_Aug_2026.md",
@@ -6021,25 +6221,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Architecture & Pinned Stack",
         "items": [
           {
-            "id": "sb_40_0",
+            "id": "sb_42_0",
             "text": "Frontend: Next.js 16.2.9 / React 19.2.7 (pinned against CVE-2025-66478 and CVE-2026-23870).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_40_1",
+            "id": "sb_42_1",
             "text": "Backend: FastAPI with async SQLAlchemy models.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_40_2",
+            "id": "sb_42_2",
             "text": "Database: PostgreSQL with structured project state tracking.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_40_3",
+            "id": "sb_42_3",
             "text": "Infrastructure: Docker Compose (docker compose up postgres redis).",
             "isTask": false,
             "completed": false
@@ -6050,49 +6250,49 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Phase 2: Scaffold Complete & Live-Verified",
         "items": [
           {
-            "id": "sb_40_4",
+            "id": "sb_42_4",
             "text": "SQLAlchemy models compile to exact DDL specification.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_5",
+            "id": "sb_42_5",
             "text": "Backend boots, initializes schemas, serves /health.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_6",
+            "id": "sb_42_6",
             "text": "POST /api/create-slm -> creates row in projects table.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_7",
+            "id": "sb_42_7",
             "text": "GET /api/projects/{id} -> returns realtime status, progress, current agent.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_8",
+            "id": "sb_42_8",
             "text": "GET /api/projects/{id}/download -> returns 409 conflict prior to completion.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_9",
+            "id": "sb_42_9",
             "text": "Validation errors (invalid model size) properly return 422.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_10",
+            "id": "sb_42_10",
             "text": "Frontend compiles without TypeScript errors across all routes (/, /build, /dashboard, /project/[id]).",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_40_11",
+            "id": "sb_42_11",
             "text": "Form submission on /build seamlessly redirects to /project/{id} with live polling.",
             "isTask": true,
             "completed": true
@@ -6103,19 +6303,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Next Roadmap Milestone: Phase 3 (Planner Agent)",
         "items": [
           {
-            "id": "sb_40_12",
+            "id": "sb_42_12",
             "text": "Connect OpenRouter / NVIDIA NIM API client inside backend worker.",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_40_13",
+            "id": "sb_42_13",
             "text": "Implement Agent 1 (Planner Agent) to turn form submissions into formal spec_json.",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_40_14",
+            "id": "sb_42_14",
             "text": "Validate synthetic dataset schema generation.",
             "isTask": true,
             "completed": false
@@ -6126,19 +6326,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_40_15",
+            "id": "sb_42_15",
             "text": "Hardware & Compute Roadmap",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_40_16",
+            "id": "sb_42_16",
             "text": "API Master Report (Phase 12 Multi-Agent)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_40_17",
+            "id": "sb_42_17",
             "text": "18th Year Life Audit (Project Triage)",
             "isTask": false,
             "completed": false
@@ -6149,7 +6349,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "SLM Factory Custom Small Language Model Training Platform Local Workspace: C:\\Users\\vansh\\Desktop\\vibe coded\\Slm iitmadr"
   },
   {
-    "id": "sb_note_41",
+    "id": "sb_note_43",
     "title": "Vedanta Technologies Website",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Vedanta Technologies Website.md",
@@ -6159,25 +6359,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Phase 1 — Official Internship (Completed )",
         "items": [
           {
-            "id": "sb_41_0",
+            "id": "sb_43_0",
             "text": "Web App (vedigitals.com): Homepage, 6 product category cards w/ WhatsApp direct CTAs (+91 8850848971), target industries, \"Why Choose Us\", responsive mobile nav",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_1",
+            "id": "sb_43_1",
             "text": "PDF Catalogue Engine: WeasyPrint HTML-to-PDF generator, 7-page technical product catalogue (v4), 5-page company profile PDF.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_2",
+            "id": "sb_43_2",
             "text": "Database Audit: Audited 49 companies, flagged Armstrong Robotics domain mismatch, issued data hygiene report.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_3",
+            "id": "sb_43_3",
             "text": "GeM Procurement: Tender analysis and bidding assessment on Government e-Marketplace.",
             "isTask": false,
             "completed": false
@@ -6188,19 +6388,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Phase 2 — Ongoing Personal & Executive Support (Active )",
         "items": [
           {
-            "id": "sb_41_4",
+            "id": "sb_43_4",
             "text": "Business Ghostwriting & Email Clarification: Drafting formal B2B client communications, supplier inquiries, and executive correspondence.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_5",
+            "id": "sb_43_5",
             "text": "Quotations (QT) & Purchase Orders (PO): Preparing client quotes (e.g., Vedanta_Quotation_Divija_Surgical_v3.xlsx), drafting POs for manufacturers, and managing ",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_6",
+            "id": "sb_43_6",
             "text": "Domain & Web Maintenance: Hostinger DNS, SSL & MX administration, minor copy edits and Next.js maintenance in Cursor.",
             "isTask": false,
             "completed": false
@@ -6211,19 +6411,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Build Errors & Fixes Resolved",
         "items": [
           {
-            "id": "sb_41_7",
+            "id": "sb_43_7",
             "text": "Vercel 'use client' directive boundaries — fixed.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_8",
+            "id": "sb_43_8",
             "text": "Raw <img> ESLint build errors — fixed.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_9",
+            "id": "sb_43_9",
             "text": "Stat Verification — replaced fabricated stats from initial v0 prototype with verified technical specs.",
             "isTask": false,
             "completed": false
@@ -6234,13 +6434,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_41_10",
+            "id": "sb_43_10",
             "text": "Vedanta Internship & Operations Log",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_41_11",
+            "id": "sb_43_11",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -6251,7 +6451,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Vedanta Technologies — Master Project Note Status: Active / Ongoing Operations & Web Lead URL: https://vedigitals.com Gi"
   },
   {
-    "id": "sb_note_42",
+    "id": "sb_note_44",
     "title": "Vedanta Technologies Website // Internship Report Aug 2026",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Vedanta Technologies Website/Internship_Report_Aug_2026.md",
@@ -6261,25 +6461,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Vedanta Technologies — Full Internship & Operations Log",
         "items": [
           {
-            "id": "sb_42_0",
+            "id": "sb_44_0",
             "text": "Company: Vedanta Technologies (Industrial Automation Components & Compressed Air Systems, Mumbai)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_1",
+            "id": "sb_44_1",
             "text": "Supervisor: Dinesh Verma (Co-Proprietor)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_2",
+            "id": "sb_44_2",
             "text": "Official Internship Period: June 23, 2026 – August 2026 | Stipend: ₹5,000/month",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_3",
+            "id": "sb_44_3",
             "text": "Current Engagement: Personal Operations Partner, Business Ghostwriter & Lead Web Developer",
             "isTask": false,
             "completed": false
@@ -6290,25 +6490,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Workflow & Execution Methodology",
         "items": [
           {
-            "id": "sb_42_4",
+            "id": "sb_44_4",
             "text": "Sprint Delivery: Shipped Phase 1 company website (vedigitals.com) on Next.js + Vercel within tight weekend deadlines.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_5",
+            "id": "sb_44_5",
             "text": "Tooling Evolution: Started initial prototyping on v0.dev (v0-vedanta-v1). Once free tier limits were reached, migrated 100% of development into Cursor.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_6",
+            "id": "sb_44_6",
             "text": "Stat Verification & Quality Audit: Audited early draft versions, caught fabricated company metrics (unverified years in business, partner counts), and replaced ",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_7",
+            "id": "sb_44_7",
             "text": "Cross-Functional Scope: Combined full-stack web engineering, HTML-to-PDF catalogue engines, database auditing, and government procurement analysis.",
             "isTask": false,
             "completed": false
@@ -6319,73 +6519,73 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Deliverables Shipped",
         "items": [
           {
-            "id": "sb_42_8",
+            "id": "sb_44_8",
             "text": "Production Website (vedigitals.com):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_9",
+            "id": "sb_44_9",
             "text": "Stack: Next.js (App Router), TypeScript, Tailwind CSS, Shadcn UI, Hostinger DNS, Vercel hosting.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_10",
+            "id": "sb_44_10",
             "text": "Design System: Ink Navy (#0b1420), Brass (#c8862f), Steel (#3d5a73). Fonts: Big Shoulders Display, IBM Plex Sans, IBM Plex Mono.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_11",
+            "id": "sb_44_11",
             "text": "Features: 6 core product category cards (Grippers, Vacuum Systems, Oil-Free Compressors, Rotary Screw Compressors, Sensors, Actuators) with direct WhatsApp CTAs",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_12",
+            "id": "sb_44_12",
             "text": "WeasyPrint PDF Engine & Print Media:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_13",
+            "id": "sb_44_13",
             "text": "Built custom HTML-to-PDF generator using WeasyPrint and asset extraction via pdfimages.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_14",
+            "id": "sb_44_14",
             "text": "Shipped 7-page technical product catalogue (v4) and 5-page corporate company profile PDF.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_15",
+            "id": "sb_44_15",
             "text": "B2B Contact Database Audit:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_16",
+            "id": "sb_44_16",
             "text": "Audited 49 target client companies (42 usable records, 7 blank).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_17",
+            "id": "sb_44_17",
             "text": "Flagged critical domain mismatch for Armstrong Robotics & Technologies (armstrongltd.com vs Nashik location) before outreach.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_18",
+            "id": "sb_44_18",
             "text": "Issued database quality audit report (5.5/10 quality rating with data hygiene roadmap).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_19",
+            "id": "sb_44_19",
             "text": "GeM Procurement:",
             "isTask": false,
             "completed": false
@@ -6396,13 +6596,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "1. Business Ghostwriting & Email Clarification",
         "items": [
           {
-            "id": "sb_42_20",
+            "id": "sb_44_20",
             "text": "Executive Ghostwriting: Drafting, refining, and clarifying formal B2B client communications, supplier inquiries, and executive correspondence.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_21",
+            "id": "sb_44_21",
             "text": "Technical Communication: Translating complex industrial automation specifications into clear, professional commercial proposals.",
             "isTask": false,
             "completed": false
@@ -6413,19 +6613,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2. Quotations (QT), Purchase Orders (PO) & Pricing Matrices",
         "items": [
           {
-            "id": "sb_42_22",
+            "id": "sb_44_22",
             "text": "Commercial Quotation Drafting (QT): Preparing client proposals and itemized quotes (e.g., Vedanta_Quotation_Divija_Surgical_v3.xlsx).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_23",
+            "id": "sb_44_23",
             "text": "Purchase Order Management (PO): Drafting formal Purchase Orders for multi-brand manufacturers (Gimatic grippers, air compressors, pneumatic valves).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_24",
+            "id": "sb_44_24",
             "text": "Price List Requirements: Structuring and maintaining standard pricing matrices, margins, and component specifications.",
             "isTask": false,
             "completed": false
@@ -6436,13 +6636,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "3. Domain Management & Web Maintenance",
         "items": [
           {
-            "id": "sb_42_25",
+            "id": "sb_44_25",
             "text": "Hostinger & DNS Administration: Managing domain routing, DNS records, MX mail configurations, and SSL certs for vedigitals.com.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_26",
+            "id": "sb_44_26",
             "text": "Ongoing Site Maintenance: Performing copy edits, UI enhancements, and feature tweaks in Cursor on the Next.js codebase.",
             "isTask": false,
             "completed": false
@@ -6453,19 +6653,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Resources & Local Paths",
         "items": [
           {
-            "id": "sb_42_27",
+            "id": "sb_44_27",
             "text": "Local Web Repository: D:/vedigitals",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_28",
+            "id": "sb_44_28",
             "text": "Master Project Note: D:/second-brain/Second-Brain/Projects/Vedanta Technologies Website.md",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_42_29",
+            "id": "sb_44_29",
             "text": "Quotations & Financials: D:/papa work by me",
             "isTask": false,
             "completed": false
@@ -6476,7 +6676,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Vedanta Technologies — Full Internship & Operations Log Company: Vedanta Technologies (Industrial Automation Components "
   },
   {
-    "id": "sb_note_43",
+    "id": "sb_note_45",
     "title": "Vibe Coded Archive",
     "topic": "Projects",
     "relativePath": "VYOM/Projects/Vibe_Coded_Archive.md",
@@ -6486,31 +6686,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Overview",
         "items": [
           {
-            "id": "sb_43_0",
+            "id": "sb_45_0",
             "text": "Health.io (healthio-clean, healthio.zip, backend_test_suite.py) — The older, pre-hardened versions.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_43_1",
+            "id": "sb_45_1",
             "text": "IdeaForge (ideaforge pnpm workspace) — The v1 concept.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_43_2",
+            "id": "sb_45_2",
             "text": "Vedanta (v0-vedanta-v1) — The initial v0.dev shipped version (which contained the fabricated stats you later caught).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_43_3",
+            "id": "sb_45_3",
             "text": "BandMate (bandmate-deploy)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_43_4",
+            "id": "sb_45_4",
             "text": "Misc API Tests (claude_babakijai.py, claude_savedmyass.py)",
             "isTask": false,
             "completed": false
@@ -6521,7 +6721,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "The Vibe Coded Graveyard Local Path: C:\\Users\\vansh\\Desktop\\vibe coded Overview This folder is the staging ground/archiv"
   },
   {
-    "id": "sb_note_44",
+    "id": "sb_note_46",
     "title": "Freelance and Financial Engine",
     "topic": "Resources",
     "relativePath": "VYOM/Resources/Freelance_and_Financial_Engine.md",
@@ -6531,19 +6731,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Active Income Streams",
         "items": [
           {
-            "id": "sb_44_0",
+            "id": "sb_46_0",
             "text": "Vedanta Technologies :: Web Dev, PDF Catalogues, GeM Bidding :: ₹5,000 monthly stipend :: Active (Phase 2)",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_44_1",
+            "id": "sb_46_1",
             "text": "Pneumatic House :: Vasai Industrial Distributor Web + Logo :: ₹5,000 fixed fee :: In Progress",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_44_2",
+            "id": "sb_46_2",
             "text": "Total Pneumatics :: Inventory Tooling & Co-Management :: Operational profit share :: Active",
             "isTask": true,
             "completed": false
@@ -6554,19 +6754,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Freelance Operating Rules",
         "items": [
           {
-            "id": "sb_44_3",
+            "id": "sb_46_3",
             "text": "50% Upfront Deposit: Never begin code or logo design without advance commitment.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_44_4",
+            "id": "sb_46_4",
             "text": "Fixed Scope Document: Strict boundaries on revisions. Any extra feature (e.g. dynamic admin CMS) is billed separately.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_44_5",
+            "id": "sb_46_5",
             "text": "Verified Content Policy: Never publish placeholder statistics or unverified claims for clients.",
             "isTask": false,
             "completed": false
@@ -6577,19 +6777,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_44_6",
+            "id": "sb_46_6",
             "text": "Vedanta Internship Report",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_44_7",
+            "id": "sb_46_7",
             "text": "Pneumatic House Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_44_8",
+            "id": "sb_46_8",
             "text": "18th Year Life Audit",
             "isTask": false,
             "completed": false
@@ -6600,7 +6800,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Freelance & Financial Engine Framework for student era financial independence and client engineering. Active Income Stre"
   },
   {
-    "id": "sb_note_45",
+    "id": "sb_note_47",
     "title": "Hardware Plan Aug 2026",
     "topic": "Resources",
     "relativePath": "VYOM/Resources/Hardware_Plan_Aug_2026.md",
@@ -6610,19 +6810,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Phase 1: Laptop Upgrade",
         "items": [
           {
-            "id": "sb_45_0",
+            "id": "sb_47_0",
             "text": "Decided Purchase: Acer Aspire Lite 15 (AL15-52H, i5-12450H, 16GB DDR4, ~₹50–57k).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_45_1",
+            "id": "sb_47_1",
             "text": "Reasoning: Daily-driver upgrade from aging 2014 i3-4030U Acer Aspire V3 (RAM upgrade impossible due to DDR3L unavailability).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_45_2",
+            "id": "sb_47_2",
             "text": "Note: The \"8GB shared VRAM\" is just Intel UHD integrated graphics borrowing RAM. No real local ML training value.",
             "isTask": false,
             "completed": false
@@ -6633,7 +6833,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Phase 2: SLM Factory Validation",
         "items": [
           {
-            "id": "sb_45_3",
+            "id": "sb_47_3",
             "text": "Use RunPod or Vast.ai to validate the SLM Factory pipeline before investing in dedicated hardware.",
             "isTask": false,
             "completed": false
@@ -6644,13 +6844,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Phase 3: Dedicated Desktop Rig",
         "items": [
           {
-            "id": "sb_45_4",
+            "id": "sb_47_4",
             "text": "Target: RTX 4060 8GB desktop.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_45_5",
+            "id": "sb_47_5",
             "text": "Purpose: Actual SLM training. Will be linked to the laptop over Tailscale + Ollama/vLLM. Gated behind SLM Factory validation.",
             "isTask": false,
             "completed": false
@@ -6661,7 +6861,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Hardware & Compute Roadmap August 14, 2026 Phase 1: Laptop Upgrade Decided Purchase : Acer Aspire Lite 15 (AL15 52H, i5 "
   },
   {
-    "id": "sb_note_46",
+    "id": "sb_note_48",
     "title": "Physical Health and Rhythm",
     "topic": "Resources",
     "relativePath": "VYOM/Resources/Physical_Health_and_Rhythm.md",
@@ -6671,19 +6871,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Core Training Pillars",
         "items": [
           {
-            "id": "sb_46_0",
+            "id": "sb_48_0",
             "text": "Core & Abdominal Focus: Daily 15-minute core circuit (planks, leg raises, crunches).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_46_1",
+            "id": "sb_48_1",
             "text": "Desk Ergonomics & Posture: Hourly posture reset (shoulder retractions, neck stretches) during extended coding sessions.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_46_2",
+            "id": "sb_48_2",
             "text": "Hydration: 3 Liters water daily.",
             "isTask": false,
             "completed": false
@@ -6694,13 +6894,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Sleep & Recovery Rhythm",
         "items": [
           {
-            "id": "sb_46_3",
+            "id": "sb_48_3",
             "text": "Sleep Floor: 7 hours non-negotiable sleep.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_46_4",
+            "id": "sb_48_4",
             "text": "Blue-Light Cutoff: Step away from active IDE screens 30 minutes before bed.",
             "isTask": false,
             "completed": false
@@ -6711,13 +6911,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_46_5",
+            "id": "sb_48_5",
             "text": "18th Year Life Audit",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_46_6",
+            "id": "sb_48_6",
             "text": "Vyom Profile & Style",
             "isTask": false,
             "completed": false
@@ -6728,7 +6928,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Physical Health & Energy Calibration Optimizing physical hardware to support intense cognitive and technical output. Cor"
   },
   {
-    "id": "sb_note_47",
+    "id": "sb_note_49",
     "title": "18th Year Life Audit and Rating",
     "topic": "Life",
     "relativePath": "VYOM/Life/18th_Year_Life_Audit_and_Rating.md",
@@ -6738,43 +6938,43 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Executive Scorecard: 7.5 / 10",
         "items": [
           {
-            "id": "sb_47_0",
+            "id": "sb_49_0",
             "text": "Technical Output & Velocity :: 9.0 / 10 :: Building at a 3rd-year CS level; shipping multi-service architectures. :: High Upward",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_1",
+            "id": "sb_49_1",
             "text": "Code Hygiene & Anti-Slop :: 9.5 / 10 :: Zero tolerance for AI hallucination; catching real bugs/fake stats pre-deploy. :: Elite Standard",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_2",
+            "id": "sb_49_2",
             "text": "Financial Independence :: 8.0 / 10 :: Multiple independent cashflows (internship + freelance + operations). :: Strong",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_3",
+            "id": "sb_49_3",
             "text": "Cognitive Load & Focus :: 5.0 / 10 :: Spread across 7+ concurrent open loops; finish-line bottleneck. :: High Risk",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_4",
+            "id": "sb_49_4",
             "text": "Team & Client Boundaries :: 6.5 / 10 :: Health.io ambiguity unresolved; client redesigns draining bandwidth. :: Needs Action",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_5",
+            "id": "sb_49_5",
             "text": "Health, Rhythm & Recovery :: 6.0 / 10 :: High output lacking structured sleep/fitness tracking beyond abs routine. :: Needs System",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_6",
+            "id": "sb_49_6",
             "text": "Trust & Verification Hygiene :: 7.5 / 10 :: Promptly caught resume cert incident; strict verification protocol needed. :: Stabilizing",
             "isTask": true,
             "completed": false
@@ -6785,25 +6985,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "1. Technical Execution & Real-World Shipping",
         "items": [
           {
-            "id": "sb_47_7",
+            "id": "sb_49_7",
             "text": "Paid Industry Deliverables: Shipped live production assets for Vedanta Technologies (catalogue generator via WeasyPrint, Next.js site at vedigitals.com, GeM pro",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_8",
+            "id": "sb_49_8",
             "text": "Deep Architecture: SLM Factory has moved beyond idea stage into a verified Phase 2 scaffold (Next.js 16 + FastAPI + PostgreSQL + Redis + Docker Compose).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_9",
+            "id": "sb_49_9",
             "text": "Live Deployed Tools: PDF Notes Generator is live and serving users on Streamlit Cloud with custom chunking and two-pass summarization.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_10",
+            "id": "sb_49_10",
             "text": "Hackathon Competitiveness: Finalized SIH 2026 PS7 (AI UI generator from wireframes with Redux dynamic CMS).",
             "isTask": false,
             "completed": false
@@ -6814,19 +7014,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2. The Anti-Slop Engineering Mindset",
         "items": [
           {
-            "id": "sb_47_11",
+            "id": "sb_49_11",
             "text": "In Health.io, you caught fake statistics, scrypt password gaps, and MIME-type bugs before production.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_12",
+            "id": "sb_49_12",
             "text": "You maintain a strict no-autocomplete anchor rule in your Python Foundation Sprint, forcing deep understanding of foundational algorithms rather than surface co",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_13",
+            "id": "sb_49_13",
             "text": "You actively audit and purge boilerplate from your repositories.",
             "isTask": false,
             "completed": false
@@ -6837,19 +7037,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "3. Financial Agency & Commercial Instincts",
         "items": [
           {
-            "id": "sb_47_14",
+            "id": "sb_49_14",
             "text": "₹5,000 internship stipend + GeM analysis at Vedanta Technologies.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_15",
+            "id": "sb_49_15",
             "text": "₹5,000 fixed-fee client project with logo branding for Pneumatic House.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_16",
+            "id": "sb_49_16",
             "text": "Operational tooling and inventory management for Total Pneumatics.",
             "isTask": false,
             "completed": false
@@ -6860,49 +7060,49 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "1. The Volume vs. Depth Dilemma (The 1 Blocker)",
         "items": [
           {
-            "id": "sb_47_17",
+            "id": "sb_49_17",
             "text": "SLM Factory (Scaffold done, needs Planner Agent)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_18",
+            "id": "sb_49_18",
             "text": "Resume ATS Tool (PRD & Masterplan ready, pending build)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_19",
+            "id": "sb_49_19",
             "text": "IdeaForge (v1 concept on pause)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_20",
+            "id": "sb_49_20",
             "text": "Health.io (Team ambiguity)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_21",
+            "id": "sb_49_21",
             "text": "Vedanta Technologies Website (Phase 2 pending)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_22",
+            "id": "sb_49_22",
             "text": "SIH Hackathon 2026 (Internal submission stage)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_23",
+            "id": "sb_49_23",
             "text": "BandMate (Archived / deploy stage)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_24",
+            "id": "sb_49_24",
             "text": "Python Foundation Sprint (Daily anchor drill)",
             "isTask": false,
             "completed": false
@@ -6913,19 +7113,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "2. The Health.io Open-Loop Friction",
         "items": [
           {
-            "id": "sb_47_25",
+            "id": "sb_49_25",
             "text": "You are doing heavy lifting on the backend while your partner's commitment fluctuates.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_26",
+            "id": "sb_49_26",
             "text": "Unresolved ambiguity consumes background mental energy.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_27",
+            "id": "sb_49_27",
             "text": "Decision required: Execute the Strategic Decision Framework. If the joint team doesn't ship by the deadline, convert your backend into your standalone portfolio",
             "isTask": false,
             "completed": false
@@ -6936,13 +7136,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "3. Physical Calibration & Recovery Deficit",
         "items": [
           {
-            "id": "sb_47_28",
+            "id": "sb_49_28",
             "text": "Coding marathons without matched sleep, ergonomics, and physical training create a compounding debt.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_29",
+            "id": "sb_49_29",
             "text": "See Physical Health & Rhythm Plan for actionable daily calibration.",
             "isTask": false,
             "completed": false
@@ -6953,37 +7153,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Concrete Action Matrix for Next 30 Days",
         "items": [
           {
-            "id": "sb_47_30",
+            "id": "sb_49_30",
             "text": "Close Vedanta Phase 2: Implement mobile menu, enquiry form, Hindi toggle; invoice final balance.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_47_31",
+            "id": "sb_49_31",
             "text": "Submit SIH PS7: Polish wireframe-to-UI preview flow with Redux CMS; finalize slide deck.",
             "isTask": true,
             "completed": true
           },
           {
-            "id": "sb_47_32",
+            "id": "sb_49_32",
             "text": "Resolve Health.io: Execute 7-day ultimatum or spin backend into standalone healthapp.",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_33",
+            "id": "sb_49_33",
             "text": "Protect Daily Python Anchor: 30–45 mins daily without IDE autocomplete in aiml(fromthestart).",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_34",
+            "id": "sb_49_34",
             "text": "Implement Sleep & Physical Rhythm: 7h sleep floor, daily posture stretches, regular training.",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_47_35",
+            "id": "sb_49_35",
             "text": "Promote SLM Factory to Tier 1: Only when Tier 1 slots open up.",
             "isTask": true,
             "completed": false
@@ -6994,37 +7194,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_47_36",
+            "id": "sb_49_36",
             "text": "Main Second Brain Dashboard",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_37",
+            "id": "sb_49_37",
             "text": "Vyom Profile & Work Style",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_38",
+            "id": "sb_49_38",
             "text": "Freelance & Financial Engine",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_39",
+            "id": "sb_49_39",
             "text": "Physical Health & Rhythm Plan",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_40",
+            "id": "sb_49_40",
             "text": "SLM Factory Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_47_41",
+            "id": "sb_49_41",
             "text": "SIH Hackathon 2026",
             "isTask": false,
             "completed": false
@@ -7035,7 +7235,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "18th Year Life Audit: The Honest Diagnostic Generated: August 27, 2026 Age: 18 Baseline Rating: 7.5 / 10 Executive Score"
   },
   {
-    "id": "sb_note_48",
+    "id": "sb_note_50",
     "title": "2026-05-19",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-05-19.md",
@@ -7045,31 +7245,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I did",
         "items": [
           {
-            "id": "sb_48_0",
+            "id": "sb_50_0",
             "text": "Built a complete prompt evaluation pipeline from scratch, adapted from the Anthropic course to run on OpenRouter's free tier using the OpenAI Python SDK",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_1",
+            "id": "sb_50_1",
             "text": "Constructed core helper functions: user_message, assistant_message, and chat",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_2",
+            "id": "sb_50_2",
             "text": "Generated a 3-task evaluation dataset of AWS-related tasks (Python functions, JSON IAM policies, Regex) and saved to dataset.json",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_3",
+            "id": "sb_50_3",
             "text": "Built run_prompt, run_test_case, and run_eval functions",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_4",
+            "id": "sb_50_4",
             "text": "Implemented a model-based grader using structured JSON evaluation — outputs strengths, weaknesses, reasoning, and a numeric score",
             "isTask": false,
             "completed": false
@@ -7080,31 +7280,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I learned",
         "items": [
           {
-            "id": "sb_48_5",
+            "id": "sb_50_5",
             "text": "Debugging recursive functions — the generate_dataset function had a self-calling bug",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_6",
+            "id": "sb_50_6",
             "text": "Variable assignment vs function calls — user_message = (messages, prompt) was wrong, should've been a call",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_7",
+            "id": "sb_50_7",
             "text": "Free-tier instability handling: empty responses, 429 rate limits, truncated JSON from low max_tokens, model unavailability",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_8",
+            "id": "sb_50_8",
             "text": "Unified retry-backoff mechanism in chat() to handle all free-tier failures gracefully",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_9",
+            "id": "sb_50_9",
             "text": "Switched to openrouter/free as the stable fallback model",
             "isTask": false,
             "completed": false
@@ -7115,19 +7315,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_48_10",
+            "id": "sb_50_10",
             "text": "Pipeline runs end-to-end",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_11",
+            "id": "sb_50_11",
             "text": "Final baseline average score: ~7.3–7.67",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_12",
+            "id": "sb_50_12",
             "text": "Fixed multiple foundational bugs through systematic debugging",
             "isTask": false,
             "completed": false
@@ -7138,13 +7338,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Blockers",
         "items": [
           {
-            "id": "sb_48_13",
+            "id": "sb_50_13",
             "text": "OpenRouter free tier is unstable — empty responses and 429s were a recurring pain",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_48_14",
+            "id": "sb_50_14",
             "text": "Low max_tokens caused truncated JSON from the grader",
             "isTask": false,
             "completed": false
@@ -7155,7 +7355,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 05 19 Projects active API Course (Prompt Evaluation Pipeline) What I did Built a complete prompt evaluation pipelin"
   },
   {
-    "id": "sb_note_49",
+    "id": "sb_note_51",
     "title": "2026-05-20",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-05-20.md",
@@ -7165,37 +7365,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I did",
         "items": [
           {
-            "id": "sb_49_0",
+            "id": "sb_51_0",
             "text": "Started with a broken lordsaveme.py that crashed on malformed JSON from the grader model",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_1",
+            "id": "sb_51_1",
             "text": "Diagnosed root cause: the nemotron reasoning model returning mixed brackets and split JSON objects",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_2",
+            "id": "sb_51_2",
             "text": "Implemented a two-layer fix using json_repair with retry logic",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_3",
+            "id": "sb_51_3",
             "text": "Rebuilt the architecture into a cleaner grader.py — iterated through 3 versions: single-model → dual-model → combined build",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_4",
+            "id": "sb_51_4",
             "text": "Final build uses llama-3.3-70b as primary with openrouter/free as intelligent fallback",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_5",
+            "id": "sb_51_5",
             "text": "Added time.sleep(30) on 429 rate limit errors and instant fallback switching on 404s",
             "isTask": false,
             "completed": false
@@ -7206,25 +7406,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I learned",
         "items": [
           {
-            "id": "sb_49_6",
+            "id": "sb_51_6",
             "text": "json_repair library — fixes malformed JSON (mixed brackets, split objects) that standard json.loads can't handle",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_7",
+            "id": "sb_51_7",
             "text": "How to architect a dual-model pipeline with graceful fallback logic",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_8",
+            "id": "sb_51_8",
             "text": "Difference between a 429 (rate limit, wait and retry) vs 404 (model unavailable, switch immediately)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_9",
+            "id": "sb_51_9",
             "text": "The nemotron reasoning model is unreliable for structured JSON output",
             "isTask": false,
             "completed": false
@@ -7235,19 +7435,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_49_10",
+            "id": "sb_51_10",
             "text": "grader.py runs end-to-end",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_11",
+            "id": "sb_51_11",
             "text": "Scores AWS tasks 1–10 and saves to results.json",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_49_12",
+            "id": "sb_51_12",
             "text": "Went from completely broken pipeline to production-stable in one session",
             "isTask": false,
             "completed": false
@@ -7258,7 +7458,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Blockers",
         "items": [
           {
-            "id": "sb_49_13",
+            "id": "sb_51_13",
             "text": "Nemotron model's mixed-bracket JSON output was the trickiest bug of the week",
             "isTask": false,
             "completed": false
@@ -7269,7 +7469,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 05 20 Projects active API Course (LLM as Judge Evaluation Pipeline) What I did Started with a broken lordsaveme.py "
   },
   {
-    "id": "sb_note_50",
+    "id": "sb_note_52",
     "title": "2026-05-21",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-05-21.md",
@@ -7279,43 +7479,43 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I did",
         "items": [
           {
-            "id": "sb_50_0",
+            "id": "sb_52_0",
             "text": "Built a code-based grading layer on top of the existing evaluation pipeline",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_1",
+            "id": "sb_52_1",
             "text": "System assesses AI-generated solutions for AWS tasks across 3 formats: Python, JSON, and Regex",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_2",
+            "id": "sb_52_2",
             "text": "Pipeline works in 3 stages:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_3",
+            "id": "sb_52_3",
             "text": "Dynamic dataset generation — each task tagged with expected format",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_4",
+            "id": "sb_52_4",
             "text": "Task model solves each problem",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_5",
+            "id": "sb_52_5",
             "text": "Two independent graders evaluate: model-based (correctness + reasoning) + syntax validator (does it actually parse?)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_6",
+            "id": "sb_52_6",
             "text": "Both scores averaged into a final result, saved to results.json",
             "isTask": false,
             "completed": false
@@ -7326,19 +7526,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I learned",
         "items": [
           {
-            "id": "sb_50_7",
+            "id": "sb_52_7",
             "text": "Why dual grading matters: a model-only grader can miss syntactically broken code that \"sounds\" correct",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_8",
+            "id": "sb_52_8",
             "text": "How to write a syntax validator for Python (compile/exec), JSON (json.loads), and Regex (re.compile)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_9",
+            "id": "sb_52_9",
             "text": "Tagging dataset entries with expected format type enables format-aware grading logic",
             "isTask": false,
             "completed": false
@@ -7349,13 +7549,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_50_10",
+            "id": "sb_52_10",
             "text": "Caught a real failure mode that a single grader would miss completely",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_50_11",
+            "id": "sb_52_11",
             "text": "Clean modular architecture — each grader is independent and composable",
             "isTask": false,
             "completed": false
@@ -7366,7 +7566,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Blockers",
         "items": [
           {
-            "id": "sb_50_12",
+            "id": "sb_52_12",
             "text": "None major today",
             "isTask": false,
             "completed": false
@@ -7377,7 +7577,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 05 21 Projects active API Course (Code Based Grading System) What I did Built a code based grading layer on top of "
   },
   {
-    "id": "sb_note_51",
+    "id": "sb_note_53",
     "title": "2026-05-22",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-05-22.md",
@@ -7387,55 +7587,55 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I did",
         "items": [
           {
-            "id": "sb_51_0",
+            "id": "sb_53_0",
             "text": "Full company research on OpportuneHR: product, leadership, 4 solution pillars, industries served, key metrics",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_1",
+            "id": "sb_53_1",
             "text": "Built answers for every expected interview round — intro to closing question",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_2",
+            "id": "sb_53_2",
             "text": "Iterated each answer multiple times, adjusting tone from formal → natural and human",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_3",
+            "id": "sb_53_3",
             "text": "Removed anything not personally owned or built (kept answers authentic)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_4",
+            "id": "sb_53_4",
             "text": "Ran a live mock round — scored 9–10 on every question",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_5",
+            "id": "sb_53_5",
             "text": "Applied minor fixes on the go during the mock",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_6",
+            "id": "sb_53_6",
             "text": "Identified website-heavy questions based on HR intel",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_7",
+            "id": "sb_53_7",
             "text": "Added bonus knowledge: leadership names, CuckooTech, FirstHRServices, MyPayrollBuddy, 5E model",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_8",
+            "id": "sb_53_8",
             "text": "Created a full final cheatsheet + 30-second revision",
             "isTask": false,
             "completed": false
@@ -7446,19 +7646,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I learned",
         "items": [
           {
-            "id": "sb_51_9",
+            "id": "sb_53_9",
             "text": "How to research a company fast and build a targeted knowledge base before an interview",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_10",
+            "id": "sb_53_10",
             "text": "Tone calibration — formal answers don't land the same as natural, human ones",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_11",
+            "id": "sb_53_11",
             "text": "Only talk about what you actually built and own — interviewers see through puffed answers",
             "isTask": false,
             "completed": false
@@ -7469,13 +7669,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_51_12",
+            "id": "sb_53_12",
             "text": "9–10 on every mock question",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_51_13",
+            "id": "sb_53_13",
             "text": "Walked in prepared and calm",
             "isTask": false,
             "completed": false
@@ -7486,7 +7686,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Blockers",
         "items": [
           {
-            "id": "sb_51_14",
+            "id": "sb_53_14",
             "text": "None",
             "isTask": false,
             "completed": false
@@ -7497,7 +7697,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 05 22 Projects active Interview Prep — OpportuneHR What I did Full company research on OpportuneHR: product, leader"
   },
   {
-    "id": "sb_note_52",
+    "id": "sb_note_54",
     "title": "2026-05-23",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-05-23.md",
@@ -7507,31 +7707,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I did",
         "items": [
           {
-            "id": "sb_52_0",
+            "id": "sb_54_0",
             "text": "Audited 49 companies in the contact database",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_1",
+            "id": "sb_54_1",
             "text": "Identified 42 entries with usable data, 7 completely blank entries",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_2",
+            "id": "sb_54_2",
             "text": "Flagged Armstrong Robotics & Technologies as a critical domain mismatch (armstrongltd.com doesn't match registered name or Nashik location)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_3",
+            "id": "sb_54_3",
             "text": "Documented structural weaknesses: 11 missing phone numbers, 14 missing emails, no website column, personal emails (rediffmail), inconsistent phone formatting, z",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_4",
+            "id": "sb_54_4",
             "text": "Generated a formal audit summary report",
             "isTask": false,
             "completed": false
@@ -7542,19 +7742,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I learned",
         "items": [
           {
-            "id": "sb_52_5",
+            "id": "sb_54_5",
             "text": "What makes a B2B contact database \"production-ready\" vs internal reference only",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_6",
+            "id": "sb_54_6",
             "text": "How to spot domain mismatches and why they matter for outreach",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_7",
+            "id": "sb_54_7",
             "text": "Structural database hygiene: consistent formatting, verified timestamps, no personal emails",
             "isTask": false,
             "completed": false
@@ -7565,13 +7765,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_52_8",
+            "id": "sb_54_8",
             "text": "Clean audit report delivered",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_52_9",
+            "id": "sb_54_9",
             "text": "Caught the Armstrong domain mismatch before it caused a bad outreach",
             "isTask": false,
             "completed": false
@@ -7582,7 +7782,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Blockers",
         "items": [
           {
-            "id": "sb_52_10",
+            "id": "sb_54_10",
             "text": "7 companies have zero online presence — may need manual verification or removal",
             "isTask": false,
             "completed": false
@@ -7593,7 +7793,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 05 23 Projects active Vedanta Technologies — Company Contact Database Audit What I did Audited 49 companies in the "
   },
   {
-    "id": "sb_note_53",
+    "id": "sb_note_55",
     "title": "2026-05-24",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-05-24.md",
@@ -7603,13 +7803,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I did",
         "items": [
           {
-            "id": "sb_53_0",
+            "id": "sb_55_0",
             "text": "Took a break, spent time away from screens",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_53_1",
+            "id": "sb_55_1",
             "text": "Some typing / light activity",
             "isTask": false,
             "completed": false
@@ -7620,7 +7820,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_53_2",
+            "id": "sb_55_2",
             "text": "Rest is part of the system too",
             "isTask": false,
             "completed": false
@@ -7631,7 +7831,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Blockers",
         "items": [
           {
-            "id": "sb_53_3",
+            "id": "sb_55_3",
             "text": "None",
             "isTask": false,
             "completed": false
@@ -7642,7 +7842,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 05 24 — 2026 05 25 Projects active Rest days — vacation What I did Took a break, spent time away from screens Some "
   },
   {
-    "id": "sb_note_54",
+    "id": "sb_note_56",
     "title": "2026-09-02",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-09-02.md",
@@ -7652,7 +7852,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Projects Active",
         "items": [
           {
-            "id": "sb_54_0",
+            "id": "sb_56_0",
             "text": "BandMate — Intelligent Song Composition & Chord Studio",
             "isTask": false,
             "completed": false
@@ -7663,73 +7863,73 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I Did",
         "items": [
           {
-            "id": "sb_54_1",
+            "id": "sb_56_1",
             "text": "Sidebar Elimination & Desktop Space Recovery: Replaced the permanent 224px left sidebar with a top-left Studio Dropdown Menu (BandMate · Song Lab ▾), giving the",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_2",
+            "id": "sb_56_2",
             "text": "Mobile UX Overhaul (Anti-Clutter Redesign):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_3",
+            "id": "sb_56_3",
             "text": "Eliminated the top-bar header collision by replacing 4 separate Key/Transpose buttons with a single compact popover badge ([ C maj ▾ ]).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_4",
+            "id": "sb_56_4",
             "text": "Set Virtual Piano to collapse by default on mobile viewports (< 1024px), instantly reclaiming 140px of vertical space.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_5",
+            "id": "sb_56_5",
             "text": "Converted Diatonic Scale Chords from a bulky 3-row wrapping block into a sleek single-line horizontal scroll strip (py-0.5).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_6",
+            "id": "sb_56_6",
             "text": "Proportioned chord cards from w-36 to w-28 on mobile with compact beat controls.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_7",
+            "id": "sb_56_7",
             "text": "Completely removed the redundant bottom dock.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_8",
+            "id": "sb_56_8",
             "text": "Top-Right Inspector Bauble: Added an on-demand [ Inspector ] toggle button with keyboard shortcut <kbd>I</kbd> and panel ✕ close button.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_9",
+            "id": "sb_56_9",
             "text": "Live Playback Piano Tracking: Fixed Virtual Piano and Inspector to dynamically illuminate and voice whichever chord is actively playing in real time, rather tha",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_10",
+            "id": "sb_56_10",
             "text": "Full Architecture & Competitive Audit: Conducted an uncompromising audit comparing BandMate against Hookpad, Scaler 2, ChordChord, and Tonaly, discovering dorma",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_11",
+            "id": "sb_56_11",
             "text": "Formulated 3-Phase Transformation Plan: Outlined Phase 1 (Theory & Inversions), Phase 2 (Audio Humanization & Fretboard), and Phase 3 (MIDI & Project Export).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_12",
+            "id": "sb_56_12",
             "text": "Deployment: Pushed all commits to https://github.com/vyomsh-pixel/bandmate (main) and deployed live to production at https://bandmate-main.vercel.app.",
             "isTask": false,
             "completed": false
@@ -7740,7 +7940,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "AI Sessions Today",
         "items": [
           {
-            "id": "sb_54_13",
+            "id": "sb_56_13",
             "text": "Antigravity (Google DeepMind) :: BandMate :: Mobile layout rebuild, dynamic piano playback tracking, audit & roadmap :: Zero-overlap mobile UI, live audio sync,",
             "isTask": true,
             "completed": false
@@ -7751,19 +7951,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Key Decisions Made",
         "items": [
           {
-            "id": "sb_54_14",
+            "id": "sb_56_14",
             "text": "Collapsing the 88-key piano on mobile gives chord timelines 100% vertical space while keeping it 1-tap accessible via [ ].",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_15",
+            "id": "sb_56_15",
             "text": "Storing inversions directly inside ChordEntry is essential so arrangements persist across sessions and playback.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_16",
+            "id": "sb_56_16",
             "text": "MIDI export (.mid) is the highest-value feature to unlock real music producer adoption.",
             "isTask": false,
             "completed": false
@@ -7774,19 +7974,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_54_17",
+            "id": "sb_56_17",
             "text": "BandMate is fully phone-compliant, looks native on mobile screens, and passes 11/11 automated tests.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_18",
+            "id": "sb_56_18",
             "text": "Real-time chord tracking makes the virtual piano feel alive during song playback.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_54_19",
+            "id": "sb_56_19",
             "text": "Vault synced with master BandMate project notes, full audit, and 3-phase upgrade plan.",
             "isTask": false,
             "completed": false
@@ -7797,7 +7997,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Next Steps",
         "items": [
           {
-            "id": "sb_54_20",
+            "id": "sb_56_20",
             "text": "Execute Phase 1: Inversion persistence, slash chord bass voicing, Harmonic Minor dominant V, and 1-click \" Auto-Smooth Voicings\".",
             "isTask": false,
             "completed": false
@@ -7808,7 +8008,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 09 02 — BandMate Studio Polish, Mobile Overhaul & Full Audit Projects Active BandMate — Intelligent Song Compositio"
   },
   {
-    "id": "sb_note_55",
+    "id": "sb_note_57",
     "title": "2026-10-10",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/2026-10-10.md",
@@ -7818,13 +8018,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Projects Active",
         "items": [
           {
-            "id": "sb_55_0",
+            "id": "sb_57_0",
             "text": "CyberPulse (SUNCHECKS) — 24/7 Cloud Email Schedule, Work Journal & Obsidian Vault Linker",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_1",
+            "id": "sb_57_1",
             "text": "Second-Brain Obsidian Vault (D:\\vault\\VYOM)",
             "isTask": false,
             "completed": false
@@ -7835,61 +8035,61 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "What I Did",
         "items": [
           {
-            "id": "sb_55_2",
+            "id": "sb_57_2",
             "text": "Neon PostgreSQL & Vercel Serverless Backend (SUNCHECKS):",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_3",
+            "id": "sb_57_3",
             "text": "Provisioned and linked Neon Serverless PostgreSQL (ep-frosty-sunset-b8eotw36-pooler.c-14.us-east-1.aws.neon.tech) on Vercel, replacing temporary JSON storage wi",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_4",
+            "id": "sb_57_4",
             "text": "Removed client-side API key inputs to protect RESEND_API_KEY and GEMINI_API_KEY inside the Vercel Server Vault and added privacy-masked Operator Identity login.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_5",
+            "id": "sb_57_5",
             "text": "Instant Email Dispatch Fix & CyberTransmissionPortal:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_6",
+            "id": "sb_57_6",
             "text": "Diagnosed and resolved Vercel's HTTP 405 Method Not Allowed collision by creating static route POST /api/reminders/trigger (api/reminders/trigger.js) and updati",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_7",
+            "id": "sb_57_7",
             "text": "Built CyberTransmissionPortal.tsx for real-time dispatch telemetry, Resend Message ID confirmation, and sandbox diagnostics.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_8",
+            "id": "sb_57_8",
             "text": "Second-Brain Obsidian Vault Migration & Neural Shard Linker:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_9",
+            "id": "sb_57_9",
             "text": "Transferred Second-Brain.zip from previous laptop and unpacked all 8 topic folders, .obsidian settings, and dataview / templater-obsidian plugins into D:\\vault\\",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_10",
+            "id": "sb_57_10",
             "text": "Built ObsidianVaultModal.tsx and pre-indexed all 65+ Second-Brain notes into src/data/secondBrainVault.ts so any Topic (Dashboard, Studies, Projects, Resources,",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_11",
+            "id": "sb_57_11",
             "text": "Updated all vault documentation (Dashboard.md, CyberPulse, BandMate, PocketLedger, Health.io, ForgeKit, Vyom_Profile_And_Style.md, Antigravity.md) to reflect th",
             "isTask": false,
             "completed": false
@@ -7900,7 +8100,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "AI Sessions Today",
         "items": [
           {
-            "id": "sb_55_12",
+            "id": "sb_57_12",
             "text": "Antigravity (Anti) :: CyberPulse & Second-Brain :: Neon SQL backend, Resend instant dispatch portal, D:\\vault\\VYOM extraction & 2-step Vault Linker :: Live on V",
             "isTask": true,
             "completed": false
@@ -7911,13 +8111,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Key Decisions Made",
         "items": [
           {
-            "id": "sb_55_13",
+            "id": "sb_57_13",
             "text": "Pre-indexing D:\\vault\\VYOM into secondBrainVault.ts while retaining the runtime RE-SYNC D:\\vault\\VYOM directory picker gives instant access to all Second-Brain ",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_14",
+            "id": "sb_57_14",
             "text": "Throttling background pollers via document.hidden keeps browser memory and CPU usage minimal on the 8GB DDR4 RAM setup.",
             "isTask": false,
             "completed": false
@@ -7928,13 +8128,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Wins",
         "items": [
           {
-            "id": "sb_55_15",
+            "id": "sb_57_15",
             "text": "End-to-end automated and instant email dispatches verified working with Resend + Gemini 2.5 Flash + Neon PostgreSQL.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_55_16",
+            "id": "sb_57_16",
             "text": "Entire Second-Brain vault restored to D:\\vault\\VYOM and directly wired into CyberPulse's 24/7 schedule matrix.",
             "isTask": false,
             "completed": false
@@ -7945,7 +8145,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "2026 10 10 — CyberPulse 24/7 Cloud Launch, Neon SQL & Second Brain Vault Linker Projects Active Projects/CyberPulse/Cybe"
   },
   {
-    "id": "sb_note_56",
+    "id": "sb_note_58",
     "title": "Template - Daily Note",
     "topic": "Daily Notes",
     "relativePath": "VYOM/Daily Notes/Template - Daily Note.md",
@@ -7955,7 +8155,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Template - Daily Note",
         "items": [
           {
-            "id": "sb_56_fallback",
+            "id": "sb_58_fallback",
             "text": "Review & execute Second-Brain note: Template - Daily Note",
             "isTask": true,
             "completed": false
@@ -7966,7 +8166,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Daily Note — {{date}} Today's focus Work done AI sessions today AI used Project What was done Outcome Key decisions made"
   },
   {
-    "id": "sb_note_57",
+    "id": "sb_note_59",
     "title": "Antigravity",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/Antigravity.md",
@@ -7976,19 +8176,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Role & Capabilities",
         "items": [
           {
-            "id": "sb_57_0",
+            "id": "sb_59_0",
             "text": "The Orchestrator (\"anti\"): Runs the full engineering, debugging, verification, and deployment loop directly across C:\\Users\\Vyom\\vibed and D:\\vault\\VYOM.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_1",
+            "id": "sb_59_1",
             "text": "The Second-Brain Bridge: Reads and writes directly to your Obsidian Vault (D:\\vault\\VYOM) and syncs all 61+ vault notes into CyberPulse (SUNCHECKS) so your note",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_2",
+            "id": "sb_59_2",
             "text": "Jules & Subagent Dispatcher: Can spawn internal research/review subagents or delegate background GitHub PR sessions to Google Jules via /jules <task>.",
             "isTask": false,
             "completed": false
@@ -7999,43 +8199,43 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Core Engineering Rules Followed by Anti",
         "items": [
           {
-            "id": "sb_57_3",
+            "id": "sb_59_3",
             "text": "Optimization-First & Ponytail Standard: Prioritize polishing, stabilizing, speeding up, and refining existing code and UI over introducing bloated features. Sta",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_4",
+            "id": "sb_59_4",
             "text": "8GB DDR4 RAM Discipline: Keep data structures, parsers, and background pollers lightweight and throttled when tabs are inactive.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_5",
+            "id": "sb_59_5",
             "text": "Zero Yellow Emojis: Strictly clean vector icons (Lucide, TechBadge) and monospace HUD indicators.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_6",
+            "id": "sb_59_6",
             "text": "Domain Philosophies:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_7",
+            "id": "sb_59_7",
             "text": "CyberPulse (SUNCHECKS): Zero client-side API key exposure; all secrets in Vercel Server Vault + Neon PostgreSQL persistence.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_8",
+            "id": "sb_59_8",
             "text": "Health.io: Strictly a personal wellness visualization tool with prominent non-clinical disclaimers.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_57_9",
+            "id": "sb_59_9",
             "text": "Pocket-Ledger: Mindful, grounded financial journal with integer-cent deterministic insights and self-reflection disclaimers.",
             "isTask": false,
             "completed": false
@@ -8046,7 +8246,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Antigravity (Anti) Your personal Lead Developer & Autonomous AI Orchestrator. Role & Capabilities The Orchestrator (\"ant"
   },
   {
-    "id": "sb_note_58",
+    "id": "sb_note_60",
     "title": "BandMate-Context",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/BandMate-Context.md",
@@ -8056,31 +8256,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Project Overview",
         "items": [
           {
-            "id": "sb_58_0",
+            "id": "sb_60_0",
             "text": "Name: BandMate",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_1",
+            "id": "sb_60_1",
             "text": "Description: Browser-based intelligent chord progression builder, song lab, and music theory workspace.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_2",
+            "id": "sb_60_2",
             "text": "Repository: https://github.com/vyomsh-pixel/bandmate",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_3",
+            "id": "sb_60_3",
             "text": "Live Production URL: https://bandmate-main.vercel.app",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_4",
+            "id": "sb_60_4",
             "text": "Local Path: C:\\Users\\vansh\\Desktop\\vibe coded\\bandmate-main\\bandmate-main",
             "isTask": false,
             "completed": false
@@ -8091,37 +8291,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Tech Stack & Conventions",
         "items": [
           {
-            "id": "sb_58_5",
+            "id": "sb_60_5",
             "text": "Framework: Next.js 16.2.6 (App Router with Turbopack), React 19, TypeScript.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_6",
+            "id": "sb_60_6",
             "text": "Styling: Tailwind CSS v4, dark mode by default (bg-background text-foreground).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_7",
+            "id": "sb_60_7",
             "text": "UI Components: Radix UI primitives, Lucide React icons, Sonner for toast notifications.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_8",
+            "id": "sb_60_8",
             "text": "Audio Engine: Web Audio API (lib/audio/audio-engine.ts) with Soundfont sample playback (lib/audio/soundfont-engine.ts) + fallback polyphonic synth.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_9",
+            "id": "sb_60_9",
             "text": "Testing: Vitest (pnpm test).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_10",
+            "id": "sb_60_10",
             "text": "State & Storage: Client-side localStorage (lib/storage/local-store.ts).",
             "isTask": false,
             "completed": false
@@ -8132,73 +8332,73 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Key Architecture Patterns",
         "items": [
           {
-            "id": "sb_58_11",
+            "id": "sb_60_11",
             "text": "Audio Singleton: getAudioEngine() is a shared singleton driving transport, beat listeners, soundfonts, and web audio clocks.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_12",
+            "id": "sb_60_12",
             "text": "Music Theory Core:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_13",
+            "id": "sb_60_13",
             "text": "lib/music/types.ts: Shared data models (Song, Section, ChordEntry, ParsedChord, Key).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_14",
+            "id": "sb_60_14",
             "text": "lib/music/chord-parser.ts: Never throws; extracts root, quality, and intervals into ParsedChord.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_15",
+            "id": "sb_60_15",
             "text": "lib/music/chords.ts: Close-position voicings and inversions (playableVoicing, voiceChord, invertVoicing).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_16",
+            "id": "sb_60_16",
             "text": "lib/music/scales.ts: Diatonic scale generation and key signatures (diatonicChords, makeKey).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_17",
+            "id": "sb_60_17",
             "text": "lib/music/analysis.ts: Roman numerals and key detection (getRomanNumeral, detectKey).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_18",
+            "id": "sb_60_18",
             "text": "lib/music/voice-leading.ts: Smooth voice leading optimizer (suggestSmoothInversion).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_19",
+            "id": "sb_60_19",
             "text": "lib/music/capo.ts: Guitar open-chord capo calculator (suggestCapo).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_20",
+            "id": "sb_60_20",
             "text": "Workspace Layout:",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_21",
+            "id": "sb_60_21",
             "text": "components/workspace/song-library-bar.tsx: Unified header with studio module selector, tracks dropdown, key/mode popover, piano toggle, and inspector toggle.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_22",
+            "id": "sb_60_22",
             "text": "components/song-lab/song-lab.tsx: 3-panel DAW view (Sections | Progression & Piano | Inspector).",
             "isTask": false,
             "completed": false
@@ -8209,25 +8409,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Important Rules for AI Assistants",
         "items": [
           {
-            "id": "sb_58_23",
+            "id": "sb_60_23",
             "text": "Never break mobile responsiveness: mobile viewports (< 768px) must use compact popovers and horizontal scroll strips.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_24",
+            "id": "sb_60_24",
             "text": "Always run pnpm test and pnpm build before committing.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_25",
+            "id": "sb_60_25",
             "text": "Commit messages follow conventional commits (feat(...), fix(...)).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_26",
+            "id": "sb_60_26",
             "text": "Push to origin main and deploy via vercel --prod --yes.",
             "isTask": false,
             "completed": false
@@ -8238,19 +8438,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_58_27",
+            "id": "sb_60_27",
             "text": "BandMate Technical Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_28",
+            "id": "sb_60_28",
             "text": "Vyom Profile & Style",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_58_29",
+            "id": "sb_60_29",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -8261,7 +8461,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "BandMate — AI Assistant Context Card Copy & paste this context block into Claude, ChatGPT, Gemini, or any LLM when askin"
   },
   {
-    "id": "sb_note_59",
+    "id": "sb_note_61",
     "title": "ChatGPT",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/ChatGPT.md",
@@ -8271,7 +8471,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "ChatGPT",
         "items": [
           {
-            "id": "sb_59_fallback",
+            "id": "sb_61_fallback",
             "text": "Review & execute Second-Brain note: ChatGPT",
             "isTask": true,
             "completed": false
@@ -8282,7 +8482,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "ChatGPT — Context Card Use for: Quick explanations, brainstorming, image generation, web search Best at: Broad general k"
   },
   {
-    "id": "sb_note_60",
+    "id": "sb_note_62",
     "title": "Claude",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/Claude.md",
@@ -8292,13 +8492,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Session log",
         "items": [
           {
-            "id": "sb_60_0",
+            "id": "sb_62_0",
             "text": "May 2026 :: PDF Assistant deployment :: Live on Streamlit Cloud, GitHub pushed, security fix applied",
             "isTask": true,
             "completed": false
           },
           {
-            "id": "sb_60_1",
+            "id": "sb_62_1",
             "text": "May 2026 :: Obsidian vault setup :: Second-Brain vault created, folder structure built",
             "isTask": true,
             "completed": false
@@ -8309,7 +8509,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Claude — Context Card Use for: Deep technical work, code review, project building, long reasoning tasks Best at: Writing"
   },
   {
-    "id": "sb_note_61",
+    "id": "sb_note_63",
     "title": "CyberPulse-Context",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/CyberPulse-Context.md",
@@ -8319,37 +8519,37 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Project Overview",
         "items": [
           {
-            "id": "sb_61_0",
+            "id": "sb_63_0",
             "text": "Name: CyberPulse (Repository: SUNCHECKS)",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_1",
+            "id": "sb_63_1",
             "text": "Description: 24/7 Cloud Email Schedule, Work/Study Journal, and Second-Brain Obsidian Vault Directive Linker.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_2",
+            "id": "sb_63_2",
             "text": "Repository: https://github.com/vyomsh-pixel/SUNCHECKS",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_3",
+            "id": "sb_63_3",
             "text": "Live Production URL: https://sunchecks.vercel.app",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_4",
+            "id": "sb_63_4",
             "text": "Local Path: C:\\Users\\Vyom\\vibed\\SUNCHECKS",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_5",
+            "id": "sb_63_5",
             "text": "Linked Obsidian Vault: D:\\vault\\VYOM (61 pre-indexed notes in src/data/secondBrainVault.ts)",
             "isTask": false,
             "completed": false
@@ -8360,25 +8560,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Tech Stack & Conventions",
         "items": [
           {
-            "id": "sb_61_6",
+            "id": "sb_63_6",
             "text": "Frontend: React 19, TypeScript, Vite 6, Tailwind CSS, Lucide React icons.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_7",
+            "id": "sb_63_7",
             "text": "Backend: Vercel Serverless Functions (api/reminders/index.js, api/reminders/trigger.js, api/cron.js, api/profile.js, api/logs.js, api/health.js).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_8",
+            "id": "sb_63_8",
             "text": "Database: Neon Serverless PostgreSQL (api/lib/db.js via pg Pool using POSTGRES_URL / DATABASE_URL).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_9",
+            "id": "sb_63_9",
             "text": "External APIs: Resend REST API (RESEND_API_KEY) for HTML email delivery + Google Gemini 2.5 Flash (GEMINI_API_KEY) for AI briefing synthesis.",
             "isTask": false,
             "completed": false
@@ -8389,31 +8589,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Strict Engineering Rules",
         "items": [
           {
-            "id": "sb_61_10",
+            "id": "sb_63_10",
             "text": "Zero Yellow Emojis: Never use standard yellow emojis anywhere in UI components, email templates, or logs. Use TechBadge vector icons or monospace brackets ([OK]",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_11",
+            "id": "sb_63_11",
             "text": "Zero Client Secret Exposure: Never expose RESEND_API_KEY, GEMINI_API_KEY, or POSTGRES_URL to the browser or commit them to git.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_12",
+            "id": "sb_63_12",
             "text": "8GB DDR4 RAM Efficiency: Keep bundles small, avoid heavy dependencies, and throttle background intervals when document.hidden is true.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_13",
+            "id": "sb_63_13",
             "text": "Vercel SPA Rewrite Safety: Keep \"source\": \"/((?!api/).)\" in vercel.json so /api/ POST routes never collide with /index.html.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_14",
+            "id": "sb_63_14",
             "text": "Verification: Always run npx tsc --noEmit before committing and pushing to origin main.",
             "isTask": false,
             "completed": false
@@ -8424,25 +8624,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Related Notes",
         "items": [
           {
-            "id": "sb_61_15",
+            "id": "sb_63_15",
             "text": "CyberPulse Master Note",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_16",
+            "id": "sb_63_16",
             "text": "CyberPulse Technical Context",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_17",
+            "id": "sb_63_17",
             "text": "Vyom Profile & Style",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_61_18",
+            "id": "sb_63_18",
             "text": "Second Brain Dashboard",
             "isTask": false,
             "completed": false
@@ -8453,7 +8653,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "CyberPulse (SUNCHECKS) — AI Assistant Context Card Copy & paste this context block into Anti, Claude, ChatGPT, or Gemini"
   },
   {
-    "id": "sb_note_62",
+    "id": "sb_note_64",
     "title": "Gemini",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/Gemini.md",
@@ -8463,7 +8663,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Gemini",
         "items": [
           {
-            "id": "sb_62_fallback",
+            "id": "sb_64_fallback",
             "text": "Review & execute Second-Brain note: Gemini",
             "isTask": true,
             "completed": false
@@ -8474,7 +8674,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Gemini — Context Card Use for: Long document analysis, Google ecosystem tasks, multimodal inputs Best at: Large context "
   },
   {
-    "id": "sb_note_63",
+    "id": "sb_note_65",
     "title": "Perplexity",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/Perplexity.md",
@@ -8484,7 +8684,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Perplexity",
         "items": [
           {
-            "id": "sb_63_fallback",
+            "id": "sb_65_fallback",
             "text": "Review & execute Second-Brain note: Perplexity",
             "isTask": true,
             "completed": false
@@ -8495,7 +8695,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Perplexity — Context Card Use for: Research, finding current information, verifying facts, documentation lookup Best at:"
   },
   {
-    "id": "sb_note_64",
+    "id": "sb_note_66",
     "title": "Vyom Profile And Style",
     "topic": "AI context Cards",
     "relativePath": "VYOM/AI context Cards/Vyom_Profile_And_Style.md",
@@ -8505,31 +8705,31 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Core Learning & Engineering Style",
         "items": [
           {
-            "id": "sb_64_0",
+            "id": "sb_66_0",
             "text": "Zero AI-Slop: No blind copy-pasting; wants every line understood.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_1",
+            "id": "sb_66_1",
             "text": "Anti-Autocomplete Rule: Coding daily foundation drills keystroke-by-keystroke.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_2",
+            "id": "sb_66_2",
             "text": "Feedback Preference: Brutal, direct, actionable feedback — zero fluff.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_3",
+            "id": "sb_66_3",
             "text": "Ponytail Lazy-Senior-Dev Standard: Optimization-first, minimal code, strict typing, standard library first, no speculative abstractions, zero yellow emojis.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_4",
+            "id": "sb_66_4",
             "text": "Hardware-Conscious Engineering: Optimized for an 8GB DDR4 RAM setup (lightweight bundles, tab-visibility polling throttling, zero bloated runtime dependencies).",
             "isTask": false,
             "completed": false
@@ -8540,25 +8740,25 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "AI & Tool Workflow",
         "items": [
           {
-            "id": "sb_64_5",
+            "id": "sb_66_5",
             "text": "Current Stack: Antigravity (\"anti\" — Local Multi-Agent Orchestrator) + Cursor/VS Code + Obsidian (D:\\vault\\VYOM Second Brain) + Google Jules (/jules autonomous ",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_6",
+            "id": "sb_66_6",
             "text": "Primary Workspace: C:\\Users\\Vyom\\vibed (Active Git repositories) & D:\\vault\\VYOM (Obsidian Second Brain).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_7",
+            "id": "sb_66_7",
             "text": "AI Tool Routing: Gemini 2.5 Flash (production serverless synthesis), Claude Sonnet/Opus, OpenRouter free tiers.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_8",
+            "id": "sb_66_8",
             "text": "Knowledge Flow: Every architecture upgrade and sprint yields structured markdown pushed directly to D:\\vault\\VYOM and indexed into CyberPulse.",
             "isTask": false,
             "completed": false
@@ -8569,19 +8769,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Technical Profile",
         "items": [
           {
-            "id": "sb_64_9",
+            "id": "sb_66_9",
             "text": "Languages & Frameworks: Python (FastAPI, Streamlit, PyTorch), TypeScript/JavaScript (React 19, Next.js 16, Redux Toolkit, Tailwind v4, Vite 6, Node/Express).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_10",
+            "id": "sb_66_10",
             "text": "Databases & Cloud Infra: Neon PostgreSQL, Supabase PostgreSQL, Vercel Serverless Functions & Cron, Resend Email API, Firebase Auth, Redis, Celery, Docker Compos",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_11",
+            "id": "sb_66_11",
             "text": "Credentials: B.Sc AI & ML (Thakur College, SGPA 7.91, MHT CET 85.5%), 3 Anthropic Certifications (AI Fluency, API Calling, Agent Building), AWS Cloud Practition",
             "isTask": false,
             "completed": false
@@ -8592,49 +8792,49 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Active Production Projects (C:\\Users\\Vyom\\vibed)",
         "items": [
           {
-            "id": "sb_64_12",
+            "id": "sb_66_12",
             "text": "CyberPulse (SUNCHECKS): 24/7 Cloud Email Schedule, Work Journal & Second-Brain Obsidian Vault Linker live on Vercel + Neon PostgreSQL (https://sunchecks.vercel.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_13",
+            "id": "sb_66_13",
             "text": "ForgeKit (SIH 2026 PS7): AI UI Generator & Dynamic CMS live on Vercel (https://forge-kitv1.vercel.app/wireframe).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_14",
+            "id": "sb_66_14",
             "text": "BandMate: Intelligent Song Composition & Chord Studio with 30 MusyngKite HD Studio Instruments & 2-Handed Piano Mode (https://bandmate-main.vercel.app).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_15",
+            "id": "sb_66_15",
             "text": "Pocket-Ledger: Mindful financial journal with deterministic integer-cent spending insights, privacy mode masking, and Firebase Auth (github.com/vyomsh-pixel/Poc",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_16",
+            "id": "sb_66_16",
             "text": "Health.io (healthifyme-project & healthio-classproject): Personal wellness visualization platform on Vercel Serverless + Supabase PostgreSQL + Firebase Google A",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_17",
+            "id": "sb_66_17",
             "text": "Vedanta Technologies: Paid internship deliverables (vedigitals.com, WeasyPrint PDFs, GeM procurement).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_18",
+            "id": "sb_66_18",
             "text": "SLM Factory: Custom Small Language Model training platform (Phase 2 Scaffold live-verified).",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_19",
+            "id": "sb_66_19",
             "text": "Python Foundation Sprint: 3-month daily anchor sprint in AI/aiml(fromthestart).",
             "isTask": false,
             "completed": false
@@ -8645,13 +8845,13 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "Long-Term Vision",
         "items": [
           {
-            "id": "sb_64_20",
+            "id": "sb_66_20",
             "text": "Build and fine-tune custom local SLMs (0.5B–3B parameters) for autonomous agent pipelines.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_64_21",
+            "id": "sb_66_21",
             "text": "Scale client engineering operations and high-impact AI products.",
             "isTask": false,
             "completed": false
@@ -8662,7 +8862,7 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
     "rawSnippet": "Vyom — Profile & Working Style Updated October 10, 2026 Core Learning & Engineering Style Zero AI Slop : No blind copy p"
   },
   {
-    "id": "sb_note_65",
+    "id": "sb_note_67",
     "title": "AI Studio Connection",
     "topic": "00-Inbox",
     "relativePath": "VYOM/00-Inbox/AI_Studio_Connection.md",
@@ -8672,19 +8872,19 @@ export const SECOND_BRAIN_VAULT_NOTES: ObsidianNote[] = [
         "heading": "The Workflow Protocol",
         "items": [
           {
-            "id": "sb_65_0",
+            "id": "sb_67_0",
             "text": "Draft & Plan: We define goals in the chat. My internal subagents review it.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_65_1",
+            "id": "sb_67_1",
             "text": "Execute: You write code in Cursor; I act as the orchestrator.",
             "isTask": false,
             "completed": false
           },
           {
-            "id": "sb_65_2",
+            "id": "sb_67_2",
             "text": "Document: Major decisions, architectures, and walkthroughs get pushed directly here, formatted with YAML frontmatter, tags, and ready for you to add Second Brai",
             "isTask": false,
             "completed": false
