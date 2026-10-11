@@ -1,7 +1,7 @@
 // DaemonView: In-Place 24/7 Email Automation & Outbox History
 // STRICT: Zero yellow emojis. Clean Lucide vector icons and monospace text badges.
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DaemonStatus, EmailLogItem, UiMode } from '../types';
 import { Send, RefreshCw, Mail, Activity } from 'lucide-react';
 import { TechBadge } from './TechBadge';
@@ -30,6 +30,10 @@ export function DaemonView({
   const [sendResult, setSendResult] = useState<string | null>(null);
   const [isScanningCron, setIsScanningCron] = useState(false);
   const [cronScanResult, setCronScanResult] = useState<string | null>(null);
+
+  useEffect(() => {
+    setTestEmail(userEmail);
+  }, [userEmail]);
 
   const handleRunCronScan = async () => {
     playCyberAlert();

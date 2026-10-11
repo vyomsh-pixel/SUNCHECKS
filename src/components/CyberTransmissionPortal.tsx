@@ -34,12 +34,12 @@ export function CyberTransmissionPortal({
 
   useEffect(() => {
     if (isOpen && reminder) {
-      setCustomEmail(reminder.email || 'rajkesir74@gmail.com');
+      setCustomEmail(reminder.email || 'operator@cyberpulse.local');
       setPhase('idle');
       setLogs([
         `[${new Date().toLocaleTimeString()}] PORTAL ONLINE // DIRECTIVE LOADED`,
         `[${new Date().toLocaleTimeString()}] TARGET: "${reminder.title}"`,
-        `[${new Date().toLocaleTimeString()}] RECIPIENT: ${reminder.email || 'rajkesir74@gmail.com'}`,
+        `[${new Date().toLocaleTimeString()}] RECIPIENT: ${reminder.email || 'operator@cyberpulse.local'}`,
         `[${new Date().toLocaleTimeString()}] CADENCE: ${reminder.cadence.toUpperCase()} @ ${reminder.time}`,
       ]);
       setMessageId(null);

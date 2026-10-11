@@ -2,7 +2,7 @@
 // Supports: Daily, Interval (Every X days), Specific Weekdays, and Random (10 AM - 11 PM)
 // STRICT: Zero yellow emojis.
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ReminderItem, ReminderCadence, ReminderTheme, UiMode } from '../types';
 import { enhanceReminder } from '../gemini';
 import { X, Sparkles, Send, Clock, Shuffle, Tag, Mail } from 'lucide-react';
@@ -44,6 +44,10 @@ export function AddReminderModal({
   const [email, setEmail] = useState(defaultEmail);
   const [autoEmail, setAutoEmail] = useState(true);
   const [isEnhancing, setIsEnhancing] = useState(false);
+
+  useEffect(() => {
+    setEmail(defaultEmail);
+  }, [defaultEmail]);
 
   if (!isOpen) return null;
 
@@ -233,8 +237,8 @@ export function AddReminderModal({
                 disabled={!title.trim() || isEnhancing}
                 className="flex items-center gap-1.5 text-xs font-cyber text-[#00F0FF] hover:text-white disabled:opacity-40"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#00F0FF] animate-spin" />
-                <span>{isEnhancing ? 'ENHANCING...' : 'ENHANCE VIA GEMINI 3.8 FLASH'}</span>
+                <Sparkles className={`w-3.5 h-3.5 text-[#00F0FF] ${isEnhancing ? 'animate-spin' : ''}`} />
+                <span>{isEnhancing ? 'ENHANCING...' : 'ENHANCE VIA GEMINI 2.5 FLASH'}</span>
               </button>
             </div>
             <input
@@ -425,7 +429,7 @@ export function AddReminderModal({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="rajkesir74@gmail.com"
+                  placeholder="operator@cyberpulse.local"
                   className="w-full bg-[#0E101A] border border-slate-700 px-3 py-1.5 text-xs font-tech text-slate-200 focus:outline-none focus:border-[#FCEE0A] cyber-cut"
                 />
               </div>

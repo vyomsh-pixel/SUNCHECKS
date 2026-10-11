@@ -1,10 +1,14 @@
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+import { handleCors, createOperatorToken, verifyOperatorAuth } from './lib/db.js';
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+export default async function handler(req, res) {
+  if (handleCors(req, res, 'GET, POST, OPTIONS')) return;
+
+  if (req.method === 'GET') {
+    const authenticated = verifyOperatorAuth(req);
+    return res.status(authenticated ? 200 : 401).json({
+      status: authenticated ? 'authenticated' : 'unauthenticated',
+      role: authenticated ? 'operator' : 'guest',
+    });
   }
 
   if (req.method !== 'POST') {
@@ -14,18 +18,20 @@ export default async function handler(req, res) {
   const { passcode } = req.body || {};
   const validPasscode = process.env.OPERATOR_PASSCODE || '2077';
 
-  if (!passcode || passcode.trim() !== validPasscode.trim()) {
+  if (!passcode || String(passcode).trim() !== String(validPasscode).trim()) {
     return res.status(401).json({
+      status: 'unauthorized',
       success: false,
       error: 'ACCESS DENIED // INVALID CLEARANCE PASSCODE',
     });
   }
 
-  // Generate lightweight session token
-  const token = `cp_auth_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const token = createOperatorToken();
   return res.status(200).json({
-    success: true,
+    status: 'authenticated',
+    role: 'operator',
     token,
+    success: true,
     operator: 'AUTHORIZED',
     message: 'NEURAL LINK ESTABLISHED // CLEARANCE GRANTED',
   });

@@ -275,7 +275,9 @@ export function ObsidianVaultModal({
       const saved = localStorage.getItem(VAULT_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length >= SECOND_BRAIN_VAULT_NOTES.length) {
+          return parsed;
+        }
       }
     } catch {
       // ignore
@@ -363,7 +365,11 @@ export function ObsidianVaultModal({
     }
 
     setNotes(parsedNotes);
-    localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(parsedNotes));
+    try {
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(parsedNotes));
+    } catch {
+      // Ignore storage quota errors
+    }
     setSelectedTopic('ALL');
     if (parsedNotes[0]) {
       setSelectedNoteId(parsedNotes[0].id);
@@ -722,3 +728,5 @@ export function ObsidianVaultModal({
     </div>
   );
 }
+
+export default ObsidianVaultModal;

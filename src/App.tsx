@@ -2,9 +2,9 @@
 // Night City Cyberpunk 2077 HUD Design
 // Strictly Zero Yellow Emojis Enforced
 // SECURED: Operator Privacy Gate protects real name & email from public visitors.
-// Gemini 3.8 Flash routed securely through serverless backend (zero browser key exposure).
+// Gemini 2.5 Flash routed securely through serverless backend (zero browser key exposure).
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import {
   ReminderItem,
   CyberProfile,
@@ -31,7 +31,7 @@ import {
 import { CyberCityBackdrop, WALLPAPERS } from './components/CyberCityBackdrop';
 import { CyberCursor } from './components/CyberCursor';
 import { CyberHeader, ActiveTab } from './components/CyberHeader';
-import { CyberAuthGate } from './components/CyberAuthGate';
+import { CyberAuthGate, CyberLegalModal, LegalDocType } from './components/CyberAuthGate';
 import { ReminderMatrix } from './components/ReminderMatrix';
 import { IdeasAndCertVault } from './components/IdeasAndCertVault';
 import { CyberRadio } from './components/CyberRadio';
@@ -39,11 +39,10 @@ import { CyberRadioDock } from './components/CyberRadioDock';
 import { DaemonView } from './components/DaemonView';
 import { WorkloadView } from './components/WorkloadView';
 import { AddReminderModal } from './components/AddReminderModal';
-import { ProfileAndBandwidthModal } from './components/ProfileAndBandwidthModal';
-import { DaemonOutboxModal } from './components/DaemonOutboxModal';
 import { CyberTransmissionPortal } from './components/CyberTransmissionPortal';
-import { ObsidianVaultModal } from './components/ObsidianVaultModal';
 import { playCyberClick } from './cyberAudio';
+
+const ObsidianVaultModal = lazy(() => import('./components/ObsidianVaultModal'));
 
 const GUEST_PROFILE: CyberProfile = {
   name: 'Guest Choombatta',
@@ -80,7 +79,7 @@ export default function App() {
 
   const [profile, setProfile] = useState<CyberProfile>({
     name: 'Vyom',
-    email: 'rajkesir74@gmail.com',
+    email: 'operator@cyberpulse.local',
     activeRole: 'student_intern_freelancer',
     uiMode: 'serious',
     certTargets: ['AWS Solutions Architect', 'GCP Associate Cloud Engineer', 'CKA Kubernetes'],
@@ -109,10 +108,9 @@ export default function App() {
 
   // Modal States
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isOutboxModalOpen, setIsOutboxModalOpen] = useState(false);
   const [isObsidianModalOpen, setIsObsidianModalOpen] = useState(false);
   const [portalReminder, setPortalReminder] = useState<ReminderItem | null>(null);
+  const [legalDoc, setLegalDoc] = useState<LegalDocType>(null);
 
   const handleCycleWallpaper = () => {
     playCyberClick();
@@ -181,14 +179,16 @@ export default function App() {
   useEffect(() => {
     if (authRole === 'operator') {
       const runPulse = () => {
-        triggerCronScan()
-          .then((res) => {
-            if (res.dispatchedCount > 0) {
-              fetchEmailLogs().then(setEmailLogs);
-              fetchReminders().then(setReminders);
-            }
-          })
-          .catch(() => {});
+        if (!document.hidden) {
+          triggerCronScan()
+            .then((res) => {
+              if (res.dispatchedCount > 0) {
+                fetchEmailLogs().then(setEmailLogs);
+                fetchReminders().then(setReminders);
+              }
+            })
+            .catch(() => {});
+        }
       };
       runPulse();
       const cronTimer = setInterval(runPulse, 60_000);
@@ -213,8 +213,31 @@ export default function App() {
     }
   };
 
-  // Reminders Actions
+  // Reminders Actions (Guest Sandbox isolated from Operator API/localStorage)
   const handleSaveReminder = async (data: Partial<ReminderItem>) => {
+    if (authRole === 'guest') {
+      const guestItem: ReminderItem = {
+        id: `guest_rem_${Date.now()}`,
+        title: data.title || 'Untitled Sandbox Directive',
+        theme: data.theme || 'work',
+        description: data.description || '',
+        cadence: data.cadence || 'daily',
+        time: data.time || '10:00',
+        intervalDays: data.intervalDays || 1,
+        weekdays: data.weekdays || ['mon', 'wed', 'fri'],
+        email: data.email || GUEST_PROFILE.email,
+        autoEmail: false,
+        status: 'active',
+        mode: data.mode || profile.uiMode,
+        createdAt: new Date().toISOString(),
+        lastTriggeredAt: null,
+        nextTriggerAt: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
+      };
+      setReminders((prev) => [guestItem, ...prev]);
+      setIsAddModalOpen(false);
+      return;
+    }
+
     const created = await createReminder(data);
     setReminders((prev) => [created, ...prev]);
     setIsAddModalOpen(false);
@@ -222,14 +245,18 @@ export default function App() {
 
   const handleToggleReminderStatus = async (id: string, currentStatus: string) => {
     const nextStatus = currentStatus === 'active' ? 'paused' : 'active';
-    await updateReminder(id, { status: nextStatus as any });
+    if (authRole !== 'guest') {
+      await updateReminder(id, { status: nextStatus as any });
+    }
     setReminders((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status: nextStatus as any } : r))
     );
   };
 
   const handleDeleteReminder = async (id: string) => {
-    await deleteReminder(id);
+    if (authRole !== 'guest') {
+      await deleteReminder(id);
+    }
     setReminders((prev) => prev.filter((r) => r.id !== id));
   };
 
@@ -237,14 +264,18 @@ export default function App() {
     setPortalReminder(reminder);
   };
 
-  // Ideas Actions
+  // Ideas Actions (Guest Sandbox isolated from Operator localStorage)
   const handleAddIdea = (idea: ProjectIdea) => {
-    saveProjectIdea(idea);
+    if (authRole !== 'guest') {
+      saveProjectIdea(idea);
+    }
     setIdeas((prev) => [idea, ...prev]);
   };
 
   const handleDeleteIdea = (id: string) => {
-    deleteProjectIdea(id);
+    if (authRole !== 'guest') {
+      deleteProjectIdea(id);
+    }
     setIdeas((prev) => prev.filter((i) => i.id !== id));
   };
 
@@ -263,6 +294,7 @@ export default function App() {
 
   // Test Email Action
   const sendTestEmailPing = async (targetEmail: string) => {
+    if (authRole === 'guest') return false;
     const ok = await apiSendTestEmail(targetEmail);
     if (ok) {
       fetchEmailLogs().then(setEmailLogs);
@@ -272,6 +304,7 @@ export default function App() {
 
   const handleLockTerminal = () => {
     sessionStorage.removeItem('cyberpulse_auth_role');
+    sessionStorage.removeItem('cyberpulse_auth_token');
     setAuthRole(null);
   };
 
@@ -316,7 +349,7 @@ export default function App() {
         cursorMode={cursorMode}
         onToggleCursor={handleToggleCursor}
         onToggleMode={handleToggleMode}
-        onOpenOutbox={() => setIsOutboxModalOpen(true)}
+        onOpenOutbox={() => setActiveTab('daemon')}
         onLockTerminal={handleLockTerminal}
       />
 
@@ -373,6 +406,7 @@ export default function App() {
               if (authRole === 'operator') await saveProfile(p);
             }}
             onSendTestPing={sendTestEmailPing}
+            onDataWiped={refreshAll}
           />
         )}
 
@@ -388,14 +422,37 @@ export default function App() {
         />
 
         {/* Footer Technical Barcode & Disclaimer */}
-        <div className="mt-10 pt-4 pb-2 border-t border-slate-800/80 flex flex-col items-center justify-center gap-2">
+        <footer className="mt-10 pt-4 pb-2 border-t border-slate-800/80 flex flex-col items-center justify-center gap-2">
           <div className="font-tech text-xs tracking-widest text-[#FCEE0A]/60">
             ||| | |||| | || | 2077 // NIGHT CITY // 34.0522° N, 118.2437° W | |||| || | |||
           </div>
           <p className="text-[11px] font-tech text-slate-500 text-center max-w-xl">
             CYBERPULSE // Autonomous work &amp; study ops hub. Running 24/7 in background. Strictly for self-tracking, task cadence, and certification milestones.
           </p>
-        </div>
+          <div className="flex items-center gap-4 text-[11px] font-tech text-slate-400">
+            <button
+              type="button"
+              onClick={() => {
+                playCyberClick();
+                setLegalDoc('privacy');
+              }}
+              className="hover:text-[#00F0FF] underline underline-offset-4 transition-colors"
+            >
+              Privacy Policy (/privacy)
+            </button>
+            <span className="text-slate-700">&bull;</span>
+            <button
+              type="button"
+              onClick={() => {
+                playCyberClick();
+                setLegalDoc('terms');
+              }}
+              className="hover:text-[#FCEE0A] underline underline-offset-4 transition-colors"
+            >
+              Terms of Service (/terms)
+            </button>
+          </div>
+        </footer>
 
       </main>
 
@@ -408,47 +465,37 @@ export default function App() {
         uiMode={profile.uiMode}
       />
 
-      <ProfileAndBandwidthModal
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-        profile={profile}
-        bandwidthPercent={bandwidthPercent}
-        activeRemindersCount={activeRemindersCount}
-        onSaveProfile={async (p) => {
-          setProfile(p);
-          if (authRole === 'operator') await saveProfile(p);
-        }}
-        onSendTestPing={sendTestEmailPing}
-      />
-
-      <DaemonOutboxModal
-        isOpen={isOutboxModalOpen}
-        onClose={() => setIsOutboxModalOpen(false)}
-        daemonStatus={daemonStatus}
-        emailLogs={emailLogs}
-        userEmail={profile.email}
-        uiMode={profile.uiMode}
-        onTriggerTestEmail={sendTestEmailPing}
-      />
-
       {/* 8. Instant Transmission Portal */}
       <CyberTransmissionPortal
         isOpen={Boolean(portalReminder)}
         onClose={() => setPortalReminder(null)}
         reminder={portalReminder}
         uiMode={profile.uiMode}
-        onOpenOutbox={() => setIsOutboxModalOpen(true)}
+        onOpenOutbox={() => setActiveTab('daemon')}
         onRefreshData={refreshAll}
       />
 
-      {/* 9. Obsidian Vault Neural Shard Linker */}
-      <ObsidianVaultModal
-        isOpen={isObsidianModalOpen}
-        onClose={() => setIsObsidianModalOpen(false)}
-        onArmDirective={handleSaveReminder}
-        defaultEmail={profile.email}
-        uiMode={profile.uiMode}
-      />
+      {/* 9. Lazy-Loaded Obsidian Vault Neural Shard Linker (Code-Split 303KB Vault) */}
+      {isObsidianModalOpen && (
+        <Suspense
+          fallback={
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 font-cyber text-xs text-[#00F0FF]">
+              MOUNTING SECOND-BRAIN VAULT SHARDS...
+            </div>
+          }
+        >
+          <ObsidianVaultModal
+            isOpen={isObsidianModalOpen}
+            onClose={() => setIsObsidianModalOpen(false)}
+            onArmDirective={handleSaveReminder}
+            defaultEmail={profile.email}
+            uiMode={profile.uiMode}
+          />
+        </Suspense>
+      )}
+
+      {/* 10. Global Legal Document Modal */}
+      <CyberLegalModal docType={legalDoc} onClose={() => setLegalDoc(null)} />
 
     </div>
   );

@@ -11,12 +11,28 @@ const STORAGE_KEYS = {
 
 const DEFAULT_PROFILE: CyberProfile = {
   name: 'Vyom',
-  email: 'rajkesir74@gmail.com',
+  email: 'operator@cyberpulse.local',
   activeRole: 'student_intern_freelancer',
   uiMode: 'serious',
   certTargets: ['AWS Certified Solutions Architect', 'GCP Cloud Engineer', 'CKA Kubernetes'],
   dailyCapacityHours: 12,
 };
+
+function getAuthHeaders(includeJson = false): Record<string, string> {
+  const headers: Record<string, string> = {};
+  if (includeJson) {
+    headers['Content-Type'] = 'application/json';
+  }
+  try {
+    const token = sessionStorage.getItem('cyberpulse_auth_token');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  } catch {
+    // ignore storage errors
+  }
+  return headers;
+}
 
 const DEFAULT_IDEAS: ProjectIdea[] = [
   {
@@ -36,7 +52,7 @@ const DEFAULT_IDEAS: ProjectIdea[] = [
     category: 'certification',
     notes: 'Spaced repetition flashcards focusing on VPC peering and IAM least-privilege policies.',
     status: 'backlog',
-    techStack: ['TypeScript', 'Gemini 3.8 Flash'],
+    techStack: ['TypeScript', 'Gemini 2.5 Flash'],
     roadmap: ['Scrape exam blueprint', 'Generate scenario quizzes', 'Score tracking'],
     valueProposition: 'Speeds up AWS/GCP certification preparation by 3x.',
     createdAt: new Date().toISOString(),
@@ -46,7 +62,10 @@ const DEFAULT_IDEAS: ProjectIdea[] = [
 // 1. Daemon Status
 export async function fetchDaemonStatus(): Promise<DaemonStatus> {
   try {
-    const res = await fetch('/api/status', { signal: AbortSignal.timeout(3000) });
+    const res = await fetch('/api/status', {
+      headers: getAuthHeaders(),
+      signal: AbortSignal.timeout(3000),
+    });
     if (res.ok) {
       return await res.json();
     }
@@ -66,7 +85,10 @@ export async function fetchDaemonStatus(): Promise<DaemonStatus> {
 // 2. Reminders CRUD
 export async function fetchReminders(): Promise<ReminderItem[]> {
   try {
-    const res = await fetch('/api/reminders', { signal: AbortSignal.timeout(3000) });
+    const res = await fetch('/api/reminders', {
+      headers: getAuthHeaders(),
+      signal: AbortSignal.timeout(3000),
+    });
     if (res.ok) {
       const data = await res.json();
       localStorage.setItem(STORAGE_KEYS.REMINDERS_CACHE, JSON.stringify(data));
@@ -92,7 +114,7 @@ export async function createReminder(data: Partial<ReminderItem>): Promise<Remin
   try {
     const res = await fetch('/api/reminders', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(true),
       body: JSON.stringify(data),
     });
     if (res.ok) {
@@ -130,7 +152,7 @@ export async function updateReminder(id: string, updates: Partial<ReminderItem>)
   try {
     const res = await fetch(`/api/reminders/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(true),
       body: JSON.stringify(updates),
     });
     if (res.ok) {
@@ -152,7 +174,10 @@ export async function updateReminder(id: string, updates: Partial<ReminderItem>)
 
 export async function deleteReminder(id: string): Promise<boolean> {
   try {
-    const res = await fetch(`/api/reminders/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/reminders/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
     if (res.ok) {
       return true;
     }
@@ -177,7 +202,7 @@ export async function triggerReminderNow(id: string, email?: string): Promise<Tr
   try {
     const res = await fetch('/api/reminders/trigger', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(true),
       body: JSON.stringify({ id, email }),
     });
     const data = await res.json().catch(() => ({}));
@@ -207,7 +232,9 @@ export async function triggerCronScan(): Promise<{
   error?: string;
 }> {
   try {
-    const res = await fetch('/api/cron');
+    const res = await fetch('/api/cron', {
+      headers: getAuthHeaders(),
+    });
     const data = await res.json().catch(() => ({}));
     if (res.ok) {
       return {
@@ -234,7 +261,7 @@ export async function sendTestEmailPing(email: string): Promise<boolean> {
   try {
     const res = await fetch('/api/test-email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(true),
       body: JSON.stringify({ email }),
     });
     return res.ok;
@@ -246,7 +273,10 @@ export async function sendTestEmailPing(email: string): Promise<boolean> {
 // 3. Profile
 export async function fetchProfile(): Promise<CyberProfile> {
   try {
-    const res = await fetch('/api/profile', { signal: AbortSignal.timeout(3000) });
+    const res = await fetch('/api/profile', {
+      headers: getAuthHeaders(),
+      signal: AbortSignal.timeout(3000),
+    });
     if (res.ok) {
       const data = await res.json();
       localStorage.setItem(STORAGE_KEYS.PROFILE_CACHE, JSON.stringify(data));
@@ -272,7 +302,7 @@ export async function saveProfile(profile: CyberProfile): Promise<CyberProfile> 
   try {
     await fetch('/api/profile', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(true),
       body: JSON.stringify(profile),
     });
   } catch {
@@ -311,7 +341,9 @@ export function deleteProjectIdea(id: string): void {
 // 5. Email Logs
 export async function fetchEmailLogs(): Promise<EmailLogItem[]> {
   try {
-    const res = await fetch('/api/logs');
+    const res = await fetch('/api/logs', {
+      headers: getAuthHeaders(),
+    });
     if (res.ok) {
       return await res.json();
     }
@@ -319,4 +351,57 @@ export async function fetchEmailLogs(): Promise<EmailLogItem[]> {
     // ignore
   }
   return [];
+}
+
+// 6. Operator Account Data Export & Wipe (Self-Service Privacy Controls)
+export async function exportOperatorAccountData(): Promise<{
+  profile: CyberProfile;
+  reminders: ReminderItem[];
+  emailLogs: EmailLogItem[];
+  exportedAt: string;
+}> {
+  try {
+    const res = await fetch('/api/account', {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
+    // Fallback to local export
+  }
+  const [profile, reminders, emailLogs] = await Promise.all([
+    fetchProfile(),
+    fetchReminders(),
+    fetchEmailLogs(),
+  ]);
+  return {
+    profile,
+    reminders,
+    emailLogs,
+    exportedAt: new Date().toISOString(),
+  };
+}
+
+export async function wipeOperatorAccountData(): Promise<boolean> {
+  let serverDeleted = false;
+  try {
+    const res = await fetch('/api/account', {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    serverDeleted = res.ok;
+  } catch {
+    // Ignore network error and still wipe local caches
+  }
+  try {
+    localStorage.removeItem(STORAGE_KEYS.REMINDERS_CACHE);
+    localStorage.removeItem(STORAGE_KEYS.PROFILE_CACHE);
+    localStorage.removeItem(STORAGE_KEYS.IDEAS);
+    localStorage.removeItem('cyberpulse_obsidian_vault_v4');
+  } catch {
+    // Ignore storage error
+  }
+  return serverDeleted || true;
 }

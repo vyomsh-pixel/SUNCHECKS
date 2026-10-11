@@ -1,9 +1,9 @@
-// Strict Gemini 3.8 Flash Client for CyberPulse
+// Strict Gemini 2.5 Flash Client for CyberPulse
 // SECURE BACKEND PROXY: The user's paid Gemini API key is stored safely on the server.
 // The browser NEVER touches or exposes the API key.
 // STRICT ZERO EMOJIS ENFORCED.
 
-export const GEMINI_MODEL = 'gemini-3.8-flash';
+export const GEMINI_MODEL = 'gemini-2.5-flash';
 
 export interface SmartReminderEnhancement {
   formattedSummary: string;
@@ -52,13 +52,15 @@ export async function enhanceReminder(
  */
 export async function refineIdea(
   concept: string,
-  category: string
+  category: string,
+  notes?: string
 ): Promise<{ headline: string; techStack: string[]; roadmap: string[]; valueProposition: string }> {
   try {
+    const fullConcept = notes && notes.trim() ? `${concept} — ${notes.trim()}` : concept;
     const res = await fetch('/api/ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskType: 'refine_idea', concept, theme: category }),
+      body: JSON.stringify({ taskType: 'refine_idea', concept: fullConcept, notes: notes || '', theme: category }),
     });
 
     if (res.ok) {

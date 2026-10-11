@@ -3,11 +3,12 @@
 // PRIVACY-FIRST: Gemini API key removed from UI (handled securely on serverless backend).
 // Operator Name & Email are shielded with an instant privacy toggle.
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CyberProfile, PersonaType, UiMode } from '../types';
-import { User, CheckCircle2, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { User, CheckCircle2, Shield, Eye, EyeOff, Sparkles, Download, Trash2 } from 'lucide-react';
 import { TechBadge } from './TechBadge';
 import { playCyberClick, playCyberAlert } from '../cyberAudio';
+import { exportOperatorAccountData, wipeOperatorAccountData } from '../storage';
 
 interface WorkloadViewProps {
   profile: CyberProfile;
@@ -16,6 +17,7 @@ interface WorkloadViewProps {
   uiMode: UiMode;
   onSaveProfile: (profile: CyberProfile) => Promise<void>;
   onSendTestPing?: (email: string) => Promise<boolean>;
+  onDataWiped?: () => void;
 }
 
 const PERSONAS: { id: PersonaType; title: string; subtitle: string; defaultHours: number }[] = [
@@ -57,6 +59,7 @@ export function WorkloadView({
   activeRemindersCount,
   uiMode,
   onSaveProfile,
+  onDataWiped,
 }: WorkloadViewProps) {
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
@@ -64,6 +67,16 @@ export function WorkloadView({
   const [dailyCapacityHours, setDailyCapacityHours] = useState(profile.dailyCapacityHours || 14);
   const [shieldActive, setShieldActive] = useState(true);
   const [savedStatus, setSavedStatus] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isWiping, setIsWiping] = useState(false);
+  const [confirmWipe, setConfirmWipe] = useState(false);
+
+  useEffect(() => {
+    setName(profile.name);
+    setEmail(profile.email);
+    setActiveRole(profile.activeRole);
+    setDailyCapacityHours(profile.dailyCapacityHours || 14);
+  }, [profile]);
 
   const handleSelectPersona = (p: typeof PERSONAS[0]) => {
     playCyberClick();
@@ -83,6 +96,46 @@ export function WorkloadView({
     });
     setSavedStatus('PROFILE & CAPACITY SAVED!');
     setTimeout(() => setSavedStatus(null), 3000);
+  };
+
+  const handleExportData = async () => {
+    playCyberClick();
+    setIsExporting(true);
+    try {
+      const payload = await exportOperatorAccountData();
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cyberpulse-operator-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setSavedStatus('ARCHIVE EXPORTED TO JSON!');
+      setTimeout(() => setSavedStatus(null), 3000);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleWipeData = async () => {
+    if (!confirmWipe) {
+      playCyberAlert();
+      setConfirmWipe(true);
+      return;
+    }
+    playCyberAlert();
+    setIsWiping(true);
+    try {
+      await wipeOperatorAccountData();
+      setConfirmWipe(false);
+      setSavedStatus('ALL OPERATOR DATA WIPED FROM CLOUD & LOCAL STORAGE');
+      if (onDataWiped) onDataWiped();
+      setTimeout(() => setSavedStatus(null), 4000);
+    } finally {
+      setIsWiping(false);
+    }
   };
 
   return (
@@ -219,7 +272,7 @@ export function WorkloadView({
                 type={shieldActive ? 'password' : 'email'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="destination@domain.com"
+                placeholder="operator@cyberpulse.local"
                 className="w-full bg-[#05060A] border border-slate-700 px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-[#FCEE0A] cyber-cut tracking-wider"
               />
             </div>
@@ -245,14 +298,14 @@ export function WorkloadView({
           <div className="p-3 bg-[#060812] border border-[#00F0FF]/40 cyber-cut flex items-center justify-between gap-3 text-xs font-tech">
             <div className="flex items-center gap-2 text-[#00F0FF]">
               <Sparkles className="w-4 h-4 text-[#00F0FF]" />
-              <span className="font-bold">AI ENGINE // GEMINI 3.8 FLASH</span>
+              <span className="font-bold">AI ENGINE // GEMINI 2.5 FLASH</span>
             </div>
             <span className="text-[10px] text-[#00FF66] bg-[#00FF66]/15 border border-[#00FF66]/40 px-2 py-0.5 cyber-cut font-bold">
               SECURED SERVER-SIDE // ZERO BROWSER KEY EXPOSURE
             </span>
           </div>
 
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <button
               type="submit"
               className="px-6 py-2.5 cyber-btn-yellow text-xs font-black"
@@ -264,6 +317,55 @@ export function WorkloadView({
             )}
           </div>
         </form>
+
+        {/* Self-Service Data Governance Controls (Export JSON / Wipe Account Data) */}
+        <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <span className="text-xs font-cyber font-bold text-slate-300 uppercase block">
+              OPERATOR DATA GOVERNANCE // SELF-SERVICE ARCHIVE &amp; WIPE
+            </span>
+            <span className="text-[11px] font-tech text-slate-400">
+              Export all profile, schedule, and outbox telemetry as JSON or permanently wipe stored records.
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={handleExportData}
+              disabled={isExporting}
+              className="px-3.5 py-2 bg-[#090D1A] border border-[#00F0FF] text-[#00F0FF] hover:bg-[#00F0FF]/15 text-xs font-cyber font-bold cyber-cut flex items-center gap-2 transition-all disabled:opacity-50"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>{isExporting ? 'EXPORTING...' : 'EXPORT OPERATOR DATA'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleWipeData}
+              disabled={isWiping}
+              className="px-3.5 py-2 bg-[#FF003C]/15 border border-[#FF003C] text-[#FF003C] hover:bg-[#FF003C]/25 text-xs font-cyber font-bold cyber-cut flex items-center gap-2 transition-all disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>
+                {isWiping
+                  ? 'WIPING...'
+                  : confirmWipe
+                  ? 'CONFIRM PERMANENT WIPE?'
+                  : 'WIPE OPERATOR DATA'}
+              </span>
+            </button>
+
+            {confirmWipe && !isWiping && (
+              <button
+                type="button"
+                onClick={() => setConfirmWipe(false)}
+                className="px-2.5 py-2 text-xs font-tech text-slate-400 hover:text-white"
+              >
+                [CANCEL]
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
     </div>

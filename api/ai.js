@@ -1,28 +1,39 @@
-// Secure Server-Side Gemini 3.8 Flash Handler
-// The user's paid Gemini API key is kept strictly on the server and is NEVER sent to the browser.
+// Secure Server-Side Gemini 2.5 Flash Handler
+// The user's Gemini API key is kept strictly on the server and is NEVER sent to the browser.
 // Strict zero-emoji policy enforced.
 
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+import { handleCors } from './lib/db.js';
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+function sanitizeInput(val, maxLen = 2000) {
+  if (typeof val !== 'string') return '';
+  return val.trim().slice(0, maxLen);
+}
+
+export default async function handler(req, res) {
+  if (handleCors(req, res, 'POST, OPTIONS')) return;
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { title, theme, mode, taskType, concept } = req.body || {};
+  const body = req.body && typeof req.body === 'object' ? req.body : {};
+  const title = sanitizeInput(body.title, 2000);
+  const theme = sanitizeInput(body.theme, 200);
+  const mode = sanitizeInput(body.mode, 64);
+  const taskType = sanitizeInput(body.taskType, 64);
+  const concept = sanitizeInput(body.concept, 2000);
+
+  if (!title && !concept) {
+    return res.status(400).json({ error: 'Input title or concept is required (max 2000 chars).' });
+  }
+
   const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 
   if (!apiKey) {
     return res.status(400).json({ error: 'Gemini API Key not configured on server.' });
   }
 
-  const model = 'gemini-3.8-flash';
+  const model = 'gemini-2.5-flash';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
   let promptText = '';
@@ -78,6 +89,7 @@ Instructions:
           temperature: mode === 'fun' ? 0.85 : 0.4,
         },
       }),
+      signal: AbortSignal.timeout(15000),
     });
 
     if (!geminiRes.ok) {

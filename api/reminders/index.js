@@ -1,13 +1,7 @@
-import { getReminders, createReminder } from '../lib/db.js';
+import { handleCors, getReminders, createReminder } from '../lib/db.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (handleCors(req, res, 'GET, POST, OPTIONS')) return;
 
   if (req.method === 'GET') {
     try {
@@ -21,7 +15,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const data = req.body || {};
-      if (!data.title) {
+      if (!data.title || typeof data.title !== 'string' || !data.title.trim()) {
         return res.status(400).json({ error: 'Title is required' });
       }
       const created = await createReminder(data);

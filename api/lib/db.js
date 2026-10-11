@@ -1,8 +1,10 @@
-// Database client for CyberPulse on Vercel
+// Database & Security Core for CyberPulse on Vercel
 // Supports Vercel Postgres, Neon SQL, and standard PostgreSQL via DATABASE_URL or POSTGRES_URL.
-// Provides SQL schema auto-migration and safe fallback.
+// Provides SQL schema auto-migration, IST timezone scheduling, HMAC auth, HTML escaping, and safe in-memory fallback.
 
+import crypto from 'node:crypto';
 import pg from 'pg';
+
 const { Pool } = pg;
 
 let pool = null;
@@ -21,23 +23,288 @@ export function getDbPool() {
       connectionString,
       ssl: { rejectUnauthorized: false },
       max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
     });
     return pool;
   }
   return null;
 }
 
-// In-memory fallback if no database connection string is provided yet
-const memoryStore = {
-  profile: {
-    id: 'vyom_default',
-    name: 'Vyom',
-    email: 'rajkesir74@gmail.com',
+export function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export function handleCors(req, res, methods = 'GET, POST, PUT, DELETE, OPTIONS') {
+  const origin = req?.headers?.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Methods', methods);
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Operator-Token');
+  if (req?.method === 'OPTIONS') {
+    res.status(200).end();
+    return true;
+  }
+  return false;
+}
+
+function getOperatorSecret() {
+  return (process.env.OPERATOR_PASSCODE || '2077').trim();
+}
+
+export function createOperatorToken(role = 'operator') {
+  const secret = getOperatorSecret();
+  const payload = `cp_op_${role}_${Date.now()}`;
+  const signature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  return `${payload}.${signature}`;
+}
+
+export function verifyOperatorAuth(reqOrToken) {
+  if (!reqOrToken) return false;
+
+  let token = '';
+  if (typeof reqOrToken === 'string') {
+    token = reqOrToken.startsWith('Bearer ') ? reqOrToken.slice(7).trim() : reqOrToken.trim();
+  } else if (typeof reqOrToken === 'object') {
+    const headers = reqOrToken.headers || {};
+    const authHeader = headers.authorization || headers.Authorization || '';
+    if (typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
+      token = authHeader.slice(7).trim();
+    } else if (typeof authHeader === 'string' && authHeader.trim()) {
+      token = authHeader.trim();
+    } else if (headers['x-operator-token']) {
+      token = String(headers['x-operator-token']).trim();
+    } else if (reqOrToken.query?.token) {
+      token = String(reqOrToken.query.token).trim();
+    } else if (reqOrToken.body?.token) {
+      token = String(reqOrToken.body.token).trim();
+    }
+  }
+
+  if (!token || typeof token !== 'string') return false;
+  const dotIndex = token.lastIndexOf('.');
+  if (dotIndex <= 0) return false;
+
+  const payload = token.slice(0, dotIndex);
+  const signature = token.slice(dotIndex + 1);
+  if (!payload.startsWith('cp_op_') || !signature) return false;
+
+  const expectedSig = crypto.createHmac('sha256', getOperatorSecret()).update(payload).digest('hex');
+  if (signature.length !== expectedSig.length || !/^[0-9a-f]+$/i.test(signature)) {
+    return false;
+  }
+  try {
+    const sigBuf = Buffer.from(signature, 'hex');
+    const expBuf = Buffer.from(expectedSig, 'hex');
+    if (sigBuf.length !== expBuf.length || sigBuf.length === 0) return false;
+    return crypto.timingSafeEqual(sigBuf, expBuf);
+  } catch {
+    return false;
+  }
+}
+
+export async function dispatchCyberEmail({
+  to,
+  subject,
+  badge = 'CYBERPULSE // DIRECTIVE',
+  title = 'Operational Directive',
+  description = '',
+  footer = '',
+}) {
+  const safeBadge = escapeHtml(badge);
+  const safeTitle = escapeHtml(title);
+  const safeDescription = escapeHtml(description);
+  const safeFooter = escapeHtml(footer || `TIMESTAMP: ${new Date().toISOString()}`);
+
+  const html = `
+    <div style="background-color: #07070A; color: #FFFFFF; font-family: monospace; padding: 24px; border: 1px solid #00F0FF;">
+      <h2 style="color: #FCEE0A; margin: 0 0 8px 0;">${safeBadge}</h2>
+      <h3 style="color: #00F0FF; margin: 0 0 16px 0;">${safeTitle}</h3>
+      <p style="color: #CCCCCC; font-size: 14px; line-height: 1.5;">${safeDescription}</p>
+      <div style="margin-top: 20px; padding: 12px; background-color: #0F121D; border-left: 3px solid #00FF66; font-size: 12px; color: #888888;">
+        ${safeFooter}
+      </div>
+    </div>
+  `.trim();
+
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const fromAddress = process.env.EMAIL_FROM || 'CyberPulse <onboarding@resend.dev>';
+
+  if (!resendApiKey) {
+    return {
+      ok: true,
+      simulated: true,
+      provider: 'SIMULATED_LOCAL',
+      id: `sim_${Date.now()}`,
+      html,
+    };
+  }
+
+  if (!to) {
+    return {
+      ok: false,
+      simulated: false,
+      provider: 'RESEND',
+      error: 'Recipient email address is required',
+      html,
+    };
+  }
+
+  const emailRes = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${resendApiKey}`,
+    },
+    body: JSON.stringify({
+      from: fromAddress,
+      to,
+      subject: subject || `[CyberPulse] ${title}`,
+      html,
+    }),
+    signal: AbortSignal.timeout(10000),
+  });
+
+  const data = await emailRes.json().catch(() => ({}));
+  return {
+    ok: emailRes.ok,
+    simulated: false,
+    provider: 'RESEND',
+    id: data?.id,
+    data,
+    error: emailRes.ok ? null : data?.error?.message || emailRes.statusText || 'Email dispatch failed',
+    html,
+  };
+}
+
+// Asia/Kolkata (IST = UTC+05:30 = +330 minutes)
+const IST_OFFSET_MINUTES = 330;
+const IST_OFFSET_MS = IST_OFFSET_MINUTES * 60 * 1000;
+
+function makeIstCandidate(istNow, dayOffset, targetH, targetM) {
+  const utcMs =
+    Date.UTC(
+      istNow.getUTCFullYear(),
+      istNow.getUTCMonth(),
+      istNow.getUTCDate() + dayOffset,
+      targetH,
+      targetM,
+      0,
+      0
+    ) - IST_OFFSET_MS;
+  return new Date(utcMs);
+}
+
+function getIstWeekday(istNow, dayOffset) {
+  return new Date(
+    Date.UTC(istNow.getUTCFullYear(), istNow.getUTCMonth(), istNow.getUTCDate() + dayOffset, 12, 0, 0, 0)
+  ).getUTCDay();
+}
+
+// Cadence calculation engine for accurate schedule tracking in Asia/Kolkata (UTC+05:30)
+// Supports both computeNextTrigger(rem, forceTomorrow) and computeNextTrigger(cadence, config, forceTomorrow)
+export function computeNextTrigger(remOrCadence, configOrForce = {}, maybeForceTomorrow = false) {
+  let config = {};
+  let cadence = 'daily';
+  let forceTomorrow = false;
+
+  if (typeof remOrCadence === 'object' && remOrCadence !== null) {
+    config = remOrCadence;
+    cadence = config.cadence || 'daily';
+    forceTomorrow = typeof configOrForce === 'boolean' ? configOrForce : Boolean(maybeForceTomorrow);
+  } else if (typeof remOrCadence === 'string') {
+    if (remOrCadence.includes(':')) {
+      config =
+        typeof configOrForce === 'object' && configOrForce !== null
+          ? { ...configOrForce, time: remOrCadence }
+          : { time: remOrCadence };
+      cadence = config.cadence || 'daily';
+      forceTomorrow = typeof configOrForce === 'boolean' ? configOrForce : Boolean(maybeForceTomorrow);
+    } else {
+      cadence = remOrCadence || 'daily';
+      if (typeof configOrForce === 'boolean') {
+        forceTomorrow = configOrForce;
+        config = {};
+      } else {
+        config = configOrForce || {};
+        forceTomorrow = Boolean(maybeForceTomorrow);
+      }
+    }
+  }
+
+  const now = config.now instanceof Date ? config.now : new Date();
+  const istNow = new Date(now.getTime() + IST_OFFSET_MS);
+
+  const timeStr = typeof config.time === 'string' && config.time.includes(':') ? config.time : '10:00';
+  const [rawH, rawM] = timeStr.split(':');
+  const targetH = Math.min(23, Math.max(0, parseInt(rawH, 10) || 0));
+  const targetM = Math.min(59, Math.max(0, parseInt(rawM, 10) || 0));
+
+  if (cadence === 'random') {
+    // 10:00 AM IST (600m) to 11:00 PM IST (1380m)
+    const randomMinutesOffset = Math.floor(Math.random() * 780);
+    const totalMinutes = 600 + randomMinutesOffset;
+    const randH = Math.floor(totalMinutes / 60);
+    const randM = totalMinutes % 60;
+    const candidate = makeIstCandidate(istNow, 0, randH, randM);
+    if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
+      return candidate.toISOString();
+    }
+    return makeIstCandidate(istNow, 1, randH, randM).toISOString();
+  }
+
+  if (cadence === 'interval') {
+    const intervalDays = Math.max(1, parseInt(config.intervalDays, 10) || 2);
+    const candidate = makeIstCandidate(istNow, 0, targetH, targetM);
+    if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
+      return candidate.toISOString();
+    }
+    return makeIstCandidate(istNow, intervalDays, targetH, targetM).toISOString();
+  }
+
+  if (cadence === 'weekdays') {
+    const dayMap = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+    const allowed = (config.weekdays || ['mon', 'tue', 'wed', 'thu', 'fri'])
+      .map((d) => (typeof d === 'string' ? dayMap[d.toLowerCase()] : d))
+      .filter((d) => d !== undefined);
+    const safeAllowed = allowed.length > 0 ? allowed : [1, 2, 3, 4, 5];
+
+    for (let dayOffset = forceTomorrow ? 1 : 0; dayOffset <= 14; dayOffset++) {
+      const candidate = makeIstCandidate(istNow, dayOffset, targetH, targetM);
+      const istDay = getIstWeekday(istNow, dayOffset);
+      if (safeAllowed.includes(istDay) && candidate.getTime() > now.getTime() + 60000) {
+        return candidate.toISOString();
+      }
+    }
+  }
+
+  // Default: daily in Asia/Kolkata (UTC+05:30)
+  const candidate = makeIstCandidate(istNow, 0, targetH, targetM);
+  if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
+    return candidate.toISOString();
+  }
+  return makeIstCandidate(istNow, 1, targetH, targetM).toISOString();
+}
+
+function getDefaultProfile() {
+  return {
+    id: 'operator_default',
+    name: process.env.OPERATOR_NAME || 'Operator',
+    email: process.env.OPERATOR_EMAIL || '',
     activeRole: 'student_intern_freelancer',
     uiMode: 'serious',
     certTargets: ['AWS Solutions Architect', 'GCP Associate Cloud Engineer', 'CKA Kubernetes'],
     dailyCapacityHours: 12,
-  },
+  };
+}
+
+// In-memory fallback if no database connection string is provided yet
+const memoryStore = {
+  profile: getDefaultProfile(),
   reminders: [
     {
       id: 'rem_init_1',
@@ -48,11 +315,11 @@ const memoryStore = {
       time: '10:00',
       intervalDays: 1,
       weekdays: ['mon', 'tue', 'wed', 'thu', 'fri'],
-      email: 'rajkesir74@gmail.com',
+      email: process.env.OPERATOR_EMAIL || '',
       autoEmail: true,
       status: 'active',
       createdAt: new Date().toISOString(),
-      nextTriggerAt: new Date(Date.now() + 3600 * 1000).toISOString(),
+      nextTriggerAt: computeNextTrigger({ cadence: 'daily', time: '10:00' }, false),
     },
   ],
   emailLogs: [],
@@ -108,7 +375,6 @@ export async function initDbSchema() {
       );
     `);
     schemaInitialized = true;
-    console.log('[CYBER DB] PostgreSQL schema initialized successfully');
   } catch (err) {
     console.warn('[CYBER DB] Schema migration error (falling back to memory):', err.message);
   }
@@ -134,7 +400,6 @@ export async function getProfile() {
         dailyCapacityHours: row.daily_capacity_hours,
       };
     }
-    // Seed initial profile
     await saveProfile(memoryStore.profile);
     return memoryStore.profile;
   } catch (err) {
@@ -145,14 +410,25 @@ export async function getProfile() {
 
 export async function saveProfile(data) {
   const p = getDbPool();
+  const safeProfile = {
+    ...memoryStore.profile,
+    ...data,
+    id: data?.id || memoryStore.profile.id || 'operator_default',
+    name: String(data?.name ?? memoryStore.profile.name ?? 'Operator').slice(0, 255),
+    email: String(data?.email ?? memoryStore.profile.email ?? (process.env.OPERATOR_EMAIL || '')).slice(0, 255),
+    activeRole: data?.activeRole || memoryStore.profile.activeRole || 'student_intern_freelancer',
+    uiMode: data?.uiMode || memoryStore.profile.uiMode || 'serious',
+    certTargets: Array.isArray(data?.certTargets) ? data.certTargets : memoryStore.profile.certTargets || [],
+    dailyCapacityHours: Number(data?.dailyCapacityHours) || memoryStore.profile.dailyCapacityHours || 12,
+  };
+
+  memoryStore.profile = safeProfile;
   if (!p) {
-    memoryStore.profile = { ...memoryStore.profile, ...data };
     return memoryStore.profile;
   }
 
   await initDbSchema();
   try {
-    const id = data.id || 'vyom_default';
     await p.query(
       `INSERT INTO cyber_profiles (id, name, email, active_role, ui_mode, cert_targets, daily_capacity_hours, updated_at)
        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
@@ -165,21 +441,38 @@ export async function saveProfile(data) {
          daily_capacity_hours = EXCLUDED.daily_capacity_hours,
          updated_at = NOW()`,
       [
-        id,
-        data.name || 'Vyom',
-        data.email || 'rajkesir74@gmail.com',
-        data.activeRole || 'student_intern_freelancer',
-        data.uiMode || 'serious',
-        JSON.stringify(data.certTargets || []),
-        data.dailyCapacityHours || 12,
+        safeProfile.id,
+        safeProfile.name,
+        safeProfile.email,
+        safeProfile.activeRole,
+        safeProfile.uiMode,
+        JSON.stringify(safeProfile.certTargets),
+        safeProfile.dailyCapacityHours,
       ]
     );
-    return data;
+    return safeProfile;
   } catch (err) {
     console.warn('DB saveProfile failed, fallback to memory', err.message);
-    memoryStore.profile = { ...memoryStore.profile, ...data };
     return memoryStore.profile;
   }
+}
+
+function mapReminderRow(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    theme: row.theme,
+    description: row.description,
+    cadence: row.cadence,
+    time: row.time,
+    intervalDays: row.interval_days,
+    weekdays: Array.isArray(row.weekdays) ? row.weekdays : JSON.parse(row.weekdays || '[]'),
+    email: row.email,
+    autoEmail: row.auto_email,
+    status: row.status,
+    nextTriggerAt: row.next_trigger_at ? new Date(row.next_trigger_at).toISOString() : null,
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : null,
+  };
 }
 
 // 2. Reminders Operations
@@ -191,104 +484,29 @@ export async function getReminders() {
   try {
     const res = await p.query('SELECT * FROM cyber_reminders ORDER BY created_at DESC');
     if (res.rows.length === 0) {
-      for (const r of memoryStore.reminders) {
-        await createReminder(r);
-      }
       return memoryStore.reminders;
     }
-    return res.rows.map((row) => ({
-      id: row.id,
-      title: row.title,
-      theme: row.theme,
-      description: row.description,
-      cadence: row.cadence,
-      time: row.time,
-      intervalDays: row.interval_days,
-      weekdays: Array.isArray(row.weekdays) ? row.weekdays : JSON.parse(row.weekdays || '[]'),
-      email: row.email,
-      autoEmail: row.auto_email,
-      status: row.status,
-      nextTriggerAt: row.next_trigger_at ? new Date(row.next_trigger_at).toISOString() : null,
-      createdAt: row.created_at ? new Date(row.created_at).toISOString() : null,
-    }));
+    return res.rows.map(mapReminderRow);
   } catch (err) {
     console.warn('DB getReminders failed, fallback to memory', err.message);
     return memoryStore.reminders;
   }
 }
 
-// Cadence calculation engine for accurate schedule tracking
-export function computeNextTrigger(cadence, config = {}, forceTomorrow = false) {
-  const now = new Date();
-  const timeStr = config.time || '10:00';
-  const [targetH, targetM] = (timeStr.includes(':') ? timeStr.split(':') : ['10', '00']).map(
-    (n) => parseInt(n, 10) || 0
-  );
-
-  if (cadence === 'random') {
-    // 10:00 AM (600m) to 11:00 PM (1380m)
-    const randomMinutesOffset = Math.floor(Math.random() * 780);
-    const totalMinutes = 600 + randomMinutesOffset;
-    const randH = Math.floor(totalMinutes / 60);
-    const randM = totalMinutes % 60;
-    const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), randH, randM, 0, 0);
-    if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
-      return candidate.toISOString();
-    }
-    candidate.setDate(candidate.getDate() + 1);
-    return candidate.toISOString();
-  }
-
-  if (cadence === 'interval') {
-    const intervalDays = Math.max(1, parseInt(config.intervalDays, 10) || 2);
-    const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetH, targetM, 0, 0);
-    if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
-      return candidate.toISOString();
-    }
-    candidate.setDate(candidate.getDate() + intervalDays);
-    return candidate.toISOString();
-  }
-
-  if (cadence === 'weekdays') {
-    const dayMap = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
-    const allowed = (config.weekdays || ['mon', 'tue', 'wed', 'thu', 'fri'])
-      .map((d) => (typeof d === 'string' ? dayMap[d.toLowerCase()] : d))
-      .filter((d) => d !== undefined);
-    const safeAllowed = allowed.length > 0 ? allowed : [1, 2, 3, 4, 5];
-
-    for (let dayOffset = forceTomorrow ? 1 : 0; dayOffset <= 14; dayOffset++) {
-      const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + dayOffset, targetH, targetM, 0, 0);
-      if (safeAllowed.includes(candidate.getDay())) {
-        if (candidate.getTime() > now.getTime() + 60000) {
-          return candidate.toISOString();
-        }
-      }
-    }
-  }
-
-  // Default: daily
-  const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetH, targetM, 0, 0);
-  if (!forceTomorrow && candidate.getTime() > now.getTime() + 60000) {
-    return candidate.toISOString();
-  }
-  candidate.setDate(candidate.getDate() + 1);
-  return candidate.toISOString();
-}
-
 export async function createReminder(data) {
   const p = getDbPool();
   const cadence = data.cadence || 'daily';
-  const calculatedNext = computeNextTrigger(cadence, data);
+  const calculatedNext = computeNextTrigger({ ...data, cadence }, false);
   const item = {
     id: data.id || `rem_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-    title: data.title || 'Untitled Directive',
-    theme: data.theme || 'work',
-    description: data.description || '',
+    title: String(data.title || 'Untitled Directive').slice(0, 255),
+    theme: String(data.theme || 'work').slice(0, 64),
+    description: String(data.description || '').slice(0, 2000),
     cadence,
     time: data.time || '10:00',
     intervalDays: Number(data.intervalDays) || 1,
-    weekdays: data.weekdays || ['mon', 'tue', 'wed', 'thu', 'fri'],
-    email: data.email || 'rajkesir74@gmail.com',
+    weekdays: Array.isArray(data.weekdays) ? data.weekdays : ['mon', 'tue', 'wed', 'thu', 'fri'],
+    email: String(data.email ?? (process.env.OPERATOR_EMAIL || '')).slice(0, 255),
     autoEmail: data.autoEmail !== false,
     status: data.status || 'active',
     nextTriggerAt: data.nextTriggerAt || calculatedNext,
@@ -329,31 +547,60 @@ export async function createReminder(data) {
   }
 }
 
-export async function updateReminder(id, updates) {
+export async function updateReminder(id, patch = {}) {
   const p = getDbPool();
+  const shouldRecompute =
+    patch.nextTriggerAt === undefined &&
+    (patch.time !== undefined ||
+      patch.cadence !== undefined ||
+      patch.intervalDays !== undefined ||
+      patch.weekdays !== undefined ||
+      patch.status === 'active');
+
   if (!p) {
     const idx = memoryStore.reminders.findIndex((r) => r.id === id);
-    if (idx !== -1) {
-      memoryStore.reminders[idx] = { ...memoryStore.reminders[idx], ...updates };
-      return memoryStore.reminders[idx];
+    if (idx === -1) return null;
+
+    const current = memoryStore.reminders[idx];
+    const merged = {
+      ...current,
+      ...patch,
+      intervalDays: patch.intervalDays !== undefined ? Number(patch.intervalDays) : current.intervalDays,
+    };
+    if (shouldRecompute) {
+      merged.nextTriggerAt = computeNextTrigger(merged, false);
     }
-    return null;
+    memoryStore.reminders[idx] = merged;
+    return merged;
   }
 
   await initDbSchema();
   try {
+    let updates = { ...patch };
+    if (shouldRecompute) {
+      const existingRes = await p.query('SELECT * FROM cyber_reminders WHERE id = $1 LIMIT 1', [id]);
+      if (existingRes.rows.length === 0) return null;
+      const existing = mapReminderRow(existingRes.rows[0]);
+      const merged = {
+        ...existing,
+        ...patch,
+        intervalDays: patch.intervalDays !== undefined ? Number(patch.intervalDays) : existing.intervalDays,
+      };
+      updates.nextTriggerAt = computeNextTrigger(merged, false);
+    }
+
     const fields = [];
     const values = [];
     let idx = 1;
 
-    if (updates.title !== undefined) { fields.push(`title = $${idx++}`); values.push(updates.title); }
-    if (updates.theme !== undefined) { fields.push(`theme = $${idx++}`); values.push(updates.theme); }
-    if (updates.description !== undefined) { fields.push(`description = $${idx++}`); values.push(updates.description); }
+    if (updates.title !== undefined) { fields.push(`title = $${idx++}`); values.push(String(updates.title).slice(0, 255)); }
+    if (updates.theme !== undefined) { fields.push(`theme = $${idx++}`); values.push(String(updates.theme).slice(0, 64)); }
+    if (updates.description !== undefined) { fields.push(`description = $${idx++}`); values.push(String(updates.description).slice(0, 2000)); }
     if (updates.cadence !== undefined) { fields.push(`cadence = $${idx++}`); values.push(updates.cadence); }
     if (updates.time !== undefined) { fields.push(`time = $${idx++}`); values.push(updates.time); }
     if (updates.intervalDays !== undefined) { fields.push(`interval_days = $${idx++}`); values.push(Number(updates.intervalDays)); }
     if (updates.weekdays !== undefined) { fields.push(`weekdays = $${idx++}`); values.push(JSON.stringify(updates.weekdays)); }
-    if (updates.email !== undefined) { fields.push(`email = $${idx++}`); values.push(updates.email); }
+    if (updates.email !== undefined) { fields.push(`email = $${idx++}`); values.push(String(updates.email).slice(0, 255)); }
     if (updates.autoEmail !== undefined) { fields.push(`auto_email = $${idx++}`); values.push(updates.autoEmail); }
     if (updates.status !== undefined) { fields.push(`status = $${idx++}`); values.push(updates.status); }
     if (updates.nextTriggerAt !== undefined) { fields.push(`next_trigger_at = $${idx++}`); values.push(updates.nextTriggerAt); }
@@ -363,7 +610,7 @@ export async function updateReminder(id, updates) {
     values.push(id);
     const query = `UPDATE cyber_reminders SET ${fields.join(', ')} WHERE id = $${idx} RETURNING *`;
     const res = await p.query(query, values);
-    return res.rows[0] || null;
+    return res.rows[0] ? mapReminderRow(res.rows[0]) : null;
   } catch (err) {
     console.warn('DB updateReminder failed', err.message);
     return null;
@@ -414,8 +661,8 @@ export async function addEmailLog(log) {
   const item = {
     id: log.id || `log_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     reminderId: log.reminderId || 'manual',
-    title: log.title || 'Notification',
-    recipient: log.recipient || 'recipient',
+    title: String(log.title || 'Notification').slice(0, 255),
+    recipient: String(log.recipient || 'recipient').slice(0, 255),
     provider: log.provider || 'RESEND',
     status: log.status || 'dispatched',
     timestamp: new Date().toISOString(),
@@ -441,4 +688,45 @@ export async function addEmailLog(log) {
     memoryStore.emailLogs.unshift(item);
     return item;
   }
+}
+
+// 4. Operator Data Rights: Export & Delete All Data
+export async function exportAllOperatorData() {
+  const [profile, reminders, emailLogs] = await Promise.all([
+    getProfile(),
+    getReminders(),
+    getEmailLogs(),
+  ]);
+
+  return {
+    profile,
+    reminders,
+    emailLogs,
+    exportedAt: new Date().toISOString(),
+  };
+}
+
+export async function deleteAllOperatorData() {
+  memoryStore.reminders = [];
+  memoryStore.emailLogs = [];
+  memoryStore.profile = getDefaultProfile();
+
+  const p = getDbPool();
+  if (p) {
+    await initDbSchema();
+    try {
+      await Promise.all([
+        p.query('DELETE FROM cyber_reminders'),
+        p.query('DELETE FROM cyber_email_logs'),
+        p.query('DELETE FROM cyber_profiles'),
+      ]);
+    } catch (err) {
+      console.warn('DB deleteAllOperatorData failed on PostgreSQL:', err.message);
+    }
+  }
+
+  return {
+    status: 'deleted',
+    deletedAt: new Date().toISOString(),
+  };
 }

@@ -1,5 +1,5 @@
 // IdeasAndCertVault: Cyberware Blueprints & Neural Shards Vault
-// Styled with Cyberpunk 2077 chamfered borders, yellow hazard tabs, and Gemini 3.8 Flash analysis.
+// Styled with Cyberpunk 2077 chamfered borders, yellow hazard tabs, and Gemini 2.5 Flash analysis.
 // STRICT: No yellow emojis. Clean Lucide vector icons and monospace text badges.
 
 import { useState } from 'react';
@@ -45,12 +45,12 @@ export function IdeasAndCertVault({
     if (newNotes.trim()) {
       setIsRefining(true);
       try {
-        const refined = await refineIdea(newTitle, newCategory);
+        const refined = await refineIdea(newTitle, newCategory, newNotes);
         techStack = refined.techStack;
         roadmap = refined.roadmap;
         valueProposition = refined.valueProposition;
       } catch (e) {
-        console.warn('Gemini 3.8 Flash refinement fallback:', e);
+        console.warn('Gemini 2.5 Flash refinement fallback:', e);
       } finally {
         setIsRefining(false);
       }
@@ -193,8 +193,8 @@ export function IdeasAndCertVault({
             rows={2}
             placeholder={
               uiMode === 'serious'
-                ? 'Concept or project deliverables (Gemini 3.8 Flash will auto-generate tech stack & sequential roadmap)...'
-                : 'Concept or client deliverables (Gemini 3.8 Flash will auto-generate tech stack & sequential roadmap)...'
+                ? 'Concept or project deliverables (Gemini 2.5 Flash will auto-generate tech stack & sequential roadmap)...'
+                : 'Concept or client deliverables (Gemini 2.5 Flash will auto-generate tech stack & sequential roadmap)...'
             }
             value={newNotes}
             onChange={(e) => setNewNotes(e.target.value)}
@@ -210,7 +210,7 @@ export function IdeasAndCertVault({
               <Sparkles className="w-3.5 h-3.5" />
               <span>
                 {isRefining
-                  ? 'ANALYZING VIA GEMINI 3.8...'
+                  ? 'ANALYZING VIA GEMINI 2.5...'
                   : uiMode === 'serious'
                   ? 'SAVE PROJECT & TECH STACK'
                   : 'COMMIT BLUEPRINT'}
@@ -249,9 +249,18 @@ export function IdeasAndCertVault({
                 </div>
 
                 {idea.notes && (
-                  <p className="font-tech text-xs text-slate-300 leading-relaxed mb-3">
+                  <p className="font-tech text-xs text-slate-300 leading-relaxed mb-2.5">
                     {idea.notes}
                   </p>
+                )}
+
+                {idea.valueProposition && (
+                  <div className="mb-3 px-3 py-1.5 bg-[#050812] border-l-2 border-l-[#FCEE0A] text-xs font-tech text-[#00FF66]">
+                    <span className="font-cyber text-[10px] text-[#FCEE0A] uppercase mr-2 font-bold">
+                      VALUE PROPOSITION:
+                    </span>
+                    <span>{idea.valueProposition}</span>
+                  </div>
                 )}
 
                 {/* Tech Stack Pills */}
