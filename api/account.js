@@ -2,7 +2,7 @@ import {
   handleCors,
   exportAllOperatorData,
   deleteAllOperatorData,
-} from './lib/db.js';
+} from './_lib/db.js';
 
 export default async function handler(req, res) {
   if (handleCors(req, res, 'GET, DELETE, OPTIONS')) return;

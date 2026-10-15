@@ -6,7 +6,7 @@ import {
   getProfile,
   computeNextTrigger,
   dispatchCyberEmail,
-} from './lib/db.js';
+} from './_lib/db.js';
 
 export default async function handler(req, res) {
   if (handleCors(req, res, 'GET, POST, OPTIONS')) return;

@@ -1,4 +1,4 @@
-import { handleCors, getDbPool, getReminders } from './lib/db.js';
+import { handleCors, getDbPool, getReminders } from './_lib/db.js';
 
 export default async function handler(req, res) {
   if (handleCors(req, res, 'GET, OPTIONS')) return;

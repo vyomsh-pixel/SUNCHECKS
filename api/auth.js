@@ -1,4 +1,4 @@
-import { handleCors, createOperatorToken, verifyOperatorAuth } from './lib/db.js';
+import { handleCors, createOperatorToken, verifyOperatorAuth } from './_lib/db.js';
 
 export default async function handler(req, res) {
   if (handleCors(req, res, 'GET, POST, OPTIONS')) return;

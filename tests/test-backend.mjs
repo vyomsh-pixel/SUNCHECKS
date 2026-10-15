@@ -14,10 +14,10 @@ import {
   exportAllOperatorData,
   deleteAllOperatorData,
   dispatchCyberEmail,
-} from './lib/db.js';
-import authHandler from './auth.js';
-import profileHandler from './profile.js';
-import accountHandler from './account.js';
+} from '../api/_lib/db.js';
+import authHandler from '../api/auth.js';
+import profileHandler from '../api/profile.js';
+import accountHandler from '../api/account.js';
 
 function createMockRes() {
   return {

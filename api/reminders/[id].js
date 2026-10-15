@@ -1,4 +1,4 @@
-import { handleCors, updateReminder, deleteReminder } from '../lib/db.js';
+import { handleCors, updateReminder, deleteReminder } from '../_lib/db.js';
 
 export default async function handler(req, res) {
   if (handleCors(req, res, 'PUT, DELETE, OPTIONS')) return;

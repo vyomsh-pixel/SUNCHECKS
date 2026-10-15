@@ -2,7 +2,7 @@
 // The user's Gemini API key is kept strictly on the server and is NEVER sent to the browser.
 // Strict zero-emoji policy enforced.
 
-import { handleCors } from './lib/db.js';
+import { handleCors } from './_lib/db.js';
 
 function sanitizeInput(val, maxLen = 2000) {
   if (typeof val !== 'string') return '';

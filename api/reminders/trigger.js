@@ -1,4 +1,4 @@
-import { handleCors, getReminders, addEmailLog, dispatchCyberEmail } from '../lib/db.js';
+import { handleCors, getReminders, addEmailLog, dispatchCyberEmail } from '../_lib/db.js';
 
 export default async function handler(req, res) {
   if (handleCors(req, res, 'POST, OPTIONS')) return;
